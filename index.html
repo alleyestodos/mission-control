@@ -1,13 +1,13 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot;&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-  &lt;title&gt;Mission Control&lt;/title&gt;
-  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
-  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
-  &lt;link href=&quot{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
-  &lt;style&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
     * {
       box-sizing: border-box;
     }
@@ -666,482 +666,482 @@
         width: 140px;
       }
     }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;nav class=&quot;navbar&quot;&gt;
-    &lt;div class=&quot;nav-left&quot;&gt;
-      &lt;div class=&quot;title&quot;&gt;⚡ Mission Control&lt;/div&gt;
-      &lt;div class=&quot;subtitle&quot;&gt;Todos los OjOs&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;nav-tabs&quot;&gt;
-      &lt;button class=&quot;tab active&quot; data-tab=&quot;dashboard&quot;&gt;📊 Dashboard&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;projects&quot;&gt;📁 Projects&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;timeline&quot;&gt;🗓️ Timeline&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;notes&quot;&gt;📝 Notes&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;revenue&quot;&gt;💰 Revenue&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;command&quot;&gt;🖥️ Command Center&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;family&quot;&gt;👨‍👩‍👦 Family&lt;/button&gt;
-      &lt;button class=&quot;tab&quot; data-tab=&quot;intel&quot;&gt;🦅 Intel&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;nav-right&quot;&gt;
-      &lt;input type=&quot;search&quot; placeholder=&quot;Search... (⌘K)&quot;&gt;
-      &lt;span class=&quot;status&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Online&lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/nav&gt;
-  &lt;div class=&quot;content&quot;&gt;
-    &lt;div id=&quot;dashboard&quot; class=&quot;tab-content active&quot;&gt;
-      &lt;h1&gt;&lt;span style=&quot;color: #e5e7eb;&quot;&gt;Good morning, &lt;/span&gt;&lt;span style=&quot;color: #a78bfa;&quot;&gt;Gary&lt;/span&gt;&lt;/h1&gt;
-      &lt;div id=&quot;current-time&quot; class=&quot;date&quot; style=&quot;color: #6b7280; font-size: 14px;&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;stats&quot;&gt;
-        &lt;div class=&quot;stat-card stat-goal&quot;&gt;
-          &lt;div class=&quot;stat-main&quot;&gt;12%&lt;/div&gt;
-          &lt;div class=&quot;stat-label&quot;&gt;Goal Progress&lt;/div&gt;
-          &lt;div class=&quot;stat-change up&quot;&gt;↑ 3% this week&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;stat-card stat-projects&quot;&gt;
-          &lt;div class=&quot;stat-main&quot;&gt;5&lt;/div&gt;
-          &lt;div class=&quot;stat-label&quot;&gt;Active Projects&lt;/div&gt;
-          &lt;div class=&quot;stat-change up&quot;&gt;↑ 2 new&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;stat-card stat-tasks&quot;&gt;
-          &lt;div class=&quot;stat-main&quot;&gt;8&lt;/div&gt;
-          &lt;div class=&quot;stat-label&quot;&gt;Tasks Today&lt;/div&gt;
-          &lt;div class=&quot;stat-change down&quot;&gt;↓ 3 remaining&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;stat-card stat-days&quot;&gt;
-          &lt;div class=&quot;stat-main&quot;&gt;90&lt;/div&gt;
-          &lt;div class=&quot;stat-label&quot;&gt;Days to Goal&lt;/div&gt;
-          &lt;div class=&quot;stat-change countdown&quot;&gt;countdown&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;grid-2&quot;&gt;
-        &lt;div class=&quot;card&quot;&gt;
-          &lt;div class=&quot;card-header&quot;&gt;ACTIVITY FEED&lt;/div&gt;
-          &lt;div class=&quot;activity-item&quot;&gt;
-            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
-            &lt;span&gt;Mission Control dashboard created&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;activity-item&quot;&gt;
-            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
-            &lt;span&gt;Banksy spawned for avatar edits&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;activity-item&quot;&gt;
-            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
-            &lt;span&gt;API keys stored in ~/.openclaw/.env&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;activity-item&quot;&gt;
-            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
-            &lt;span&gt;Harriet folder created on Google Drive&lt;/span&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;card&quot;&gt;
-          &lt;div class=&quot;card-header&quot;&gt;TOP PRIORITIES&lt;/div&gt;
-          &lt;label class=&quot;priority-item&quot;&gt;
-            &lt;div class=&quot;priority-checkbox&quot;&gt;
-              &lt;input type=&quot;checkbox&quot; id=&quot;p1&quot;&gt;
-              &lt;span&gt;&lt;/span&gt;
-            &lt;/div&gt;
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="title">⚡ Mission Control</div>
+      <div class="subtitle">Todos los OjOs</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="tab" data-tab="projects">📁 Projects</button>
+      <button class="tab" data-tab="timeline">🗓️ Timeline</button>
+      <button class="tab" data-tab="notes">📝 Notes</button>
+      <button class="tab" data-tab="revenue">💰 Revenue</button>
+      <button class="tab" data-tab="command">🖥️ Command Center</button>
+      <button class="tab" data-tab="family">👨‍👩‍👦 Family</button>
+      <button class="tab" data-tab="intel">🦅 Intel</button>
+    </div>
+    <div class="nav-right">
+      <input type="search" placeholder="Search... (⌘K)">
+      <span class="status"><span class="dot"></span>Online</span>
+    </div>
+  </nav>
+  <div class="content">
+    <div id="dashboard" class="tab-content active">
+      <h1><span style="color: #e5e7eb;">Good morning, </span><span style="color: #a78bfa;">Gary</span></h1>
+      <div id="current-time" class="date" style="color: #6b7280; font-size: 14px;"></div>
+      <div class="stats">
+        <div class="stat-card stat-goal">
+          <div class="stat-main">12%</div>
+          <div class="stat-label">Goal Progress</div>
+          <div class="stat-change up">↑ 3% this week</div>
+        </div>
+        <div class="stat-card stat-projects">
+          <div class="stat-main">5</div>
+          <div class="stat-label">Active Projects</div>
+          <div class="stat-change up">↑ 2 new</div>
+        </div>
+        <div class="stat-card stat-tasks">
+          <div class="stat-main">8</div>
+          <div class="stat-label">Tasks Today</div>
+          <div class="stat-change down">↓ 3 remaining</div>
+        </div>
+        <div class="stat-card stat-days">
+          <div class="stat-main">90</div>
+          <div class="stat-label">Days to Goal</div>
+          <div class="stat-change countdown">countdown</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">ACTIVITY FEED</div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Mission Control dashboard created</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Banksy spawned for avatar edits</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>API keys stored in ~/.openclaw/.env</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Harriet folder created on Google Drive</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">TOP PRIORITIES</div>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p1">
+              <span></span>
+            </div>
             Complete Mission Control v1
-          &lt;/label&gt;
-          &lt;label class=&quot;priority-item&quot;&gt;
-            &lt;div class=&quot;priority-checkbox&quot;&gt;
-              &lt;input type=&quot;checkbox&quot; id=&quot;p2&quot;&gt;
-              &lt;span&gt;&lt;/span&gt;
-            &lt;/div&gt;
+          </label>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p2">
+              <span></span>
+            </div>
             Review agent overnight work
-          &lt;/label&gt;
-          &lt;label class=&quot;priority-item&quot;&gt;
-            &lt;div class=&quot;priority-checkbox&quot;&gt;
-              &lt;input type=&quot;checkbox&quot; id=&quot;p3&quot;&gt;
-              &lt;span&gt;&lt;/span&gt;
-            &lt;/div&gt;
+          </label>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p3">
+              <span></span>
+            </div>
             Set up daily report system
-          &lt;/label&gt;
-          &lt;div class=&quot;add-priority&quot;&gt;
-            &lt;input type=&quot;text&quot; placeholder=&quot;New priority...&quot;&gt;
-            &lt;button class=&quot;btn&quot;&gt;Add&lt;/button&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;projects&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;📁 Projects&lt;/h1&gt;
-      &lt;div class=&quot;kanban&quot;&gt;
-        &lt;div class=&quot;kanban-column&quot;&gt;
-          &lt;div class=&quot;column-header&quot;&gt;BACKLOG&lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-high&quot;&gt;Base44.ai Integration&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;Replicate Mission Control for remote access&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-medium&quot;&gt;Higgsfield.ai Experiment&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;Banksy API key testing + video gen&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;kanban-column&quot;&gt;
-          &lt;div class=&quot;column-header&quot;&gt;IN PROGRESS&lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-high&quot;&gt;Avatar Redesigns&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;Banksy editing all team avatars with names&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-high&quot;&gt;Mission Control v1&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;Build local Node.js dashboard&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;kanban-column&quot;&gt;
-          &lt;div class=&quot;column-header&quot;&gt;DONE&lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-medium&quot;&gt;Team Folder Setup&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;Google Drive + EncryptedStorage mirrors&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;task-card&quot;&gt;
-            &lt;div class=&quot;task-title priority-high&quot;&gt;Agent Overnight Test&lt;/div&gt;
-            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
-            &lt;div class=&quot;task-desc&quot;&gt;All 9 agents completed sample tasks&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;timeline&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;🗓️ Roadmap&lt;/h1&gt;
-      &lt;div class=&quot;timeline&quot;&gt;
-        &lt;div class=&quot;timeline-item&quot;&gt;
-          &lt;div class=&quot;timeline-dot active&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 1: Foundation&lt;/div&gt;
-          &lt;div class=&quot;timeline-dates&quot;&gt;Feb 23-25 2026&lt;/div&gt;
-          &lt;ul class=&quot;checklist&quot;&gt;
-            &lt;li class=&quot;done&quot;&gt;Oz+Harriet SSH bridge&lt;/li&gt;
-            &lt;li class=&quot;done&quot;&gt;All 10 agents created&lt;/li&gt;
-            &lt;li class=&quot;done&quot;&gt;Overnight test run&lt;/li&gt;
-            &lt;li class=&quot;done&quot;&gt;API keys secured&lt;/li&gt;
-            &lt;li&gt;Mission Control v1&lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;timeline-item&quot;&gt;
-          &lt;div class=&quot;timeline-dot&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 2: Local Intelligence&lt;/div&gt;
-          &lt;div class=&quot;timeline-dates&quot;&gt;Feb 26-Mar 5&lt;/div&gt;
-          &lt;ul class=&quot;checklist&quot;&gt;
-            &lt;li&gt;qwen2.5:72b as orchestrator&lt;/li&gt;
-            &lt;li&gt;Agent model assignments optimized&lt;/li&gt;
-            &lt;li&gt;Daily report system automated&lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;timeline-item&quot;&gt;
-          &lt;div class=&quot;timeline-dot&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 3: Remote Access&lt;/div&gt;
-          &lt;div class=&quot;timeline-dates&quot;&gt;Mar 6-15&lt;/div&gt;
-          &lt;ul class=&quot;checklist&quot;&gt;
-            &lt;li&gt;Base44.ai replication&lt;/li&gt;
-            &lt;li&gt;Google OAuth sign-in&lt;/li&gt;
-            &lt;li&gt;Mobile-responsive dashboard&lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;notes&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;📝 Notes&lt;/h1&gt;
-      &lt;div class=&quot;notes-grid&quot;&gt;
-        &lt;div class=&quot;note-card&quot;&gt;
-          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Meeting with Client A&lt;/h3&gt;
-          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Discuss project scope and timeline. Next steps: send proposal.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;note-card&quot;&gt;
-          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Agent Optimizations&lt;/h3&gt;
-          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Test qwen2.5 models for better performance.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;note-card&quot;&gt;
-          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Daily Review&lt;/h3&gt;
-          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Check overnight agent outputs.&lt;/p&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;button class=&quot;btn&quot; style=&quot;margin-top: 24px;&quot;&gt;+ New Note&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;revenue&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;💰 Revenue&lt;/h1&gt;
-      &lt;div class=&quot;revenue-grid&quot;&gt;
-        &lt;div class=&quot;card gauge-container&quot; style=&quot;position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;&quot;&gt;
-          &lt;svg class=&quot;gauge-svg&quot; viewBox=&quot;0 0 100 100&quot;&gt;
-            &lt;circle class=&quot;gauge-circle-bg&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;&gt;&lt;/circle&gt;
-            &lt;circle class=&quot;gauge-circle-progress&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;&gt;&lt;/circle&gt;
-          &lt;/svg&gt;
-          &lt;div class=&quot;gauge-value&quot; style=&quot;font-size: 36px; color: #6366f1;&quot;&gt;$4,000&lt;/div&gt;
-          &lt;div style=&quot;color: #9ca3af; margin-top: 8px;&quot;&gt;of $25,000 goal&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;card chart-container&quot;&gt;
-          &lt;div class=&quot;chart-label&quot;&gt;REVENUE — LAST 6 MONTHS&lt;/div&gt;
-          &lt;svg class=&quot;revenue-svg&quot; viewBox=&quot;0 0 400 200&quot;&gt;
-            &lt;defs&gt;
-              &lt;linearGradient id=&quot;barGrad&quot; x1=&quot;0%&quot; y1=&quot;100%&quot; x2=&quot;0%&quot; y2=&quot;0%&quot;&gt;
-                &lt;stop offset=&quot;0%&quot; stop-color=&quot;#6366f1&quot;/&gt;
-                &lt;stop offset=&quot;100%&quot; stop-color=&quot;#a78bfa&quot;/&gt;
-              &lt;/linearGradient&gt;
-            &lt;/defs&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;20&quot; y=&quot;120&quot; width=&quot;40&quot; height=&quot;80&quot; rx=&quot;4&quot;/&gt; &lt;!-- Sep $8k --&gt;
-            &lt;text x=&quot;40&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Sep&lt;/text&gt;
-            &lt;text x=&quot;40&quot; y=&quot;140&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$8k&lt;/text&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;90&quot; y=&quot;100&quot; width=&quot;40&quot; height=&quot;100&quot; rx=&quot;4&quot;/&gt; &lt;!-- Oct $10.5k --&gt;
-            &lt;text x=&quot;110&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Oct&lt;/text&gt;
-            &lt;text x=&quot;110&quot; y=&quot;115&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$10.5k&lt;/text&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;160&quot; y=&quot;80&quot; width=&quot;40&quot; height=&quot;120&quot; rx=&quot;4&quot;/&gt;
-            &lt;text x=&quot;180&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Nov&lt;/text&gt;
-            &lt;text x=&quot;180&quot; y=&quot;90&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$12k&lt;/text&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;230&quot; y=&quot;60&quot; width=&quot;40&quot; height=&quot;140&quot; rx=&quot;4&quot;/&gt;
-            &lt;text x=&quot;250&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Dec&lt;/text&gt;
-            &lt;text x=&quot;250&quot; y=&quot;65&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$14.5k&lt;/text&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;300&quot; y=&quot;40&quot; width=&quot;40&quot; height=&quot;160&quot; rx=&quot;4&quot;/&gt;
-            &lt;text x=&quot;320&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Jan&lt;/text&gt;
-            &lt;text x=&quot;320&quot; y=&quot;45&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$16k&lt;/text&gt;
-            &lt;rect class=&quot;bar&quot; x=&quot;370&quot; y=&quot;20&quot; width=&quot;40&quot; height=&quot;180&quot; rx=&quot;4&quot;/&gt;
-            &lt;text x=&quot;390&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Feb&lt;/text&gt;
-            &lt;text x=&quot;390&quot; y=&quot;25&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$18.5k&lt;/text&gt;
-          &lt;/svg&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;card&quot;&gt;
-        &lt;div class=&quot;card-header&quot;&gt;CLIENTS&lt;/div&gt;
-        &lt;table class=&quot;clients-table&quot;&gt;
-          &lt;thead&gt;
-            &lt;tr&gt;
-              &lt;th&gt;NAME&lt;/th&gt;
-              &lt;th&gt;MONTHLY VALUE&lt;/th&gt;
-              &lt;th&gt;STATUS&lt;/th&gt;
-              &lt;th&gt;START DATE&lt;/th&gt;
-              &lt;th&gt;&lt;/th&gt;
-            &lt;/tr&gt;
-          &lt;/thead&gt;
-          &lt;tbody&gt;
-            &lt;tr&gt;
-              &lt;td&gt;Sample Client A&lt;/td&gt;
-              &lt;td&gt;$2,500&lt;/td&gt;
-              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
-              &lt;td&gt;2026-01-15&lt;/td&gt;
-              &lt;td&gt;&lt;span class=&quot;delete-icon&quot;&gt;🗑️&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-              &lt;td&gt;Sample Client B&lt;/td&gt;
-              &lt;td&gt;$1,500&lt;/td&gt;
-              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
-              &lt;td&gt;2026-02-01&lt;/td&gt;
-              &lt;td&gt;&lt;span class=&quot;delete-icon&quot;&gt;🗑️&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-              &lt;td colspan=&quot;2&quot;&gt;
-                &lt;div class=&quot;add-client-row&quot;&gt;
-                  &lt;input type=&quot;text&quot; placeholder=&quot;Client name&quot;&gt;
-                  &lt;input type=&quot;text&quot; placeholder=&quot;$ Monthly value&quot;&gt;
-                &lt;/div&gt;
-              &lt;/td&gt;
-              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
-              &lt;td&gt;&lt;input type=&quot;date&quot;&gt;&lt;/td&gt;
-              &lt;td&gt;&lt;button class=&quot;btn&quot;&gt;Add Client&lt;/button&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-          &lt;/tbody&gt;
-        &lt;/table&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;projections&quot;&gt;
-        &lt;div class=&quot;projection-item&quot;&gt;
-          &lt;div class=&quot;projection-value projection-mrr&quot;&gt;$4,000&lt;/div&gt;
-          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Current MRR&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;projection-item&quot;&gt;
-          &lt;div class=&quot;projection-value projection-annual&quot;&gt;$48,000&lt;/div&gt;
-          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Projected Annual&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;projection-item&quot;&gt;
-          &lt;div class=&quot;projection-value projection-growth&quot;&gt;$21,000&lt;/div&gt;
-          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Monthly Growth Needed&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;command&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;🖥️ Agent Command Center&lt;/h1&gt;
-      &lt;div class=&quot;agents-grid&quot;&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #ff6b6b;&quot;&gt;A&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Andy&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Finance/Accountant&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #4ecdc4;&quot;&gt;B&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Banksy&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Visual/Creative&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot yellow&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;busy&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #45b7d1;&quot;&gt;C&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Chris Knight&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Sales/Closer&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #96ceb4;&quot;&gt;Cl&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Clu&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Master Developer&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;coder:32b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #feca57;&quot;&gt;E&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Ed Lewis&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Leverage/Credit&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot gray&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;offline&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #ff9ff3;&quot;&gt;M&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Marissa&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Customer Service&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;mistral-nemo:12b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #54a0ff;&quot;&gt;Ma&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Matlock&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Legal&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #5f27cd;&quot;&gt;P&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Phineas&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Travel &amp; Experience&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot gray&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;offline&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;agent-card&quot;&gt;
-          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #00d2d3;&quot;&gt;S&lt;/div&gt;
-          &lt;div class=&quot;agent-name&quot;&gt;Spencer&lt;/div&gt;
-          &lt;div class=&quot;agent-role&quot;&gt;Long-Term Strategy&lt;/div&gt;
-          &lt;div class=&quot;agent-status&quot;&gt;
-            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
-            &lt;span&gt;online&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
-          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;decisions card&quot;&gt;
-        &lt;div class=&quot;card-header&quot;&gt;EXECUTIVE DECISIONS&lt;/div&gt;
-        &lt;div class=&quot;decision&quot;&gt;
-          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
-          &lt;div class=&quot;decision-question&quot;&gt;Should all agents have Opus as fallback?&lt;/div&gt;
-          &lt;div class=&quot;decision-answer&quot;&gt;Removed Opus fallback from all agents to prevent silent API burns. Local-only fallbacks now.&lt;/div&gt;
-          &lt;div class=&quot;decision-consulted&quot;&gt;Consulted: Oz, All agents&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;decision&quot;&gt;
-          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
-          &lt;div class=&quot;decision-question&quot;&gt;Team structure — who runs agents?&lt;/div&gt;
-          &lt;div class=&quot;decision-answer&quot;&gt;Harriet is ONLY agent on laptop. All 10 team agents run on Oz (Mac Studio) only.&lt;/div&gt;
-          &lt;div class=&quot;decision-consulted&quot;&gt;Consulted: Harriet, Oz&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;family&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;👨‍👩‍👦 Family&lt;/h1&gt;
-      &lt;div class=&quot;family-grid&quot;&gt;
-        &lt;div class=&quot;family-card&quot;&gt;
-          &lt;h2&gt;Health&lt;/h2&gt;
-          &lt;p&gt;All checkups up to date. Next: dental in March.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;family-card&quot;&gt;
-          &lt;h2&gt;Education&lt;/h2&gt;
-          &lt;p&gt;School progress good. Homework reminders set.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;family-card&quot;&gt;
-          &lt;h2&gt;Social&lt;/h2&gt;
-          &lt;p&gt;Upcoming events: family dinner this weekend.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;family-card&quot;&gt;
-          &lt;h2&gt;Work&lt;/h2&gt;
-          &lt;p&gt;Family schedules synced. No conflicts.&lt;/p&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;intel&quot; class=&quot;tab-content&quot;&gt;
-      &lt;h1&gt;🦅 Intel&lt;/h1&gt;
-      &lt;div class=&quot;intel-list&quot;&gt;
-        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #6366f1;&quot;&gt;
-          &lt;span class=&quot;intel-source&quot;&gt;TechCrunch&lt;/span&gt;
-          &lt;div class=&quot;intel-title&quot;&gt;OpenClaw releases new agent orchestration features&lt;/div&gt;
-          &lt;div class=&quot;intel-time&quot;&gt;2 hours ago&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #22c55e;&quot;&gt;
-          &lt;span class=&quot;intel-source&quot;&gt;Reuters&lt;/span&gt;
-          &lt;div class=&quot;intel-title&quot;&gt;AI models see 20% efficiency boost&lt;/div&gt;
-          &lt;div class=&quot;intel-time&quot;&gt;5 hours ago&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #eab308;&quot;&gt;
-          &lt;span class=&quot;intel-source&quot;&gt;ClawHub&lt;/span&gt;
-          &lt;div class=&quot;intel-title&quot;&gt;New skills available: mcporter, agent-browser&lt;/div&gt;
-          &lt;div class=&quot;intel-time&quot;&gt;1 day ago&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #ef4444;&quot;&gt;
-          &lt;span class=&quot;intel-source&quot;&gt;Ars Technica&lt;/span&gt;
-          &lt;div class=&quot;intel-title&quot;&gt;Security patch for local LLMs released&lt;/div&gt;
-          &lt;div class=&quot;intel-time&quot;&gt;2 days ago&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #a78bfa;&quot;&gt;
-          &lt;span class=&quot;intel-source&quot;&gt;Hacker News&lt;/span&gt;
-          &lt;div class=&quot;intel-title&quot;&gt;Discussion: Scaling agent teams at home&lt;/div&gt;
-          &lt;div class=&quot;intel-time&quot;&gt;3 days ago&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;script&gt;
+          </label>
+          <div class="add-priority">
+            <input type="text" placeholder="New priority...">
+            <button class="btn">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="projects" class="tab-content">
+      <h1>📁 Projects</h1>
+      <div class="kanban">
+        <div class="kanban-column">
+          <div class="column-header">BACKLOG</div>
+          <div class="task-card">
+            <div class="task-title priority-high">Base44.ai Integration</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Replicate Mission Control for remote access</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-medium">Higgsfield.ai Experiment</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Banksy API key testing + video gen</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+        <div class="kanban-column">
+          <div class="column-header">IN PROGRESS</div>
+          <div class="task-card">
+            <div class="task-title priority-high">Avatar Redesigns</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">Banksy editing all team avatars with names</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-high">Mission Control v1</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Build local Node.js dashboard</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+        <div class="kanban-column">
+          <div class="column-header">DONE</div>
+          <div class="task-card">
+            <div class="task-title priority-medium">Team Folder Setup</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">Google Drive + EncryptedStorage mirrors</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-high">Agent Overnight Test</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">All 9 agents completed sample tasks</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+      </div>
+    </div>
+    <div id="timeline" class="tab-content">
+      <h1>🗓️ Roadmap</h1>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-phase">Phase 1: Foundation</div>
+          <div class="timeline-dates">Feb 23-25 2026</div>
+          <ul class="checklist">
+            <li class="done">Oz+Harriet SSH bridge</li>
+            <li class="done">All 10 agents created</li>
+            <li class="done">Overnight test run</li>
+            <li class="done">API keys secured</li>
+            <li>Mission Control v1</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-phase">Phase 2: Local Intelligence</div>
+          <div class="timeline-dates">Feb 26-Mar 5</div>
+          <ul class="checklist">
+            <li>qwen2.5:72b as orchestrator</li>
+            <li>Agent model assignments optimized</li>
+            <li>Daily report system automated</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-phase">Phase 3: Remote Access</div>
+          <div class="timeline-dates">Mar 6-15</div>
+          <ul class="checklist">
+            <li>Base44.ai replication</li>
+            <li>Google OAuth sign-in</li>
+            <li>Mobile-responsive dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="notes" class="tab-content">
+      <h1>📝 Notes</h1>
+      <div class="notes-grid">
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Meeting with Client A</h3>
+          <p style="color: #9ca3af; margin: 0;">Discuss project scope and timeline. Next steps: send proposal.</p>
+        </div>
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Agent Optimizations</h3>
+          <p style="color: #9ca3af; margin: 0;">Test qwen2.5 models for better performance.</p>
+        </div>
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Daily Review</h3>
+          <p style="color: #9ca3af; margin: 0;">Check overnight agent outputs.</p>
+        </div>
+      </div>
+      <button class="btn" style="margin-top: 24px;">+ New Note</button>
+    </div>
+    <div id="revenue" class="tab-content">
+      <h1>💰 Revenue</h1>
+      <div class="revenue-grid">
+        <div class="card gauge-container" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <svg class="gauge-svg" viewBox="0 0 100 100">
+            <circle class="gauge-circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="gauge-circle-progress" cx="50" cy="50" r="40"></circle>
+          </svg>
+          <div class="gauge-value" style="font-size: 36px; color: #6366f1;">$4,000</div>
+          <div style="color: #9ca3af; margin-top: 8px;">of $25,000 goal</div>
+        </div>
+        <div class="card chart-container">
+          <div class="chart-label">REVENUE — LAST 6 MONTHS</div>
+          <svg class="revenue-svg" viewBox="0 0 400 200">
+            <defs>
+              <linearGradient id="barGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a78bfa"/>
+              </linearGradient>
+            </defs>
+            <rect class="bar" x="20" y="120" width="40" height="80" rx="4"/> <!-- Sep $8k -->
+            <text x="40" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Sep</text>
+            <text x="40" y="140" text-anchor="middle" font-size="12" fill="#e5e7eb">$8k</text>
+            <rect class="bar" x="90" y="100" width="40" height="100" rx="4"/> <!-- Oct $10.5k -->
+            <text x="110" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Oct</text>
+            <text x="110" y="115" text-anchor="middle" font-size="12" fill="#e5e7eb">$10.5k</text>
+            <rect class="bar" x="160" y="80" width="40" height="120" rx="4"/>
+            <text x="180" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Nov</text>
+            <text x="180" y="90" text-anchor="middle" font-size="12" fill="#e5e7eb">$12k</text>
+            <rect class="bar" x="230" y="60" width="40" height="140" rx="4"/>
+            <text x="250" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Dec</text>
+            <text x="250" y="65" text-anchor="middle" font-size="12" fill="#e5e7eb">$14.5k</text>
+            <rect class="bar" x="300" y="40" width="40" height="160" rx="4"/>
+            <text x="320" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Jan</text>
+            <text x="320" y="45" text-anchor="middle" font-size="12" fill="#e5e7eb">$16k</text>
+            <rect class="bar" x="370" y="20" width="40" height="180" rx="4"/>
+            <text x="390" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Feb</text>
+            <text x="390" y="25" text-anchor="middle" font-size="12" fill="#e5e7eb">$18.5k</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">CLIENTS</div>
+        <table class="clients-table">
+          <thead>
+            <tr>
+              <th>NAME</th>
+              <th>MONTHLY VALUE</th>
+              <th>STATUS</th>
+              <th>START DATE</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sample Client A</td>
+              <td>$2,500</td>
+              <td><span class="badge active">active</span></td>
+              <td>2026-01-15</td>
+              <td><span class="delete-icon">🗑️</span></td>
+            </tr>
+            <tr>
+              <td>Sample Client B</td>
+              <td>$1,500</td>
+              <td><span class="badge active">active</span></td>
+              <td>2026-02-01</td>
+              <td><span class="delete-icon">🗑️</span></td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="add-client-row">
+                  <input type="text" placeholder="Client name">
+                  <input type="text" placeholder="$ Monthly value">
+                </div>
+              </td>
+              <td><span class="badge active">active</span></td>
+              <td><input type="date"></td>
+              <td><button class="btn">Add Client</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="projections">
+        <div class="projection-item">
+          <div class="projection-value projection-mrr">$4,000</div>
+          <div style="color: #9ca3af;">Current MRR</div>
+        </div>
+        <div class="projection-item">
+          <div class="projection-value projection-annual">$48,000</div>
+          <div style="color: #9ca3af;">Projected Annual</div>
+        </div>
+        <div class="projection-item">
+          <div class="projection-value projection-growth">$21,000</div>
+          <div style="color: #9ca3af;">Monthly Growth Needed</div>
+        </div>
+      </div>
+    </div>
+    <div id="command" class="tab-content">
+      <h1>🖥️ Agent Command Center</h1>
+      <div class="agents-grid">
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #ff6b6b;">A</div>
+          <div class="agent-name">Andy</div>
+          <div class="agent-role">Finance/Accountant</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #4ecdc4;">B</div>
+          <div class="agent-name">Banksy</div>
+          <div class="agent-role">Visual/Creative</div>
+          <div class="agent-status">
+            <span class="status-dot yellow"></span>
+            <span>busy</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #45b7d1;">C</div>
+          <div class="agent-name">Chris Knight</div>
+          <div class="agent-role">Sales/Closer</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #96ceb4;">Cl</div>
+          <div class="agent-name">Clu</div>
+          <div class="agent-role">Master Developer</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">coder:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #feca57;">E</div>
+          <div class="agent-name">Ed Lewis</div>
+          <div class="agent-role">Leverage/Credit</div>
+          <div class="agent-status">
+            <span class="status-dot gray"></span>
+            <span>offline</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #ff9ff3;">M</div>
+          <div class="agent-name">Marissa</div>
+          <div class="agent-role">Customer Service</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">mistral-nemo:12b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #54a0ff;">Ma</div>
+          <div class="agent-name">Matlock</div>
+          <div class="agent-role">Legal</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #5f27cd;">P</div>
+          <div class="agent-name">Phineas</div>
+          <div class="agent-role">Travel & Experience</div>
+          <div class="agent-status">
+            <span class="status-dot gray"></span>
+            <span>offline</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #00d2d3;">S</div>
+          <div class="agent-name">Spencer</div>
+          <div class="agent-role">Long-Term Strategy</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+      </div>
+      <div class="decisions card">
+        <div class="card-header">EXECUTIVE DECISIONS</div>
+        <div class="decision">
+          <div class="decision-date">2026-02-04</div>
+          <div class="decision-question">Should all agents have Opus as fallback?</div>
+          <div class="decision-answer">Removed Opus fallback from all agents to prevent silent API burns. Local-only fallbacks now.</div>
+          <div class="decision-consulted">Consulted: Oz, All agents</div>
+        </div>
+        <div class="decision">
+          <div class="decision-date">2026-02-04</div>
+          <div class="decision-question">Team structure — who runs agents?</div>
+          <div class="decision-answer">Harriet is ONLY agent on laptop. All 10 team agents run on Oz (Mac Studio) only.</div>
+          <div class="decision-consulted">Consulted: Harriet, Oz</div>
+        </div>
+      </div>
+    </div>
+    <div id="family" class="tab-content">
+      <h1>👨‍👩‍👦 Family</h1>
+      <div class="family-grid">
+        <div class="family-card">
+          <h2>Health</h2>
+          <p>All checkups up to date. Next: dental in March.</p>
+        </div>
+        <div class="family-card">
+          <h2>Education</h2>
+          <p>School progress good. Homework reminders set.</p>
+        </div>
+        <div class="family-card">
+          <h2>Social</h2>
+          <p>Upcoming events: family dinner this weekend.</p>
+        </div>
+        <div class="family-card">
+          <h2>Work</h2>
+          <p>Family schedules synced. No conflicts.</p>
+        </div>
+      </div>
+    </div>
+    <div id="intel" class="tab-content">
+      <h1>🦅 Intel</h1>
+      <div class="intel-list">
+        <div class="intel-item" style="border-left-color: #6366f1;">
+          <span class="intel-source">TechCrunch</span>
+          <div class="intel-title">OpenClaw releases new agent orchestration features</div>
+          <div class="intel-time">2 hours ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #22c55e;">
+          <span class="intel-source">Reuters</span>
+          <div class="intel-title">AI models see 20% efficiency boost</div>
+          <div class="intel-time">5 hours ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #eab308;">
+          <span class="intel-source">ClawHub</span>
+          <div class="intel-title">New skills available: mcporter, agent-browser</div>
+          <div class="intel-time">1 day ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #ef4444;">
+          <span class="intel-source">Ars Technica</span>
+          <div class="intel-title">Security patch for local LLMs released</div>
+          <div class="intel-time">2 days ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #a78bfa;">
+          <span class="intel-source">Hacker News</span>
+          <div class="intel-title">Discussion: Scaling agent teams at home</div>
+          <div class="intel-time">3 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
     // Tab switching
-    document.querySelectorAll('.tab').forEach(button =&gt; {
-      button.addEventListener('click', () =&gt; {
+    document.querySelectorAll('.tab').forEach(button => {
+      button.addEventListener('click', () => {
         const targetTab = button.dataset.tab;
-        document.querySelectorAll('.tab').forEach(btn =&gt; btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content =&gt; content.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         button.classList.add('active');
         document.getElementById(targetTab).classList.add('active');
       });
@@ -1171,6 +1171,6 @@
     const offset = circumference - progress * circumference;
     progressCircle.style.strokeDasharray = `${progress * circumference} ${circumference}`;
     progressCircle.style.strokeDashoffset = '0';
-  &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+</body>
+</html>
