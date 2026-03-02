@@ -1119,6 +1119,74 @@
       background: linear-gradient(90deg, #6366f1, #a78bfa);
     }
 
+    /* ── Universal Voice Input ── */
+    .voice-section {
+      margin-top: 16px;
+      border-top: 1px solid #2d2d44;
+      padding-top: 16px;
+    }
+    .voice-section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: #6b7280; margin-bottom: 10px;
+    }
+    .voice-input-row {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .voice-transcript-box {
+      flex: 1; background: #0d0d11; border: 1px solid #2d2d44; border-radius: 8px;
+      padding: 8px 12px; font-size: 13px; color: #e5e7eb; min-height: 38px;
+      font-style: italic; color: #9ca3af; line-height: 1.5;
+    }
+    .voice-mic-btn {
+      width: 38px; height: 38px; border-radius: 10px; background: #dc2626;
+      border: none; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; transition: all 0.2s;
+    }
+    .voice-mic-btn.recording { background: #7f1d1d; animation: mic-pulse 1s infinite; }
+    @keyframes mic-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4)} 50%{box-shadow:0 0 0 8px rgba(220,38,38,0)} }
+    .voice-timer { font-size: 12px; color: #dc2626; font-weight: 700; min-width: 28px; }
+    .voice-save-btn {
+      background: #6366f1; color: white; border: none; border-radius: 8px;
+      padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+      display: none;
+    }
+    .voice-note-preview {
+      margin-top: 8px; font-size: 12px; color: #22c55e; display: none;
+    }
+
+    /* ── Add Project / Task Modal ── */
+    .voice-modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); z-index: 4000;
+      align-items: center; justify-content: center;
+    }
+    .voice-modal-overlay.active { display: flex; }
+    .voice-modal-box {
+      background: #16161e; border: 1px solid #2d2d44; border-radius: 16px;
+      padding: 28px; max-width: 520px; width: 90%; position: relative;
+    }
+    .vm-title { font-size: 18px; font-weight: 700; color: #e5e7eb; margin-bottom: 4px; }
+    .vm-subtitle { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+    .vm-field { margin-bottom: 14px; }
+    .vm-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing:.05em; color: #6b7280; margin-bottom: 6px; }
+    .vm-input { width: 100%; background: #1a1a2e; border: 1px solid #2d2d44; border-radius: 8px; padding: 10px 14px; color: #e5e7eb; font-size: 13px; outline: none; }
+    .vm-input:focus { border-color: #6366f1; }
+    .vm-textarea { width: 100%; background: #1a1a2e; border: 1px solid #2d2d44; border-radius: 8px; padding: 10px 14px; color: #e5e7eb; font-size: 13px; outline: none; min-height: 80px; resize: vertical; }
+    .vm-textarea:focus { border-color: #6366f1; }
+    .vm-select { width: 100%; background: #1a1a2e; border: 1px solid #2d2d44; border-radius: 8px; padding: 10px 14px; color: #e5e7eb; font-size: 13px; outline: none; }
+    .vm-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #6b7280; font-size: 20px; cursor: pointer; }
+    .vm-close:hover { color: #e5e7eb; }
+    .vm-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .vm-btn-cancel { background: #1a1a2e; border: 1px solid #3f3f5c; color: #9ca3af; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    .vm-btn-submit { background: #6366f1; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; }
+
+    /* Notes export */
+    .notes-export-btn {
+      background: #1a1a2e; border: 1px solid #2d2d44; color: #9ca3af;
+      padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer;
+    }
+    .notes-export-btn:hover { border-color: #6366f1; color: #a78bfa; }
+
     /* Task rows */
     .task-row {
       display: flex; align-items: center; gap: 10px; padding: 10px 12px;
@@ -1590,7 +1658,7 @@
               </div>
             </div>
           </div>
-          <button class="add-task-btn">+ Add project</button>
+          <button class="add-task-btn" onclick="openAddProjectModal()">+ Add project</button>
         </div>
 
         <!-- Backlog -->
@@ -1638,7 +1706,7 @@
               </div>
             </div>
           </div>
-          <button class="add-task-btn">+ Add project</button>
+          <button class="add-task-btn" onclick="openAddProjectModal()">+ Add project</button>
         </div>
 
         <!-- In Progress -->
@@ -1699,7 +1767,7 @@
               </div>
             </div>
           </div>
-          <button class="add-task-btn">+ Add project</button>
+          <button class="add-task-btn" onclick="openAddProjectModal()">+ Add project</button>
         </div>
 
         <!-- Review -->
@@ -1736,7 +1804,7 @@
               </div>
             </div>
           </div>
-          <button class="add-task-btn">+ Add project</button>
+          <button class="add-task-btn" onclick="openAddProjectModal()">+ Add project</button>
         </div>
 
         <!-- Done -->
@@ -1791,7 +1859,7 @@
               </div>
             </div>
           </div>
-          <button class="add-task-btn">+ Add project</button>
+          <button class="add-task-btn" onclick="openAddProjectModal()">+ Add project</button>
         </div>
 
       </div>
@@ -1885,8 +1953,7 @@
                   <div class="assignee-option"><input type="checkbox"><div class="activity-avatar" style="background:#f59e0b;width:24px;height:24px;font-size:10px;flex-shrink:0;">M</div><span style="font-size:13px;color:#e5e7eb;">Milo</span></div>
                 </div>
               </div>
-              <input type="text" placeholder="+ Add task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;outline:none;">
-              <button style="background:#6366f1;color:white;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px;">Add</button>
+              <button onclick="openAddTaskModal('human')" style="flex:1;background:#1a1a2e;border:1px dashed #6366f1;border-radius:6px;padding:8px 14px;color:#a78bfa;font-size:13px;cursor:pointer;text-align:left;">🎤 + Add task (voice or type)...</button>
             </div>
           </div>
         </div>
@@ -1943,8 +2010,7 @@
                 <div class="assignee-option"><input type="checkbox"><img src="avatars/spencer.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Spencer</span></div>
               </div>
             </div>
-            <input type="text" placeholder="+ Assign task to agent..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;outline:none;">
-            <button style="background:#22c55e;color:#0d0d11;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px;">Assign</button>
+            <button onclick="openAddTaskModal('agent')" style="flex:1;background:#1a1a2e;border:1px dashed #22c55e;border-radius:6px;padding:8px 14px;color:#22c55e;font-size:13px;cursor:pointer;text-align:left;">🎤 + Assign agent task (voice or type)...</button>
           </div>
         </div>
       </div>
@@ -1999,7 +2065,10 @@
         <div class="tab-title" style="margin-bottom:0;">📝 Notes</div>
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="font-size:12px;color:#22c55e;background:#0d1f0d;border:1px solid #22c55e;border-radius:6px;padding:4px 10px;">🔒 Sensitive content auto-redacted</div>
-          <div style="font-size:12px;color:#6b7280;">All entries are immutable originals</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="font-size:12px;color:#6b7280;">All entries are immutable originals</div>
+            <button class="notes-export-btn" onclick="copyNotesForAgent()" title="Copy all notes as plain text for Clu or any agent to read">📋 Copy for Agent</button>
+          </div>
         </div>
       </div>
 
@@ -2493,6 +2562,141 @@
           <div class="family-modal-item">○ Track weekly progress</div>
           <div class="family-modal-item">○ Review with family monthly</div>
         </div>
+        <!-- Voice note section -->
+        <div class="voice-section">
+          <div class="voice-section-label">🎤 Add a Voice Note</div>
+          <div class="voice-input-row">
+            <div class="voice-transcript-box" id="familyVoiceBox">Tap mic to record — transcription appears here...</div>
+            <button class="voice-mic-btn" id="familyMicBtn" onclick="startVoice('familyVoiceBox','familyMicBtn','familyVoiceTimer','familyVoiceSave','familyVoicePreview')" title="Record (30s max)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+            </button>
+            <span class="voice-timer" id="familyVoiceTimer"></span>
+            <button class="voice-save-btn" id="familyVoiceSave" onclick="saveVoiceNote('familyVoiceBox','familyVoicePreview','familyVoiceSave')">Save to Notes</button>
+          </div>
+          <div class="voice-note-preview" id="familyVoicePreview">✅ Saved to Notes — readable by Harriet & Clu</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Add Project Modal ── -->
+    <div class="voice-modal-overlay" id="addProjectModal">
+      <div class="voice-modal-box">
+        <button class="vm-close" onclick="closeAddProjectModal()">✕</button>
+        <div class="vm-title">📁 New Project</div>
+        <div class="vm-subtitle">Type or speak — Clu will read this and know exactly what to build.</div>
+
+        <div class="vm-field">
+          <div class="vm-label">Project Title</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="text" class="vm-input" id="newProjectTitle" placeholder="e.g. Build Revenue Dashboard">
+            <button class="voice-mic-btn" id="projMicBtn" onclick="startVoice('newProjectDesc','projMicBtn','projVoiceTimer','projVoiceSave',null,true,'newProjectTitle')" title="Speak title + description">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+            </button>
+            <span class="voice-timer" id="projVoiceTimer"></span>
+          </div>
+        </div>
+
+        <div class="vm-field">
+          <div class="vm-label">Description <span style="color:#4b5563;font-weight:400;text-transform:none;">(voice transcription appears here)</span></div>
+          <textarea class="vm-textarea" id="newProjectDesc" placeholder="Describe the project... or tap the mic and speak it."></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="vm-field">
+            <div class="vm-label">Priority</div>
+            <select class="vm-select" id="newProjectPriority">
+              <option value="high">🔴 High</option>
+              <option value="med" selected>🟡 Medium</option>
+              <option value="low">🟢 Low</option>
+            </select>
+          </div>
+          <div class="vm-field">
+            <div class="vm-label">Column</div>
+            <select class="vm-select" id="newProjectColumn">
+              <option value="recurring">🔁 Recurring</option>
+              <option value="backlog" selected>📋 Backlog</option>
+              <option value="inprogress">🔵 In Progress</option>
+              <option value="review">🟡 Review</option>
+              <option value="done">✅ Done</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vm-field">
+          <div class="vm-label">Assign To</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" checked style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#6366f1;width:22px;height:22px;font-size:9px;flex-shrink:0;">G</div> Gary</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/harriet.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Harriet</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/clu.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Clu</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/oz.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Oz</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/banksy.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Banksy</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/spencer.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Spencer</label>
+          </div>
+        </div>
+
+        <div id="projVoiceSave" style="display:none;font-size:12px;color:#22c55e;margin-top:4px;">✅ Voice transcribed — edit above if needed</div>
+
+        <div class="vm-actions">
+          <button class="vm-btn-cancel" onclick="closeAddProjectModal()">Cancel</button>
+          <button class="vm-btn-submit" onclick="submitNewProject()">Create Project →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Add Task Modal ── -->
+    <div class="voice-modal-overlay" id="addTaskModal">
+      <div class="voice-modal-box">
+        <button class="vm-close" onclick="closeAddTaskModal()">✕</button>
+        <div class="vm-title" id="addTaskModalTitle">✅ New Task</div>
+        <div class="vm-subtitle">Speak or type. Agents can read this from Notes.</div>
+
+        <div class="vm-field">
+          <div class="vm-label">Task Description</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+            <button class="voice-mic-btn" id="taskMicBtn" onclick="startVoice('newTaskDesc','taskMicBtn','taskVoiceTimer','taskVoiceSave',null,false,null)" title="Speak task">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+            </button>
+            <span style="font-size:12px;color:#6b7280;">Tap mic to speak — 30 second max</span>
+            <span class="voice-timer" id="taskVoiceTimer"></span>
+          </div>
+          <textarea class="vm-textarea" id="newTaskDesc" placeholder="Describe the task..."></textarea>
+          <div id="taskVoiceSave" style="display:none;font-size:12px;color:#22c55e;margin-top:4px;">✅ Voice transcribed — edit above if needed</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="vm-field">
+            <div class="vm-label">Priority</div>
+            <select class="vm-select" id="newTaskPriority">
+              <option value="high">🔴 High</option>
+              <option value="med" selected>🟡 Medium</option>
+              <option value="low">🟢 Low</option>
+            </select>
+          </div>
+          <div class="vm-field">
+            <div class="vm-label">Type</div>
+            <select class="vm-select" id="newTaskType">
+              <option value="human">👤 Human Task</option>
+              <option value="agent">🤖 Agent Task</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vm-field">
+          <div class="vm-label">Assign To</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" checked style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#6366f1;width:22px;height:22px;font-size:9px;flex-shrink:0;">G</div> Gary</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#8b5cf6;width:22px;height:22px;font-size:9px;flex-shrink:0;">N</div> Nardellly</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#f59e0b;width:22px;height:22px;font-size:9px;flex-shrink:0;">M</div> Milo</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/harriet.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Harriet</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/clu.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Clu</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/banksy.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Banksy</label>
+          </div>
+        </div>
+
+        <div class="vm-actions">
+          <button class="vm-btn-cancel" onclick="closeAddTaskModal()">Cancel</button>
+          <button class="vm-btn-submit" onclick="submitNewTask()">Add Task →</button>
+        </div>
       </div>
     </div>
 
@@ -2746,15 +2950,8 @@
     }
 
     function awardTrophies() {
-      showToast();
+      showToast('🏆 Trophies awarded — priority complete!');
       closeModal();
-      // Simulate complete
-    }
-
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
     }
     // ── Project / Task Modals ───────────────────────────────────
     const AVATARS = {
@@ -2848,82 +3045,152 @@
       }
     });
 
-    // ── Mic / Voice Input ──────────────────────────────────────
-    let micRecording = false;
-    let micTimer = null;
-    let micSeconds = 30;
-    let recognition = null;
+    // ── Universal Voice Input ──────────────────────────────────
+    let activeRecognition = null;
+    let activeTimer = null;
 
-    function toggleMic() {
-      if (micRecording) stopMic();
-      else startMic();
-    }
+    function startVoice(targetBoxId, micBtnId, timerId, saveId, previewId, fillTitle, titleId) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) { alert('Voice input requires Chrome browser.'); return; }
+      if (activeRecognition) { activeRecognition.stop(); return; }
 
-    function startMic() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert('Voice input not supported in this browser. Try Chrome.');
-        return;
-      }
-      recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-      let finalTranscript = '';
+      const micBtn = document.getElementById(micBtnId);
+      const timerEl = document.getElementById(timerId);
+      const box = document.getElementById(targetBoxId);
+      let finalText = '';
+      let secs = 30;
 
-      recognition.onresult = function(e) {
+      micBtn.classList.add('recording');
+      timerEl.textContent = '0:30';
+
+      activeRecognition = new SpeechRec();
+      activeRecognition.continuous = true;
+      activeRecognition.interimResults = true;
+      activeRecognition.lang = 'en-US';
+
+      activeRecognition.onresult = function(e) {
         let interim = '';
         for (let i = e.resultIndex; i < e.results.length; i++) {
-          if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+          if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
           else interim += e.results[i][0].transcript;
         }
-        document.getElementById('priorityInput').value = finalTranscript + interim;
+        box.value !== undefined ? (box.value = finalText + interim) : (box.textContent = finalText + interim);
+        if (fillTitle && titleId && finalText.trim()) {
+          const words = finalText.trim().split(' ').slice(0,8).join(' ');
+          document.getElementById(titleId).value = words.charAt(0).toUpperCase() + words.slice(1);
+        }
       };
-      recognition.onend = function() {
-        if (micRecording) finalizeMic(finalTranscript || document.getElementById('priorityInput').value);
-      };
-      recognition.start();
-      micRecording = true;
 
-      // UI
-      const btn = document.getElementById('micBtn');
-      btn.style.background = '#7f1d1d';
-      btn.style.animation = 'none';
-      const status = document.getElementById('micStatus');
-      status.style.display = 'flex';
-      micSeconds = 30;
-      document.getElementById('micTimer').textContent = '0:30';
-      micTimer = setInterval(() => {
-        micSeconds--;
-        document.getElementById('micTimer').textContent = '0:' + String(micSeconds).padStart(2,'0');
-        if (micSeconds <= 0) stopMic();
+      activeRecognition.onend = function() {
+        stopVoice(micBtnId, timerId, saveId, previewId, finalText, targetBoxId);
+      };
+
+      activeRecognition.start();
+
+      activeTimer = setInterval(() => {
+        secs--;
+        timerEl.textContent = '0:' + String(secs).padStart(2,'0');
+        if (secs <= 0) { activeRecognition.stop(); }
       }, 1000);
     }
 
-    function stopMic() {
-      micRecording = false;
-      clearInterval(micTimer);
-      if (recognition) { recognition.stop(); recognition = null; }
-      document.getElementById('micBtn').style.background = '#dc2626';
-      document.getElementById('micStatus').style.display = 'none';
+    function stopVoice(micBtnId, timerId, saveId, previewId, transcript, targetBoxId) {
+      clearInterval(activeTimer);
+      activeRecognition = null;
+      const micBtn = document.getElementById(micBtnId);
+      const timerEl = document.getElementById(timerId);
+      if (micBtn) micBtn.classList.remove('recording');
+      if (timerEl) timerEl.textContent = '';
+      if (saveId) {
+        const saveEl = document.getElementById(saveId);
+        if (saveEl) { saveEl.style.display = 'block'; }
+      }
     }
 
-    function finalizeMic(transcript) {
-      if (!transcript.trim()) return;
-      // Add raw transcription to Notes
-      addNoteEntry('voice', 'Gary', transcript, '#6366f1', 'G');
-      // Show AI analyzing
-      const aiEl = document.getElementById('aiAnalyzing');
-      aiEl.style.display = 'block';
-      setTimeout(() => {
-        aiEl.style.display = 'none';
-        // Summarize to short goal (trim to ~60 chars, capitalize)
-        let summary = transcript.trim();
-        summary = summary.charAt(0).toUpperCase() + summary.slice(1);
-        if (summary.length > 70) summary = summary.slice(0, 67) + '...';
-        document.getElementById('priorityInput').value = summary;
-        addPriorityFromInput();
-      }, 2000);
+    function saveVoiceNote(boxId, previewId, saveBtnId) {
+      const box = document.getElementById(boxId);
+      const text = box.value || box.textContent;
+      if (!text.trim() || text.includes('Tap mic')) return;
+      // Add to Notes tab
+      addNoteEntry('voice', 'Gary', text.trim(), '#6366f1', 'G');
+      const preview = document.getElementById(previewId);
+      const saveBtn = document.getElementById(saveBtnId);
+      if (preview) { preview.style.display = 'block'; }
+      if (saveBtn) saveBtn.style.display = 'none';
+      box.value !== undefined ? (box.value = '') : (box.textContent = 'Tap mic to record...');
+    }
+
+    // ── Add Project Modal ──────────────────────────────────────
+    function openAddProjectModal() {
+      document.getElementById('newProjectTitle').value = '';
+      document.getElementById('newProjectDesc').value = '';
+      document.getElementById('addProjectModal').classList.add('active');
+    }
+    function closeAddProjectModal() {
+      document.getElementById('addProjectModal').classList.remove('active');
+    }
+    function submitNewProject() {
+      const title = document.getElementById('newProjectTitle').value.trim();
+      const desc = document.getElementById('newProjectDesc').value.trim();
+      if (!title) { document.getElementById('newProjectTitle').focus(); return; }
+      // Add to Notes as a project creation entry
+      addNoteEntry('system', 'Gary', `New project created: "${title}". ${desc}`, '#6366f1', 'G');
+      closeAddProjectModal();
+      showToast('Project "' + title.slice(0,30) + '" created — added to Notes for agents');
+    }
+
+    // ── Add Task Modal ──────────────────────────────────────────
+    function openAddTaskModal(type) {
+      document.getElementById('newTaskDesc').value = '';
+      document.getElementById('addTaskModalTitle').textContent = type === 'agent' ? '🤖 New Agent Task' : '✅ New Human Task';
+      document.getElementById('newTaskType').value = type || 'human';
+      document.getElementById('addTaskModal').classList.add('active');
+    }
+    function closeAddTaskModal() {
+      document.getElementById('addTaskModal').classList.remove('active');
+    }
+    function submitNewTask() {
+      const desc = document.getElementById('newTaskDesc').value.trim();
+      const type = document.getElementById('newTaskType').value;
+      if (!desc) { document.getElementById('newTaskDesc').focus(); return; }
+      addNoteEntry('system', 'Gary', `New ${type} task: "${desc}"`, '#6366f1', 'G');
+      closeAddTaskModal();
+      showToast('Task added to Notes — Clu & Harriet can read it');
+    }
+
+    // ── Notes export for agents ──────────────────────────────────
+    function copyNotesForAgent() {
+      const entries = document.querySelectorAll('.note-entry');
+      let text = '=== MISSION CONTROL NOTES — AGENT READ ===\n\n';
+      entries.forEach(el => {
+        const header = el.querySelector('.note-entry-header');
+        const body = el.querySelector('.note-entry-body');
+        if (header && body) text += `[${header.textContent.replace(/\s+/g,' ').trim()}]\n${body.textContent.replace(/\s+/g,' ').trim()}\n\n---\n\n`;
+      });
+      navigator.clipboard.writeText(text).then(() => showToast('Notes copied — paste to Clu or any agent'));
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = msg || '🏆 Trophies awarded!';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('addProjectModal').addEventListener('click', function(e){ if(e.target===this) closeAddProjectModal(); });
+    document.getElementById('addTaskModal').addEventListener('click', function(e){ if(e.target===this) closeAddTaskModal(); });
+
+    // ── Top Priorities mic (wired to universal voice) ──────────
+    function toggleMic() {
+      const btn = document.getElementById('micBtn');
+      if (btn.classList.contains('recording')) {
+        if (activeRecognition) activeRecognition.stop();
+      } else {
+        startVoice('priorityInput', 'micBtn', 'micTimer', null, null, false, null);
+        const status = document.getElementById('micStatus');
+        if (status) status.style.display = 'flex';
+      }
     }
 
     // ── Priority helpers ────────────────────────────────────────
