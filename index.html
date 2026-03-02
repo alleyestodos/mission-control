@@ -1,0 +1,1176 @@
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Mission Control&lt;/title&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+  &lt;link href=&quot{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;style&gt;
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0d0d11;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: #13131a;
+      border-bottom: 1px solid #1e1e2e;
+      display: flex;
+      align-items: center;
+      padding: 0 48px;
+      z-index: 1000;
+      font-size: 13px;
+    }
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .nav-left .title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #a78bfa;
+    }
+    .nav-left .subtitle {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .nav-tabs {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin: 0 24px;
+    }
+    .tab {
+      background: transparent;
+      color: #9ca3af;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab:hover {
+      background: #1e1b4b;
+      color: #c4b5fd;
+    }
+    .tab.active {
+      background: #1e1b4b;
+      color: #c4b5fd;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .nav-right input {
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 200px;
+    }
+    .nav-right input::placeholder {
+      color: #6b7280;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      color: #22c55e;
+      font-weight: 500;
+    }
+    .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: 6px;
+    }
+    .content {
+      margin-top: 48px;
+      padding: 32px 48px;
+      min-height: calc(100vh - 48px);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 24px 0;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 40px 0;
+    }
+    .stat-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .stat-goal::before { background: #6366f1; }
+    .stat-projects::before { background: #22c55e; }
+    .stat-tasks::before { background: #eab308; }
+    .stat-days::before { background: #ef4444; }
+    .stat-main {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .stat-label {
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .stat-change {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .stat-change.up { color: #22c55e; }
+    .stat-change.down { color: #f59e0b; }
+    .stat-change.countdown { color: #ef4444; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-header {
+      text-transform: uppercase;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2d2d44;
+    }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 8px 0;
+    }
+    .dot-blue {
+      width: 6px;
+      height: 6px;
+      background: #6366f1;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .priority-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #4b5563;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .priority-checkbox input {
+      opacity: 0;
+      position: absolute;
+    }
+    .priority-checkbox input:checked + span {
+      background: #6366f1;
+      border-color: #6366f1;
+    }
+    .priority-checkbox span {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .add-priority {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .add-priority input {
+      flex: 1;
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .btn {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #5856eb;
+    }
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .kanban-column {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .column-header {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #e5e7eb;
+    }
+    .task-card {
+      background: transparent;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .task-card:hover {
+      background: #1a1a2e;
+    }
+    .task-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .priority-high { color: #ef4444; }
+    .priority-medium { color: #f59e0b; }
+    .task-date {
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .task-desc {
+      color: #9ca3af;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .add-task {
+      border: 2px dashed #4b5563;
+      background: transparent;
+      color: #6b7280;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-top: 24px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #2d2d44;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -40px;
+      top: 12px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #6b7280;
+      border: 3px solid #0d0d11;
+    }
+    .timeline-dot.active {
+      background: #22c55e;
+    }
+    .timeline-phase {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .timeline-dates {
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: #9ca3af;
+    }
+    .checklist .done {
+      color: #22c55e;
+    }
+    .checklist .done::before {
+      content: '✓';
+      color: #22c55e;
+      font-weight: bold;
+      margin-right: 4px;
+    }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .note-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .gauge-container {
+      text-align: center;
+    }
+    .gauge-svg {
+      width: 200px;
+      height: 200px;
+      transform: rotate(-90deg);
+    }
+    .gauge-circle-bg {
+      fill: none;
+      stroke: #2d2d44;
+      stroke-width: 12;
+    }
+    .gauge-circle-progress {
+      fill: none;
+      stroke: #6366f1;
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 157 502;
+      transition: stroke-dasharray 1s;
+    }
+    .gauge-value {
+      font-size: 48px;
+      font-weight: 700;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .chart-container {
+      position: relative;
+    }
+    .chart-label {
+      text-transform: uppercase;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .revenue-svg {
+      width: 100%;
+      height: 200px;
+    }
+    .bar {
+      fill: url(#barGrad);
+    }
+    .clients-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+    }
+    .clients-table th,
+    .clients-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #2d2d44;
+    }
+    .clients-table th {
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge.active {
+      background: #22c55e;
+      color: white;
+    }
+    .delete-icon {
+      cursor: pointer;
+      color: #ef4444;
+      font-size: 16px;
+    }
+    .add-client-row {
+      display: flex;
+      gap: 12px;
+      padding-top: 12px;
+    }
+    .add-client-row input {
+      flex: 1;
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .projections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .projection-item {
+      text-align: center;
+      padding: 24px;
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+    }
+    .projection-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .projection-mrr { color: #22c55e; }
+    .projection-annual { color: #6366f1; }
+    .projection-growth { color: #ef4444; }
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .agent-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .agent-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+    .agent-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .agent-role {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    .agent-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-dot.green { background: #22c55e; }
+    .status-dot.yellow { background: #eab308; }
+    .status-dot.gray { background: #6b7280; }
+    .model-badge {
+      background: #1e1b4b;
+      color: #c4b5fd;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    .tokens {
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    .decisions {
+      margin-top: 40px;
+    }
+    .decision {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .decision-date {
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .decision-question {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .decision-answer {
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+    .decision-consulted {
+      color: #6b7280;
+      font-size: 12px;
+      font-style: italic;
+    }
+    .family-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .family-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .intel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .intel-item {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-left: 3px solid;
+      border-radius: 0 10px 10px 0;
+      padding: 20px;
+    }
+    .intel-source {
+      background: #1e1b4b;
+      color: #c4b5fd;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .intel-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .intel-time {
+      color: #6b7280;
+      font-size: 12px;
+    }
+    @media (max-width: 1200px) {
+      .navbar {
+        padding: 0 24px;
+      }
+      .content {
+        padding: 24px;
+      }
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .kanban {
+        grid-template-columns: 1fr;
+      }
+      .revenue-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-tabs {
+        flex-wrap: wrap;
+        gap: 2px;
+        margin: 0 12px;
+      }
+      .nav-right input {
+        width: 140px;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav class=&quot;navbar&quot;&gt;
+    &lt;div class=&quot;nav-left&quot;&gt;
+      &lt;div class=&quot;title&quot;&gt;⚡ Mission Control&lt;/div&gt;
+      &lt;div class=&quot;subtitle&quot;&gt;Todos los OjOs&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;nav-tabs&quot;&gt;
+      &lt;button class=&quot;tab active&quot; data-tab=&quot;dashboard&quot;&gt;📊 Dashboard&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;projects&quot;&gt;📁 Projects&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;timeline&quot;&gt;🗓️ Timeline&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;notes&quot;&gt;📝 Notes&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;revenue&quot;&gt;💰 Revenue&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;command&quot;&gt;🖥️ Command Center&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;family&quot;&gt;👨‍👩‍👦 Family&lt;/button&gt;
+      &lt;button class=&quot;tab&quot; data-tab=&quot;intel&quot;&gt;🦅 Intel&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;nav-right&quot;&gt;
+      &lt;input type=&quot;search&quot; placeholder=&quot;Search... (⌘K)&quot;&gt;
+      &lt;span class=&quot;status&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Online&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+  &lt;div class=&quot;content&quot;&gt;
+    &lt;div id=&quot;dashboard&quot; class=&quot;tab-content active&quot;&gt;
+      &lt;h1&gt;&lt;span style=&quot;color: #e5e7eb;&quot;&gt;Good morning, &lt;/span&gt;&lt;span style=&quot;color: #a78bfa;&quot;&gt;Gary&lt;/span&gt;&lt;/h1&gt;
+      &lt;div id=&quot;current-time&quot; class=&quot;date&quot; style=&quot;color: #6b7280; font-size: 14px;&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;stats&quot;&gt;
+        &lt;div class=&quot;stat-card stat-goal&quot;&gt;
+          &lt;div class=&quot;stat-main&quot;&gt;12%&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Goal Progress&lt;/div&gt;
+          &lt;div class=&quot;stat-change up&quot;&gt;↑ 3% this week&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-projects&quot;&gt;
+          &lt;div class=&quot;stat-main&quot;&gt;5&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Active Projects&lt;/div&gt;
+          &lt;div class=&quot;stat-change up&quot;&gt;↑ 2 new&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-tasks&quot;&gt;
+          &lt;div class=&quot;stat-main&quot;&gt;8&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Tasks Today&lt;/div&gt;
+          &lt;div class=&quot;stat-change down&quot;&gt;↓ 3 remaining&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-days&quot;&gt;
+          &lt;div class=&quot;stat-main&quot;&gt;90&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Days to Goal&lt;/div&gt;
+          &lt;div class=&quot;stat-change countdown&quot;&gt;countdown&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;grid-2&quot;&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div class=&quot;card-header&quot;&gt;ACTIVITY FEED&lt;/div&gt;
+          &lt;div class=&quot;activity-item&quot;&gt;
+            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;Mission Control dashboard created&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;activity-item&quot;&gt;
+            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;Banksy spawned for avatar edits&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;activity-item&quot;&gt;
+            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;API keys stored in ~/.openclaw/.env&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;activity-item&quot;&gt;
+            &lt;div class=&quot;dot-blue&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;Harriet folder created on Google Drive&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div class=&quot;card-header&quot;&gt;TOP PRIORITIES&lt;/div&gt;
+          &lt;label class=&quot;priority-item&quot;&gt;
+            &lt;div class=&quot;priority-checkbox&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; id=&quot;p1&quot;&gt;
+              &lt;span&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            Complete Mission Control v1
+          &lt;/label&gt;
+          &lt;label class=&quot;priority-item&quot;&gt;
+            &lt;div class=&quot;priority-checkbox&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; id=&quot;p2&quot;&gt;
+              &lt;span&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            Review agent overnight work
+          &lt;/label&gt;
+          &lt;label class=&quot;priority-item&quot;&gt;
+            &lt;div class=&quot;priority-checkbox&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; id=&quot;p3&quot;&gt;
+              &lt;span&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            Set up daily report system
+          &lt;/label&gt;
+          &lt;div class=&quot;add-priority&quot;&gt;
+            &lt;input type=&quot;text&quot; placeholder=&quot;New priority...&quot;&gt;
+            &lt;button class=&quot;btn&quot;&gt;Add&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;projects&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;📁 Projects&lt;/h1&gt;
+      &lt;div class=&quot;kanban&quot;&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;BACKLOG&lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-high&quot;&gt;Base44.ai Integration&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;Replicate Mission Control for remote access&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-medium&quot;&gt;Higgsfield.ai Experiment&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;Banksy API key testing + video gen&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;IN PROGRESS&lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-high&quot;&gt;Avatar Redesigns&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;Banksy editing all team avatars with names&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-high&quot;&gt;Mission Control v1&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;Build local Node.js dashboard&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;DONE&lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-medium&quot;&gt;Team Folder Setup&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;Google Drive + EncryptedStorage mirrors&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;task-card&quot;&gt;
+            &lt;div class=&quot;task-title priority-high&quot;&gt;Agent Overnight Test&lt;/div&gt;
+            &lt;div class=&quot;task-date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div class=&quot;task-desc&quot;&gt;All 9 agents completed sample tasks&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;timeline&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;🗓️ Roadmap&lt;/h1&gt;
+      &lt;div class=&quot;timeline&quot;&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot active&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 1: Foundation&lt;/div&gt;
+          &lt;div class=&quot;timeline-dates&quot;&gt;Feb 23-25 2026&lt;/div&gt;
+          &lt;ul class=&quot;checklist&quot;&gt;
+            &lt;li class=&quot;done&quot;&gt;Oz+Harriet SSH bridge&lt;/li&gt;
+            &lt;li class=&quot;done&quot;&gt;All 10 agents created&lt;/li&gt;
+            &lt;li class=&quot;done&quot;&gt;Overnight test run&lt;/li&gt;
+            &lt;li class=&quot;done&quot;&gt;API keys secured&lt;/li&gt;
+            &lt;li&gt;Mission Control v1&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 2: Local Intelligence&lt;/div&gt;
+          &lt;div class=&quot;timeline-dates&quot;&gt;Feb 26-Mar 5&lt;/div&gt;
+          &lt;ul class=&quot;checklist&quot;&gt;
+            &lt;li&gt;qwen2.5:72b as orchestrator&lt;/li&gt;
+            &lt;li&gt;Agent model assignments optimized&lt;/li&gt;
+            &lt;li&gt;Daily report system automated&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;timeline-phase&quot;&gt;Phase 3: Remote Access&lt;/div&gt;
+          &lt;div class=&quot;timeline-dates&quot;&gt;Mar 6-15&lt;/div&gt;
+          &lt;ul class=&quot;checklist&quot;&gt;
+            &lt;li&gt;Base44.ai replication&lt;/li&gt;
+            &lt;li&gt;Google OAuth sign-in&lt;/li&gt;
+            &lt;li&gt;Mobile-responsive dashboard&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;notes&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;📝 Notes&lt;/h1&gt;
+      &lt;div class=&quot;notes-grid&quot;&gt;
+        &lt;div class=&quot;note-card&quot;&gt;
+          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Meeting with Client A&lt;/h3&gt;
+          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Discuss project scope and timeline. Next steps: send proposal.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;note-card&quot;&gt;
+          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Agent Optimizations&lt;/h3&gt;
+          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Test qwen2.5 models for better performance.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;note-card&quot;&gt;
+          &lt;h3 style=&quot;margin: 0 0 12px 0; color: #e5e7eb;&quot;&gt;Daily Review&lt;/h3&gt;
+          &lt;p style=&quot;color: #9ca3af; margin: 0;&quot;&gt;Check overnight agent outputs.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;button class=&quot;btn&quot; style=&quot;margin-top: 24px;&quot;&gt;+ New Note&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;revenue&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;💰 Revenue&lt;/h1&gt;
+      &lt;div class=&quot;revenue-grid&quot;&gt;
+        &lt;div class=&quot;card gauge-container&quot; style=&quot;position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;&quot;&gt;
+          &lt;svg class=&quot;gauge-svg&quot; viewBox=&quot;0 0 100 100&quot;&gt;
+            &lt;circle class=&quot;gauge-circle-bg&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;&gt;&lt;/circle&gt;
+            &lt;circle class=&quot;gauge-circle-progress&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;&gt;&lt;/circle&gt;
+          &lt;/svg&gt;
+          &lt;div class=&quot;gauge-value&quot; style=&quot;font-size: 36px; color: #6366f1;&quot;&gt;$4,000&lt;/div&gt;
+          &lt;div style=&quot;color: #9ca3af; margin-top: 8px;&quot;&gt;of $25,000 goal&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card chart-container&quot;&gt;
+          &lt;div class=&quot;chart-label&quot;&gt;REVENUE — LAST 6 MONTHS&lt;/div&gt;
+          &lt;svg class=&quot;revenue-svg&quot; viewBox=&quot;0 0 400 200&quot;&gt;
+            &lt;defs&gt;
+              &lt;linearGradient id=&quot;barGrad&quot; x1=&quot;0%&quot; y1=&quot;100%&quot; x2=&quot;0%&quot; y2=&quot;0%&quot;&gt;
+                &lt;stop offset=&quot;0%&quot; stop-color=&quot;#6366f1&quot;/&gt;
+                &lt;stop offset=&quot;100%&quot; stop-color=&quot;#a78bfa&quot;/&gt;
+              &lt;/linearGradient&gt;
+            &lt;/defs&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;20&quot; y=&quot;120&quot; width=&quot;40&quot; height=&quot;80&quot; rx=&quot;4&quot;/&gt; &lt;!-- Sep $8k --&gt;
+            &lt;text x=&quot;40&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Sep&lt;/text&gt;
+            &lt;text x=&quot;40&quot; y=&quot;140&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$8k&lt;/text&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;90&quot; y=&quot;100&quot; width=&quot;40&quot; height=&quot;100&quot; rx=&quot;4&quot;/&gt; &lt;!-- Oct $10.5k --&gt;
+            &lt;text x=&quot;110&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Oct&lt;/text&gt;
+            &lt;text x=&quot;110&quot; y=&quot;115&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$10.5k&lt;/text&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;160&quot; y=&quot;80&quot; width=&quot;40&quot; height=&quot;120&quot; rx=&quot;4&quot;/&gt;
+            &lt;text x=&quot;180&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Nov&lt;/text&gt;
+            &lt;text x=&quot;180&quot; y=&quot;90&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$12k&lt;/text&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;230&quot; y=&quot;60&quot; width=&quot;40&quot; height=&quot;140&quot; rx=&quot;4&quot;/&gt;
+            &lt;text x=&quot;250&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Dec&lt;/text&gt;
+            &lt;text x=&quot;250&quot; y=&quot;65&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$14.5k&lt;/text&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;300&quot; y=&quot;40&quot; width=&quot;40&quot; height=&quot;160&quot; rx=&quot;4&quot;/&gt;
+            &lt;text x=&quot;320&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Jan&lt;/text&gt;
+            &lt;text x=&quot;320&quot; y=&quot;45&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$16k&lt;/text&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;370&quot; y=&quot;20&quot; width=&quot;40&quot; height=&quot;180&quot; rx=&quot;4&quot;/&gt;
+            &lt;text x=&quot;390&quot; y=&quot;195&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;#9ca3af&quot;&gt;Feb&lt;/text&gt;
+            &lt;text x=&quot;390&quot; y=&quot;25&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot; fill=&quot;#e5e7eb&quot;&gt;$18.5k&lt;/text&gt;
+          &lt;/svg&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;
+        &lt;div class=&quot;card-header&quot;&gt;CLIENTS&lt;/div&gt;
+        &lt;table class=&quot;clients-table&quot;&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;NAME&lt;/th&gt;
+              &lt;th&gt;MONTHLY VALUE&lt;/th&gt;
+              &lt;th&gt;STATUS&lt;/th&gt;
+              &lt;th&gt;START DATE&lt;/th&gt;
+              &lt;th&gt;&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;Sample Client A&lt;/td&gt;
+              &lt;td&gt;$2,500&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;2026-01-15&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;delete-icon&quot;&gt;🗑️&lt;/span&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;Sample Client B&lt;/td&gt;
+              &lt;td&gt;$1,500&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;2026-02-01&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;delete-icon&quot;&gt;🗑️&lt;/span&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td colspan=&quot;2&quot;&gt;
+                &lt;div class=&quot;add-client-row&quot;&gt;
+                  &lt;input type=&quot;text&quot; placeholder=&quot;Client name&quot;&gt;
+                  &lt;input type=&quot;text&quot; placeholder=&quot;$ Monthly value&quot;&gt;
+                &lt;/div&gt;
+              &lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;badge active&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;input type=&quot;date&quot;&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;button class=&quot;btn&quot;&gt;Add Client&lt;/button&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;projections&quot;&gt;
+        &lt;div class=&quot;projection-item&quot;&gt;
+          &lt;div class=&quot;projection-value projection-mrr&quot;&gt;$4,000&lt;/div&gt;
+          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Current MRR&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;projection-item&quot;&gt;
+          &lt;div class=&quot;projection-value projection-annual&quot;&gt;$48,000&lt;/div&gt;
+          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Projected Annual&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;projection-item&quot;&gt;
+          &lt;div class=&quot;projection-value projection-growth&quot;&gt;$21,000&lt;/div&gt;
+          &lt;div style=&quot;color: #9ca3af;&quot;&gt;Monthly Growth Needed&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;command&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;🖥️ Agent Command Center&lt;/h1&gt;
+      &lt;div class=&quot;agents-grid&quot;&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #ff6b6b;&quot;&gt;A&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Andy&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Finance/Accountant&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #4ecdc4;&quot;&gt;B&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Banksy&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Visual/Creative&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot yellow&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;busy&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #45b7d1;&quot;&gt;C&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Chris Knight&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Sales/Closer&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #96ceb4;&quot;&gt;Cl&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Clu&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Master Developer&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;coder:32b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #feca57;&quot;&gt;E&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Ed Lewis&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Leverage/Credit&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot gray&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;offline&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #ff9ff3;&quot;&gt;M&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Marissa&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Customer Service&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;mistral-nemo:12b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #54a0ff;&quot;&gt;Ma&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Matlock&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Legal&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #5f27cd;&quot;&gt;P&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Phineas&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Travel &amp; Experience&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot gray&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;offline&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background: #00d2d3;&quot;&gt;S&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Spencer&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Long-Term Strategy&lt;/div&gt;
+          &lt;div class=&quot;agent-status&quot;&gt;
+            &lt;span class=&quot;status-dot green&quot;&gt;&lt;/span&gt;
+            &lt;span&gt;online&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+          &lt;div class=&quot;tokens&quot;&gt;0 tokens&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;decisions card&quot;&gt;
+        &lt;div class=&quot;card-header&quot;&gt;EXECUTIVE DECISIONS&lt;/div&gt;
+        &lt;div class=&quot;decision&quot;&gt;
+          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
+          &lt;div class=&quot;decision-question&quot;&gt;Should all agents have Opus as fallback?&lt;/div&gt;
+          &lt;div class=&quot;decision-answer&quot;&gt;Removed Opus fallback from all agents to prevent silent API burns. Local-only fallbacks now.&lt;/div&gt;
+          &lt;div class=&quot;decision-consulted&quot;&gt;Consulted: Oz, All agents&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;decision&quot;&gt;
+          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
+          &lt;div class=&quot;decision-question&quot;&gt;Team structure — who runs agents?&lt;/div&gt;
+          &lt;div class=&quot;decision-answer&quot;&gt;Harriet is ONLY agent on laptop. All 10 team agents run on Oz (Mac Studio) only.&lt;/div&gt;
+          &lt;div class=&quot;decision-consulted&quot;&gt;Consulted: Harriet, Oz&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;family&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;👨‍👩‍👦 Family&lt;/h1&gt;
+      &lt;div class=&quot;family-grid&quot;&gt;
+        &lt;div class=&quot;family-card&quot;&gt;
+          &lt;h2&gt;Health&lt;/h2&gt;
+          &lt;p&gt;All checkups up to date. Next: dental in March.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;family-card&quot;&gt;
+          &lt;h2&gt;Education&lt;/h2&gt;
+          &lt;p&gt;School progress good. Homework reminders set.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;family-card&quot;&gt;
+          &lt;h2&gt;Social&lt;/h2&gt;
+          &lt;p&gt;Upcoming events: family dinner this weekend.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;family-card&quot;&gt;
+          &lt;h2&gt;Work&lt;/h2&gt;
+          &lt;p&gt;Family schedules synced. No conflicts.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;intel&quot; class=&quot;tab-content&quot;&gt;
+      &lt;h1&gt;🦅 Intel&lt;/h1&gt;
+      &lt;div class=&quot;intel-list&quot;&gt;
+        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #6366f1;&quot;&gt;
+          &lt;span class=&quot;intel-source&quot;&gt;TechCrunch&lt;/span&gt;
+          &lt;div class=&quot;intel-title&quot;&gt;OpenClaw releases new agent orchestration features&lt;/div&gt;
+          &lt;div class=&quot;intel-time&quot;&gt;2 hours ago&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #22c55e;&quot;&gt;
+          &lt;span class=&quot;intel-source&quot;&gt;Reuters&lt;/span&gt;
+          &lt;div class=&quot;intel-title&quot;&gt;AI models see 20% efficiency boost&lt;/div&gt;
+          &lt;div class=&quot;intel-time&quot;&gt;5 hours ago&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #eab308;&quot;&gt;
+          &lt;span class=&quot;intel-source&quot;&gt;ClawHub&lt;/span&gt;
+          &lt;div class=&quot;intel-title&quot;&gt;New skills available: mcporter, agent-browser&lt;/div&gt;
+          &lt;div class=&quot;intel-time&quot;&gt;1 day ago&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #ef4444;&quot;&gt;
+          &lt;span class=&quot;intel-source&quot;&gt;Ars Technica&lt;/span&gt;
+          &lt;div class=&quot;intel-title&quot;&gt;Security patch for local LLMs released&lt;/div&gt;
+          &lt;div class=&quot;intel-time&quot;&gt;2 days ago&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;intel-item&quot; style=&quot;border-left-color: #a78bfa;&quot;&gt;
+          &lt;span class=&quot;intel-source&quot;&gt;Hacker News&lt;/span&gt;
+          &lt;div class=&quot;intel-title&quot;&gt;Discussion: Scaling agent teams at home&lt;/div&gt;
+          &lt;div class=&quot;intel-time&quot;&gt;3 days ago&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script&gt;
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(button =&gt; {
+      button.addEventListener('click', () =&gt; {
+        const targetTab = button.dataset.tab;
+        document.querySelectorAll('.tab').forEach(btn =&gt; btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content =&gt; content.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Live date/time
+    function updateTime() {
+      const now = new Date();
+      const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'America/Santo_Domingo'
+      };
+      const dateStr = now.toLocaleDateString('en-US', options);
+      const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'America/Santo_Domingo', hour: '2-digit', minute: '2-digit' });
+      document.getElementById('current-time').textContent = `${dateStr} ${timeStr}`;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Gauge animation (16% = 0.16 * 251.3 ≈ 40.2)
+    const progressCircle = document.querySelector('.gauge-circle-progress');
+    const circumference = 2 * Math.PI * 40;
+    const progress = 0.16;
+    const offset = circumference - progress * circumference;
+    progressCircle.style.strokeDasharray = `${progress * circumference} ${circumference}`;
+    progressCircle.style.strokeDashoffset = '0';
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
