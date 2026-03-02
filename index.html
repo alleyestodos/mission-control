@@ -1928,14 +1928,14 @@
           <div style="display:flex;flex-direction:column;gap:8px;" id="humanTaskList">
 
             <!-- Task with push count -->
-            <div class="task-row" onclick="openTaskModal({title:'Review Mission Control feedback',type:'human',assignees:['gary'],priority:'high',pushCount:0,start:'2026-03-02',created:'today'})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Review Mission Control feedback',type:'human',assignees:['gary'],priority:'high',pushCount:0,start:'2026-03-02',created:'today'})">
               <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
               <img src="avatars/harriet.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" title="Gary">
               <span style="font-size:13px;color:#e5e7eb;flex:1;">Review Mission Control feedback</span>
               <span style="font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
             </div>
 
-            <div class="task-row" onclick="openTaskModal({title:'Call client — Sample Client A',type:'human',assignees:['gary'],priority:'med',pushCount:2,start:'2026-03-01',created:'yesterday'})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Call client — Sample Client A',type:'human',assignees:['gary'],priority:'med',pushCount:2,start:'2026-03-01',created:'yesterday'})">
               <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
               <div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div>
               <span style="font-size:13px;color:#e5e7eb;flex:1;">Call client — Sample Client A</span>
@@ -1943,7 +1943,7 @@
               <span style="font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">Med</span>
             </div>
 
-            <div class="task-row" onclick="openTaskModal({title:'Vet visit with Milo',type:'human',assignees:['gary','milo'],priority:'high',pushCount:1,start:'2026-03-02',created:'today'})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Vet visit with Milo',type:'human',assignees:['gary','milo'],priority:'high',pushCount:1,start:'2026-03-02',created:'today'})">
               <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
               <div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div>
               <div class="activity-avatar" style="background:#f59e0b;width:24px;height:24px;font-size:10px;flex-shrink:0;margin-left:-8px;">M</div>
@@ -1988,13 +1988,13 @@
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;" id="agentTaskList">
 
-            <div class="task-row" onclick="openTaskModal({title:'Rebuild Mission Control V7',type:'agent',assignees:['harriet'],priority:'high',pushCount:0,start:'2026-03-02',created:'today',isOrchestrator:true})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Rebuild Mission Control V7',type:'agent',assignees:['harriet'],priority:'high',pushCount:0,start:'2026-03-02',created:'today',isOrchestrator:true})">
               <img src="avatars/harriet.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Harriet">
               <span style="font-size:13px;color:#e5e7eb;flex:1;">Rebuild Mission Control V7</span>
               <span style="font-size:11px;color:#22c55e;background:#0d1f0d;padding:2px 8px;border-radius:4px;">🔄 Active</span>
             </div>
 
-            <div class="task-row" onclick="openTaskModal({title:'Generate avatar images for all agents',type:'agent',assignees:['banksy'],priority:'med',pushCount:1,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Generate avatar images for all agents',type:'agent',assignees:['banksy'],priority:'med',pushCount:1,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
               <img src="avatars/banksy.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Banksy">
               <span style="font-size:13px;color:#e5e7eb;flex:1;">Generate avatar images</span>
               <span title="Pushed 1 time" style="font-size:16px;">😤</span>
@@ -2007,7 +2007,7 @@
               <span style="font-size:11px;color:#22c55e;">✓ Done</span>
             </div>
 
-            <div class="task-row" onclick="openTaskModal({title:'Sync Obsidian vault to Oz',type:'agent',assignees:['clu'],priority:'med',pushCount:3,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
+            <div class="task-row" onclick="window._currentTaskRow=this;openTaskModal({title:'Sync Obsidian vault to Oz',type:'agent',assignees:['clu'],priority:'med',pushCount:3,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
               <img src="avatars/clu.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Clu">
               <span style="font-size:13px;color:#e5e7eb;flex:1;">Sync Obsidian vault to Oz</span>
               <span title="Pushed 3 times — agent struggling" style="font-size:16px;">😡</span>
@@ -2040,7 +2040,7 @@
       <!-- Task detail modal -->
       <div class="project-modal-overlay" id="taskModal">
         <div class="project-modal-box">
-          <button class="pm-close" onclick="document.getElementById('taskModal').classList.remove('active')">✕</button>
+          <button class="pm-close" onclick="closeTaskModal()">✕</button>
           <div class="pm-title" id="tmTitle"></div>
           <hr class="pm-divider">
           <div class="pm-row">
@@ -2052,8 +2052,18 @@
           <div class="pm-label" style="margin-bottom:8px;">Assigned To</div>
           <div class="pm-assignee-row" id="tmAssignees"></div>
           <hr class="pm-divider">
+          <!-- Normal actions -->
           <div id="tmActions" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
           <div style="margin-top:14px;font-size:11px;color:#4b5563;" id="tmPermNote"></div>
+          <!-- Delete confirmation (hidden by default) -->
+          <div id="tmDeleteConfirm" style="display:none;margin-top:16px;background:#1a0a0a;border:1px solid #ef4444;border-radius:12px;padding:18px;">
+            <div style="font-size:15px;font-weight:700;color:#fca5a5;margin-bottom:6px;">⚠️ You intend to Delete — not Complete... correct?</div>
+            <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">Deleting is permanent. The task is completely removed — no record, no trace.<br>If it was actually done, use Complete instead.</div>
+            <div style="display:flex;gap:10px;">
+              <button onclick="completeTaskInstead()" style="flex:1;background:#052e16;color:#22c55e;border:1px solid #22c55e;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;">✅ I will Complete</button>
+              <button onclick="vanquishTask()" style="flex:1;background:#450a0a;color:#ef4444;border:1px solid #ef4444;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;">💣 I will not Complete — DELETE IT</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2774,15 +2784,18 @@
 
         <div class="vm-field">
           <div class="vm-label">Task Description</div>
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-            <button class="voice-mic-btn" id="taskMicBtn" onclick="startVoice('newTaskDesc','taskMicBtn','taskVoiceTimer','taskVoiceSave',null,false,null)" title="Speak task">
+          <!-- Mic row -->
+          <div style="display:flex;gap:10px;align-items:center;background:#0d0d11;border:1px solid #2d2d44;border-radius:8px;padding:10px 14px;margin-bottom:8px;">
+            <button class="voice-mic-btn" id="taskMicBtn" onclick="startVoice('newTaskDesc','taskMicBtn','taskVoiceTimer',null,null,false,null)" title="Speak task — transcription fills the box below">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
             </button>
-            <span style="font-size:12px;color:#6b7280;">Tap mic to speak — 30 second max</span>
-            <span class="voice-timer" id="taskVoiceTimer"></span>
+            <div>
+              <div style="font-size:12px;color:#e5e7eb;font-weight:600;">Tap mic → speak → words appear below</div>
+              <div style="font-size:11px;color:#6b7280;">Live via Web Speech · finalized by local Whisper · 30s max</div>
+            </div>
+            <span class="voice-timer" id="taskVoiceTimer" style="margin-left:auto;"></span>
           </div>
-          <textarea class="vm-textarea" id="newTaskDesc" placeholder="Describe the task..."></textarea>
-          <div id="taskVoiceSave" style="display:none;font-size:12px;color:#22c55e;margin-top:4px;">✅ Voice transcribed — edit above if needed</div>
+          <textarea class="vm-textarea" id="newTaskDesc" placeholder="Type here — or tap mic above and speak, transcription flows in live..."></textarea>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -2795,7 +2808,7 @@
             </select>
           </div>
           <div class="vm-field">
-            <div class="vm-label">Type</div>
+            <div class="vm-label">Task Type</div>
             <select class="vm-select" id="newTaskType">
               <option value="human">👤 Human Task</option>
               <option value="agent">🤖 Agent Task</option>
@@ -2804,14 +2817,73 @@
         </div>
 
         <div class="vm-field">
-          <div class="vm-label">Assign To</div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" checked style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#6366f1;width:22px;height:22px;font-size:9px;flex-shrink:0;">G</div> Gary</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#8b5cf6;width:22px;height:22px;font-size:9px;flex-shrink:0;">N</div> Nardellly</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#f59e0b;width:22px;height:22px;font-size:9px;flex-shrink:0;">M</div> Milo</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/harriet.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Harriet</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/clu.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Clu</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/banksy.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Banksy</label>
+          <div class="vm-label" style="margin-bottom:10px;">Assign To — <span style="font-weight:400;text-transform:none;color:#4b5563;">tap an avatar to assign (gold = assigned)</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;">
+            <div class="avatar-pill task-assignee selected" data-name="gary" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <div class="avatar-pill-init" style="background:#6366f1;">G</div>
+              <span class="avatar-pill-name">Gary</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="nardellly" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <div class="avatar-pill-init" style="background:#8b5cf6;">N</div>
+              <span class="avatar-pill-name">Nardellly</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="alan" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <div class="avatar-pill-init" style="background:#0ea5e9;">A</div>
+              <span class="avatar-pill-name">Alan</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="milo" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <div class="avatar-pill-init" style="background:#f59e0b;">M</div>
+              <span class="avatar-pill-name">Milo</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="harriet" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/harriet.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Harriet</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="clu" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/clu.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Clu</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="oz" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/oz.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Oz</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="banksy" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/banksy.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Banksy</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="andy" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/andy.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Andy</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="spencer" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/spencer.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Spencer</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="marissa" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/marissa.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Marissa</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="matlock" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/matlock.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Matlock</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill task-assignee" data-name="phineas" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/phineas.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Phineas</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
           </div>
         </div>
 
@@ -3173,11 +3245,13 @@
       });
       const actionsEl = document.getElementById('tmActions');
       const noteEl = document.getElementById('tmPermNote');
-      // Orchestrators (Gary = human, Harriet/Oz = agents) can complete/delete
-      // Non-orchestrator agents can only push
+      document.getElementById('tmDeleteConfirm').style.display = 'none';
       const isOrchestrator = data.type === 'human' || data.isOrchestrator;
       if (isOrchestrator) {
-        actionsEl.innerHTML = `<button class="pm-btn pm-btn-push" onclick="pushTaskFromModal()">📅 Push to Tomorrow</button><button class="pm-btn pm-btn-complete" onclick="document.getElementById('taskModal').classList.remove('active')">✅ Mark Complete</button><button class="pm-btn pm-btn-delete" onclick="document.getElementById('taskModal').classList.remove('active')">🗑 Delete</button>`;
+        actionsEl.innerHTML = `
+          <button class="pm-btn pm-btn-push" onclick="pushTaskFromModal()">📅 Push to Tomorrow</button>
+          <button class="pm-btn pm-btn-complete" onclick="completeTaskFromModal()">✅ Mark Complete</button>
+          <button class="pm-btn pm-btn-delete" onclick="showTaskDeleteConfirm()">🗑 Delete</button>`;
         noteEl.textContent = '';
       } else {
         actionsEl.innerHTML = `<button class="pm-btn pm-btn-push" onclick="pushTaskFromModal()">📅 Push to Tomorrow</button>`;
@@ -3185,8 +3259,40 @@
       }
       document.getElementById('taskModal').classList.add('active');
     }
-    function pushTaskFromModal() { document.getElementById('taskModal').classList.remove('active'); }
-    document.getElementById('taskModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('active'); });
+
+    function closeTaskModal() {
+      document.getElementById('taskModal').classList.remove('active');
+      document.getElementById('tmDeleteConfirm').style.display = 'none';
+    }
+
+    function showTaskDeleteConfirm() {
+      document.getElementById('tmActions').style.opacity = '0.3';
+      document.getElementById('tmActions').style.pointerEvents = 'none';
+      document.getElementById('tmDeleteConfirm').style.display = 'block';
+      document.getElementById('tmDeleteConfirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function completeTaskInstead() {
+      closeTaskModal();
+      showToast('✅ Task marked Complete');
+      // Remove the task row from DOM (would be real data in production)
+      if (window._currentTaskRow) { window._currentTaskRow.remove(); window._currentTaskRow = null; }
+    }
+
+    function vanquishTask() {
+      closeTaskModal();
+      if (window._currentTaskRow) { window._currentTaskRow.remove(); window._currentTaskRow = null; }
+      showToast('💣 Task deleted — completely removed, no trace');
+    }
+
+    function completeTaskFromModal() {
+      closeTaskModal();
+      if (window._currentTaskRow) { window._currentTaskRow.remove(); window._currentTaskRow = null; }
+      showToast('✅ Task marked Complete');
+    }
+
+    function pushTaskFromModal() { closeTaskModal(); }
+    document.getElementById('taskModal').addEventListener('click', function(e){ if(e.target===this) closeTaskModal(); });
 
     function pushTask(emoji) {
       const pushLevels = ['😤','😠','😡','🤬'];
@@ -3460,8 +3566,12 @@
     // ── Add Task Modal ──────────────────────────────────────────
     function openAddTaskModal(type) {
       document.getElementById('newTaskDesc').value = '';
-      document.getElementById('addTaskModalTitle').textContent = type === 'agent' ? '🤖 New Agent Task' : '✅ New Human Task';
+      document.getElementById('addTaskModalTitle').textContent = type === 'agent' ? '🤖 New Agent Task' : '✅ New Task';
       document.getElementById('newTaskType').value = type || 'human';
+      // Reset assignees — Gary selected by default
+      document.querySelectorAll('.task-assignee').forEach(p => {
+        p.classList.toggle('selected', p.dataset.name === 'gary');
+      });
       document.getElementById('addTaskModal').classList.add('active');
     }
     function closeAddTaskModal() {
