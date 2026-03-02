@@ -893,51 +893,142 @@
     }
 
     /* Family */
-    .family-grid {
+    .family-members-row {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
-      margin-bottom: 24px;
     }
+    @media (max-width: 1200px) { .family-members-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .family-members-row { grid-template-columns: 1fr; } }
 
-    @media (max-width: 768px) {
-      .family-grid {
-        grid-template-columns: 1fr;
-      }
+    .family-member-panel {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 16px;
+      padding: 20px;
     }
-
-    .family-section ul {
-      list-style: none;
-    }
-
-    .family-section li {
-      font-size: 13px;
-      color: #9ca3af;
-      margin-bottom: 8px;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .family-section li::before {
-      content: '•';
-      color: #6366f1;
-      position: absolute;
-      left: 0;
-    }
-
-    .family-members {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .family-avatar {
+    .family-member-header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: #9ca3af;
+      margin-bottom: 16px;
+      gap: 8px;
+    }
+    .family-member-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+    }
+    .family-member-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+    .family-member-role {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .family-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .family-card {
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .family-card:hover {
+      border-color: #6366f1;
+      background: #1e1b4b;
+    }
+    .family-card-icon { font-size: 18px; margin-bottom: 4px; }
+    .family-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .family-card-value {
+      font-size: 13px;
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+    .family-card-grade {
+      font-size: 22px;
+      font-weight: 800;
+      color: #22c55e;
+      line-height: 1;
+    }
+
+    /* Family card modal */
+    .family-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .family-modal-overlay.active { display: flex; }
+    .family-modal-box {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+    }
+    .family-modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none; border: none;
+      color: #6b7280; font-size: 20px;
+      cursor: pointer;
+    }
+    .family-modal-close:hover { color: #e5e7eb; }
+    .family-modal-title {
+      font-size: 18px; font-weight: 700;
+      color: #e5e7eb; margin-bottom: 4px;
+    }
+    .family-modal-person {
+      font-size: 13px; color: #a78bfa;
+      margin-bottom: 20px;
+    }
+    .family-modal-section { margin-bottom: 16px; }
+    .family-modal-section-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: #6b7280; margin-bottom: 8px;
+    }
+    .family-modal-item {
+      display: flex; align-items: center;
+      gap: 10px; padding: 8px 0;
+      border-bottom: 1px solid #2d2d44;
+      font-size: 13px; color: #9ca3af;
+    }
+    .family-modal-item:last-child { border-bottom: none; }
+    .family-modal-progress-bar {
+      height: 6px; background: #2d2d44;
+      border-radius: 3px; overflow: hidden;
+      margin-top: 12px;
+    }
+    .family-modal-progress-fill {
+      height: 100%; border-radius: 3px;
+      background: linear-gradient(90deg, #6366f1, #a78bfa);
     }
 
     /* Intel */
@@ -1124,7 +1215,7 @@
       <div class="stats-grid">
         <div class="stat-card stat-goal">
           <div class="stat-value">12%</div>
-          <div class="stat-label">Goal Progress</div>
+          <div class="stat-label">Goals Progress</div>
           <div class="stat-change" style="color: #22c55e;">↑ 3% this week</div>
         </div>
         <div class="stat-card stat-projects">
@@ -1541,55 +1632,157 @@
     <!-- Tab 7: Family -->
     <div id="family" class="tab">
       <div class="tab-title">👨‍👩‍👦 Family</div>
-      <div class="family-grid">
-        <div class="card family-section">
-          <div style="font-size: 18px; margin-bottom: 16px;">🏥 Health</div>
-          <ul>
-            <li>Annual checkups: Up to date</li>
-            <li>Exercise log: 3x/week</li>
-            <li>Medications: None active</li>
-          </ul>
+      <div class="family-members-row">
+
+        <!-- Gary -->
+        <div class="family-member-panel">
+          <div class="family-member-header">
+            <div class="family-member-avatar" style="background:#6366f1;">G</div>
+            <div class="family-member-name">Gary</div>
+            <div class="family-member-role">Founder — Todos los OjOs</div>
+          </div>
+          <div class="family-cards-grid">
+            <div class="family-card" onclick="openFamilyModal('Gary','Health','🏥','Gym 3x/week. No active medications. Annual checkup: March 2026.','Progress','85')">
+              <div class="family-card-icon">🏥</div>
+              <div class="family-card-label">Health</div>
+              <div class="family-card-grade">A</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Gary','Education','📚','AI/ML deep dive ongoing. 2 books active. 1 certification in progress.','Progress','78')">
+              <div class="family-card-icon">📚</div>
+              <div class="family-card-label">Education</div>
+              <div class="family-card-grade" style="color:#a78bfa;">B+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Gary','Social','🤝','Team dinner Friday. Weekly family calls. 2 network events this month.','Progress','72')">
+              <div class="family-card-icon">🤝</div>
+              <div class="family-card-label">Social</div>
+              <div class="family-card-grade" style="color:#f59e0b;">B</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Gary','Revenue','💰','7am + 7pm standups active. 5 active projects. Revenue goal on track.','Progress','91')">
+              <div class="family-card-icon">💰</div>
+              <div class="family-card-label">Revenue</div>
+              <div class="family-card-grade" style="color:#22c55e;">A+</div>
+            </div>
+          </div>
         </div>
-        <div class="card family-section">
-          <div style="font-size: 18px; margin-bottom: 16px;">📚 Education</div>
-          <ul>
-            <li>Current courses: AI & Automation</li>
-            <li>Books reading: 2 active</li>
-            <li>Certifications: 1 in progress</li>
-          </ul>
+
+        <!-- Nardellly -->
+        <div class="family-member-panel">
+          <div class="family-member-header">
+            <div class="family-member-avatar" style="background:#8b5cf6;">N</div>
+            <div class="family-member-name">Nardellly</div>
+            <div class="family-member-role">Family</div>
+          </div>
+          <div class="family-cards-grid">
+            <div class="family-card" onclick="openFamilyModal('Nardellly','Health','🏥','Yoga Tuesday & Thursday. Last checkup: Jan 2026. No active medications.','Progress','88')">
+              <div class="family-card-icon">🏥</div>
+              <div class="family-card-label">Health</div>
+              <div class="family-card-grade">A</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Nardellly','Education','📚','Language study active. 1 online course in progress.','Progress','74')">
+              <div class="family-card-icon">📚</div>
+              <div class="family-card-label">Education</div>
+              <div class="family-card-grade" style="color:#f59e0b;">B</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Nardellly','Social','🤝','Book club Saturday. Active social calendar.','Progress','82')">
+              <div class="family-card-icon">🤝</div>
+              <div class="family-card-label">Social</div>
+              <div class="family-card-grade" style="color:#a78bfa;">B+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Nardellly','Revenue','💰','Project review ongoing. Contributing to household goals.','Progress','65')">
+              <div class="family-card-icon">💰</div>
+              <div class="family-card-label">Revenue</div>
+              <div class="family-card-grade" style="color:#f59e0b;">C+</div>
+            </div>
+          </div>
         </div>
-        <div class="card family-section">
-          <div style="font-size: 18px; margin-bottom: 16px;">👥 Social</div>
-          <ul>
-            <li>Family calls: Weekly</li>
-            <li>Network events: 2 this month</li>
-            <li>Community: Active</li>
-          </ul>
+
+        <!-- Alan -->
+        <div class="family-member-panel">
+          <div class="family-member-header">
+            <div class="family-member-avatar" style="background:#10b981;">A</div>
+            <div class="family-member-name">Alan</div>
+            <div class="family-member-role">Family</div>
+          </div>
+          <div class="family-cards-grid">
+            <div class="family-card" onclick="openFamilyModal('Alan','Health','🏥','Checkup scheduled Mar 5. Soccer keeping active.','Progress','80')">
+              <div class="family-card-icon">🏥</div>
+              <div class="family-card-label">Health</div>
+              <div class="family-card-grade" style="color:#a78bfa;">B+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Alan','Education','📚','Math tutoring weekly. Science fair prep in progress.','Progress','83')">
+              <div class="family-card-icon">📚</div>
+              <div class="family-card-label">Education</div>
+              <div class="family-card-grade" style="color:#a78bfa;">B+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Alan','Social','🤝','Soccer Saturday. Good friend group at school.','Progress','90')">
+              <div class="family-card-icon">🤝</div>
+              <div class="family-card-label">Social</div>
+              <div class="family-card-grade" style="color:#22c55e;">A</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Alan','Revenue','💰','Science fair — potential scholarship opportunity.','Progress','50')">
+              <div class="family-card-icon">💰</div>
+              <div class="family-card-label">Revenue</div>
+              <div class="family-card-grade" style="color:#6b7280;">C</div>
+            </div>
+          </div>
         </div>
-        <div class="card family-section">
-          <div style="font-size: 18px; margin-bottom: 16px;">💼 Work</div>
-          <ul>
-            <li>Active projects: 5</li>
-            <li>Client meetings: 3 this week</li>
-            <li>Revenue goal: On track</li>
-          </ul>
+
+        <!-- Milo -->
+        <div class="family-member-panel">
+          <div class="family-member-header">
+            <div class="family-member-avatar" style="background:#f59e0b;">M</div>
+            <div class="family-member-name">Milo</div>
+            <div class="family-member-role">Family</div>
+          </div>
+          <div class="family-cards-grid">
+            <div class="family-card" onclick="openFamilyModal('Milo','Health','🏥','Pediatrics Mar 10. Healthy, active child.','Progress','92')">
+              <div class="family-card-icon">🏥</div>
+              <div class="family-card-label">Health</div>
+              <div class="family-card-grade" style="color:#22c55e;">A+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Milo','Education','📚','Reading program active. Art class showing great progress.','Progress','88')">
+              <div class="family-card-icon">📚</div>
+              <div class="family-card-label">Education</div>
+              <div class="family-card-grade" style="color:#22c55e;">A</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Milo','Social','🤝','Playdate Wednesday. Very sociable.','Progress','95')">
+              <div class="family-card-icon">🤝</div>
+              <div class="family-card-label">Social</div>
+              <div class="family-card-grade" style="color:#22c55e;">A+</div>
+            </div>
+            <div class="family-card" onclick="openFamilyModal('Milo','Revenue','💰','Art class — early creative development.','Progress','40')">
+              <div class="family-card-icon">💰</div>
+              <div class="family-card-label">Revenue</div>
+              <div class="family-card-grade" style="color:#6b7280;">N/A</div>
+            </div>
+          </div>
         </div>
+
       </div>
-      <div class="family-members">
-        <div class="family-avatar">
-          <div style="width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;">G</div>
-          <div>Gary</div>
-          <div>Self</div>
+    </div>
+
+    <!-- Family Modal -->
+    <div class="family-modal-overlay" id="familyModal">
+      <div class="family-modal-box">
+        <button class="family-modal-close" onclick="closeFamilyModal()">✕</button>
+        <div class="family-modal-title" id="familyModalTitle"></div>
+        <div class="family-modal-person" id="familyModalPerson"></div>
+        <div class="family-modal-section">
+          <div class="family-modal-section-label">Status</div>
+          <div class="family-modal-item" id="familyModalStatus"></div>
         </div>
-        <div class="family-avatar">
-          <div style="width: 48px; height: 48px; border-radius: 50%; background: #ec4899; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;">W</div>
-          <div>Wife</div>
-          <div>Partner</div>
+        <div class="family-modal-section">
+          <div class="family-modal-section-label">Progress toward goals</div>
+          <div class="family-modal-progress-bar">
+            <div class="family-modal-progress-fill" id="familyModalBar" style="width:0%"></div>
+          </div>
+          <div style="font-size:12px;color:#6b7280;margin-top:6px;" id="familyModalPct"></div>
         </div>
-        <div class="family-avatar">
-          <div style="width: 48px; height: 48px; border-radius: 50%; background: #10b981; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;">K</div>
-          <div>Kid</div>
-          <div>Child</div>
+        <div class="family-modal-section">
+          <div class="family-modal-section-label">Goals</div>
+          <div class="family-modal-item">○ Set quarterly target</div>
+          <div class="family-modal-item">○ Track weekly progress</div>
+          <div class="family-modal-item">○ Review with family monthly</div>
         </div>
       </div>
     </div>
@@ -1806,6 +1999,32 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
+    function openFamilyModal(person, category, icon, status, label, pct) {
+      document.getElementById('familyModalTitle').textContent = icon + ' ' + category;
+      document.getElementById('familyModalPerson').textContent = person;
+      document.getElementById('familyModalStatus').textContent = status;
+      document.getElementById('familyModalBar').style.width = pct + '%';
+      document.getElementById('familyModalPct').textContent = pct + '% — ' + getGrade(parseInt(pct));
+      document.getElementById('familyModal').classList.add('active');
+    }
+    function closeFamilyModal() {
+      document.getElementById('familyModal').classList.remove('active');
+    }
+    function getGrade(pct) {
+      if (pct >= 95) return 'A+';
+      if (pct >= 90) return 'A';
+      if (pct >= 85) return 'A−';
+      if (pct >= 80) return 'B+';
+      if (pct >= 75) return 'B';
+      if (pct >= 70) return 'B−';
+      if (pct >= 65) return 'C+';
+      if (pct >= 60) return 'C';
+      if (pct >= 55) return 'C−';
+      return 'D';
+    }
+    document.getElementById('familyModal').addEventListener('click', function(e) {
+      if (e.target === this) closeFamilyModal();
+    });
   </script>
 </body>
 </html>
