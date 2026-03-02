@@ -1418,7 +1418,7 @@
         <span class="emoji-only">💰</span>
       </button>
       <button class="tab-btn" data-tab="command">
-        <span class="full">🖥️ Command Center</span>
+        <span class="full">🤖 Agents</span>
         <span class="med">🖥️ Cmd</span>
         <span class="emoji-only">🖥️</span>
       </button>
@@ -2101,11 +2101,24 @@
 
       <!-- Filter tabs -->
       <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-        <button onclick="filterNotesByTag('all',this)" class="note-filter-btn active-filter" style="background:#1e1b4b;color:#c4b5fd;border:1px solid #6366f1;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">All</button>
-        <button onclick="filterNotesByTag('voice',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🎤 Voice</button>
-        <button onclick="filterNotesByTag('telegram',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📱 Telegram</button>
-        <button onclick="filterNotesByTag('brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🤖 Agent Brief</button>
-        <button onclick="filterNotesByTag('system',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📋 System</button>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button onclick="filterNotesByTag('all',this)" class="note-filter-btn active-filter" style="background:#1e1b4b;color:#c4b5fd;border:1px solid #6366f1;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">All</button>
+          <button onclick="filterNotesByCategory('📅 Daily Brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📅 Daily Brief</button>
+          <button onclick="filterNotesByCategory('📊 Weekly Brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📊 Weekly Brief</button>
+          <button onclick="filterNotesByCategory('📁 Project',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📁 Project</button>
+          <button onclick="filterNotesByCategory('✅ Task',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">✅ Task</button>
+          <button onclick="filterNotesByCategory('🗓️ Timeline',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🗓️ Timeline</button>
+          <button onclick="filterNotesByCategory('💰 Income',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">💰 Income</button>
+          <button onclick="filterNotesByCategory('💸 Expense',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">💸 Expense</button>
+          <button onclick="filterNotesByTag('voice',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🎤 Voice</button>
+          <button onclick="filterNotesByTag('telegram',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📱 Telegram</button>
+          <button onclick="filterNotesByTag('brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🤖 Agent Brief</button>
+          <button onclick="filterNotesByCategory('🦅 Intel',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🦅 Intel</button>
+          <button onclick="filterNotesByCategory('👨‍👩‍👦 Family',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">👨‍👩‍👦 Family</button>
+          <button onclick="filterNotesByCategory('⚠️ Problem',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">⚠️ Problem</button>
+          <button onclick="filterNotesByCategory('📞 Client',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📞 Client</button>
+          <button onclick="filterNotesByTag('system',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📋 System</button>
+        </div>
       </div>
 
       <!-- Direct voice note capture -->
@@ -2116,10 +2129,41 @@
           </div>
           <div style="flex:1;text-align:left;">
             <div style="font-size:14px;font-weight:700;color:#e5e7eb;" id="directVoiceBtnLabel">🎤 Add Voice Note</div>
-            <div style="font-size:12px;color:#6b7280;">Tap to record — stream of consciousness, transcribed by local Whisper (no API cost)</div>
+            <div style="font-size:12px;color:#6b7280;">Tap to record — stream of consciousness, transcribed locally by Whisper (no API cost)</div>
           </div>
           <div id="directVoiceRecStatus" style="display:none;font-size:12px;font-weight:700;color:#dc2626;white-space:nowrap;">● REC <span id="directVoiceTimerDisp"></span></div>
         </button>
+        <!-- Voice note quick-start guide -->
+        <details style="margin-top:-4px;background:#0d0d11;border:1px solid #2d2d44;border-radius:8px;padding:0;">
+          <summary style="padding:10px 14px;font-size:12px;color:#6b7280;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">
+            <span>💡</span> <span>How to start a note so Clu understands it instantly</span>
+            <span style="margin-left:auto;font-size:10px;color:#4b5563;">tap to expand</span>
+          </summary>
+          <div style="padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;">
+            <div style="font-size:11px;color:#6b7280;padding-top:10px;grid-column:1/-1;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Start with a prefix → Clu tags it automatically</div>
+            <div style="font-size:12px;color:#9ca3af;line-height:2;">
+              <span style="color:#f59e0b;">Daily brief:</span> today's update<br>
+              <span style="color:#f59e0b;">Weekly:</span> this week recap<br>
+              <span style="color:#f59e0b;">Project, Mission Control:</span> fix the mic<br>
+              <span style="color:#f59e0b;">Task:</span> remind Banksy to post Reel<br>
+              <span style="color:#f59e0b;">Timeline:</span> launch by end of March<br>
+              <span style="color:#f59e0b;">Intel:</span> competitor launched new feature<br>
+              <span style="color:#f59e0b;">Goal:</span> hit 10 clients this quarter<br>
+              <span style="color:#f59e0b;">Problem:</span> mic still not capturing<br>
+            </div>
+            <div style="font-size:12px;color:#9ca3af;line-height:2;">
+              <span style="color:#60a5fa;">Income:</span> client paid $500 invoice<br>
+              <span style="color:#60a5fa;">Expense TLO:</span> paid $99 Canva annual<br>
+              <span style="color:#60a5fa;">Expense personal:</span> bought new keyboard<br>
+              <span style="color:#60a5fa;">Expense Alan:</span> soccer cleats $45<br>
+              <span style="color:#60a5fa;">Expense Milo:</span> vet visit $200<br>
+              <span style="color:#60a5fa;">Strategy:</span> should we expand to Mexico<br>
+              <span style="color:#60a5fa;">Client:</span> call with Joe's Salon Friday<br>
+              <span style="color:#60a5fa;">Family:</span> Alan's report card was great<br>
+            </div>
+            <div style="grid-column:1/-1;font-size:11px;color:#4b5563;border-top:1px solid #1e1e2e;padding-top:8px;margin-top:4px;">No prefix? No problem — Clu keyword-scans the full note and tags it automatically.</div>
+          </div>
+        </details>
         <div id="directVoiceTranscriptArea" style="display:none;margin-top:-8px;background:#1a1a2e;border:1px solid #2d2d44;border-top:none;border-radius:0 0 12px 12px;padding:16px;">
           <div style="font-size:11px;color:#6b7280;margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Transcription — edit freely before saving</div>
           <div id="directVoiceTranscriptText" contenteditable="true" style="min-height:80px;font-size:14px;color:#e5e7eb;line-height:1.7;outline:none;background:transparent;" placeholder="Recording transcription appears here..."></div>
@@ -2321,7 +2365,7 @@
 
     <!-- Tab 6: Command Center -->
     <div id="command" class="tab">
-      <div class="tab-title">🖥️ Agent Command Center</div>
+      <div class="tab-title">🤖 Agents</div>
       <div class="agents-grid">
         <div class="agent-card card">
           <div class="agent-avatar" style="background-color: #3b82f6;">A</div>
@@ -3496,18 +3540,64 @@
     // ── Notes journal helpers ───────────────────────────────────
     const NOTES_KEY = 'mc_notes_v1';
 
+    // ── Auto-tagging system ─────────────────────────────────────
+    // PREFIX RULE: if note starts with "Word:" or "Word, Name:" → use that tag directly
+    // KEYWORD RULE: otherwise scan full text
+    const TAG_PREFIXES = {
+      'daily brief': '📅 Daily Brief', 'daily': '📅 Daily Brief',
+      'weekly brief': '📊 Weekly Brief', 'weekly': '📊 Weekly Brief',
+      'project': '📁 Project',
+      'task': '✅ Task',
+      'timeline': '🗓️ Timeline',
+      'income': '💰 Income',
+      'expense tlo': '💸 Expense · TLO', 'expense todos': '💸 Expense · TLO',
+      'expense alan': '💸 Expense · Alan', 'expense milo': '💸 Expense · Milo',
+      'expense nardellly': '💸 Expense · Nardellly', 'expense personal': '💸 Expense · Gary',
+      'expense gary': '💸 Expense · Gary', 'expense': '💸 Expense',
+      'agent note': '🤖 Agents', 'agent': '🤖 Agents',
+      'family': '👨‍👩‍👦 Family',
+      'health': '🏥 Health',
+      'intel': '🦅 Intel',
+      'strategy': '💡 Strategy',
+      'travel': '✈️ Travel',
+      'goal': '🎯 Goal',
+      'problem': '⚠️ Problem', 'issue': '⚠️ Problem', 'blocked': '⚠️ Problem',
+      'client': '📞 Client', 'meeting': '📞 Client',
+    };
+
     function autoTag(text, sourceTag) {
-      const t = (text || '').toLowerCase();
-      if (t.match(/health|gym|doctor|checkup|medication|exercise|medical|sick|wellness|yoga/)) return '🏥 Health';
-      if (t.match(/revenue|money|client|invoice|payment|income|profit|sales|mrr|billing/)) return '💰 Revenue';
-      if (t.match(/project|build|develop|code|deploy|launch|feature|bug|fix|implement/)) return '📁 Project';
-      if (t.match(/family|nardell|alan|milo|kids|wife|home|school|vet|milo/)) return '👨‍👩‍👦 Family';
-      if (t.match(/agent|harriet|banksy|clu|oz|andy|marissa|matlock|spencer|phineas/)) return '🤖 Agents';
-      if (t.match(/task|todo|reminder|schedule|deadline|meeting|call|standup/)) return '✅ Tasks';
-      if (t.match(/idea|strategy|plan|goal|vision|market|grow|scale/)) return '💡 Strategy';
-      if (t.match(/travel|flight|hotel|trip|visa|passport|airbnb/)) return '✈️ Travel';
       if (sourceTag === 'telegram') return '📱 Telegram';
-      if (sourceTag === 'brief') return '🤖 Brief';
+      if (sourceTag === 'brief') return '🤖 Agent Brief';
+
+      const t = (text || '').toLowerCase().trim();
+
+      // Check prefix first (text starts with "keyword:" or "keyword, name:")
+      for (const [prefix, tag] of Object.entries(TAG_PREFIXES)) {
+        if (t.startsWith(prefix + ':') || t.startsWith(prefix + ',')) return tag;
+      }
+
+      // Keyword scan fallback
+      if (t.match(/\bdaily brief\b|\bmorning standup\b|\b7am\b|\bday recap\b/)) return '📅 Daily Brief';
+      if (t.match(/\bweekly brief\b|\bweek in review\b|\bweekly recap\b/)) return '📊 Weekly Brief';
+      if (t.match(/\bincome\b|\bpayment received\b|\binvoice paid\b|\bearned\b|\bdeposit\b|\bclient paid\b/)) return '💰 Income';
+      if (t.match(/\btodos los ojos\b|\btlo\b|\bagency expense\b|\bbusiness expense\b|\bwrite.?off\b/)) return '💸 Expense · TLO';
+      if (t.match(/\bfor alan\b|\balan's\b|\balan expense\b|\balan school\b/)) return '💸 Expense · Alan';
+      if (t.match(/\bfor milo\b|\bmilo's\b|\bmilo expense\b|\bvet\b/)) return '💸 Expense · Milo';
+      if (t.match(/\bfor nardellly\b|\bnardellly's\b/)) return '💸 Expense · Nardellly';
+      if (t.match(/\bmy expense\b|\bpersonal expense\b|\bi bought\b|\bi spent\b/)) return '💸 Expense · Gary';
+      if (t.match(/\bexpense\b|\bspent\b|\bpaid for\b|\bcost\b/)) return '💸 Expense';
+      if (t.match(/\bdeadline\b|\bmilestone\b|\btarget date\b|\bby (march|april|may|june|july|august|september|october|november|december|q[1-4])\b/)) return '🗓️ Timeline';
+      if (t.match(/\btask\b|\btodo\b|\baction item\b|\bfollow up\b|\bassign\b/)) return '✅ Task';
+      if (t.match(/\bintel\b|\bcompetitor\b|\bmarket research\b|\bdiscovered\b|\bfound out\b|\bread that\b/)) return '🦅 Intel';
+      if (t.match(/\bgoal\b|\bobjective\b|\bokr\b|\bquarter\b|\bby end of\b/)) return '🎯 Goal';
+      if (t.match(/\bproblem\b|\bissue\b|\bblocked\b|\bfrustrated\b|\bbroken\b|\bfailed\b/)) return '⚠️ Problem';
+      if (t.match(/\bclient\b|\bproposal\b|\bdemo\b|\bcall with\b/)) return '📞 Client';
+      if (t.match(/\bproject\b|\bbuild\b|\bdeploy\b|\blaunch\b|\bfeature\b|\bbug\b|\bimplement\b/)) return '📁 Project';
+      if (t.match(/\bhealth\b|\bgym\b|\bdoctor\b|\bcheckup\b|\bmedication\b|\bsick\b|\bwellness\b/)) return '🏥 Health';
+      if (t.match(/\btravel\b|\bflight\b|\bhotel\b|\btrip\b|\bvisa\b|\bairbnb\b/)) return '✈️ Travel';
+      if (t.match(/\bfamily\b|\bnardell\b|\balan\b|\bmilo\b|\bkids\b|\bhome\b/)) return '👨‍👩‍👦 Family';
+      if (t.match(/\bharriet\b|\bbanksy\b|\bclu\b|\bandy\b|\bmarissa\b|\bmatlock\b|\bspencer\b|\bphineas\b/)) return '🤖 Agents';
+      if (t.match(/\bstrategy\b|\bidea\b|\bvision\b|\bopportunity\b|\bshould we\b|\bscale\b/)) return '💡 Strategy';
       return '📝 General';
     }
 
@@ -3594,6 +3684,17 @@
       btn.style.background = '#1e1b4b'; btn.style.color = '#c4b5fd'; btn.style.borderColor = '#6366f1';
       document.querySelectorAll('.note-entry').forEach(el => {
         el.style.display = (tag === 'all' || el.dataset.tag === tag) ? '' : 'none';
+      });
+    }
+
+    function filterNotesByCategory(cat, btn) {
+      document.querySelectorAll('.note-filter-btn').forEach(b => {
+        b.style.background = '#16161e'; b.style.color = '#9ca3af'; b.style.borderColor = '#2d2d44';
+      });
+      btn.style.background = '#1e1b4b'; btn.style.color = '#c4b5fd'; btn.style.borderColor = '#6366f1';
+      document.querySelectorAll('.note-entry').forEach(el => {
+        const c = el.dataset.category || '';
+        el.style.display = c.includes(cat.replace(/^[^\w]+/, '').trim()) ? '' : 'none';
       });
     }
 
