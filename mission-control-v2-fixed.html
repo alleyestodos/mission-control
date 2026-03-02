@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0d0d11;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: #13131a;
+      border-bottom: 1px solid #1e1e2e;
+      display: flex;
+      align-items: center;
+      padding: 0 48px;
+      z-index: 1000;
+      font-size: 13px;
+    }
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .nav-left .title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #a78bfa;
+    }
+    .nav-left .subtitle {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .nav-tabs {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin: 0 24px;
+    }
+    .tab {
+      background: transparent;
+      color: #9ca3af;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab:hover {
+      background: #1e1b4b;
+      color: #c4b5fd;
+    }
+    .tab.active {
+      background: #1e1b4b;
+      color: #c4b5fd;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .nav-right input {
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 200px;
+    }
+    .nav-right input::placeholder {
+      color: #6b7280;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      color: #22c55e;
+      font-weight: 500;
+    }
+    .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: 6px;
+    }
+    .content {
+      margin-top: 48px;
+      padding: 32px 48px;
+      min-height: calc(100vh - 48px);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 24px 0;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 40px 0;
+    }
+    .stat-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .stat-goal::before { background: #6366f1; }
+    .stat-projects::before { background: #22c55e; }
+    .stat-tasks::before { background: #eab308; }
+    .stat-days::before { background: #ef4444; }
+    .stat-main {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .stat-label {
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .stat-change {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .stat-change.up { color: #22c55e; }
+    .stat-change.down { color: #f59e0b; }
+    .stat-change.countdown { color: #ef4444; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-header {
+      text-transform: uppercase;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2d2d44;
+    }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 8px 0;
+    }
+    .dot-blue {
+      width: 6px;
+      height: 6px;
+      background: #6366f1;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .priority-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #4b5563;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .priority-checkbox input {
+      opacity: 0;
+      position: absolute;
+    }
+    .priority-checkbox input:checked + span {
+      background: #6366f1;
+      border-color: #6366f1;
+    }
+    .priority-checkbox span {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .add-priority {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .add-priority input {
+      flex: 1;
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .btn {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #5856eb;
+    }
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .kanban-column {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .column-header {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #e5e7eb;
+    }
+    .task-card {
+      background: transparent;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .task-card:hover {
+      background: #1a1a2e;
+    }
+    .task-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .priority-high { color: #ef4444; }
+    .priority-medium { color: #f59e0b; }
+    .task-date {
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .task-desc {
+      color: #9ca3af;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .add-task {
+      border: 2px dashed #4b5563;
+      background: transparent;
+      color: #6b7280;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-top: 24px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #2d2d44;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -40px;
+      top: 12px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #6b7280;
+      border: 3px solid #0d0d11;
+    }
+    .timeline-dot.active {
+      background: #22c55e;
+    }
+    .timeline-phase {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .timeline-dates {
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: #9ca3af;
+    }
+    .checklist .done {
+      color: #22c55e;
+    }
+    .checklist .done::before {
+      content: '✓';
+      color: #22c55e;
+      font-weight: bold;
+      margin-right: 4px;
+    }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .note-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .gauge-container {
+      text-align: center;
+    }
+    .gauge-svg {
+      width: 200px;
+      height: 200px;
+      transform: rotate(-90deg);
+    }
+    .gauge-circle-bg {
+      fill: none;
+      stroke: #2d2d44;
+      stroke-width: 12;
+    }
+    .gauge-circle-progress {
+      fill: none;
+      stroke: #6366f1;
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 157 502;
+      transition: stroke-dasharray 1s;
+    }
+    .gauge-value {
+      font-size: 48px;
+      font-weight: 700;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .chart-container {
+      position: relative;
+    }
+    .chart-label {
+      text-transform: uppercase;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .revenue-svg {
+      width: 100%;
+      height: 200px;
+    }
+    .bar {
+      fill: url(#barGrad);
+    }
+    .clients-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+    }
+    .clients-table th,
+    .clients-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #2d2d44;
+    }
+    .clients-table th {
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge.active {
+      background: #22c55e;
+      color: white;
+    }
+    .delete-icon {
+      cursor: pointer;
+      color: #ef4444;
+      font-size: 16px;
+    }
+    .add-client-row {
+      display: flex;
+      gap: 12px;
+      padding-top: 12px;
+    }
+    .add-client-row input {
+      flex: 1;
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      color: #e5e7eb;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .projections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .projection-item {
+      text-align: center;
+      padding: 24px;
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+    }
+    .projection-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .projection-mrr { color: #22c55e; }
+    .projection-annual { color: #6366f1; }
+    .projection-growth { color: #ef4444; }
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .agent-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .agent-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+    .agent-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .agent-role {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    .agent-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-dot.green { background: #22c55e; }
+    .status-dot.yellow { background: #eab308; }
+    .status-dot.gray { background: #6b7280; }
+    .model-badge {
+      background: #1e1b4b;
+      color: #c4b5fd;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    .tokens {
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    .decisions {
+      margin-top: 40px;
+    }
+    .decision {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .decision-date {
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .decision-question {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .decision-answer {
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+    .decision-consulted {
+      color: #6b7280;
+      font-size: 12px;
+      font-style: italic;
+    }
+    .family-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .family-card {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .intel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .intel-item {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-left: 3px solid;
+      border-radius: 0 10px 10px 0;
+      padding: 20px;
+    }
+    .intel-source {
+      background: #1e1b4b;
+      color: #c4b5fd;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .intel-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .intel-time {
+      color: #6b7280;
+      font-size: 12px;
+    }
+    @media (max-width: 1200px) {
+      .navbar {
+        padding: 0 24px;
+      }
+      .content {
+        padding: 24px;
+      }
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .kanban {
+        grid-template-columns: 1fr;
+      }
+      .revenue-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-tabs {
+        flex-wrap: wrap;
+        gap: 2px;
+        margin: 0 12px;
+      }
+      .nav-right input {
+        width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="title">⚡ Mission Control</div>
+      <div class="subtitle">Todos los OjOs</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="tab" data-tab="projects">📁 Projects</button>
+      <button class="tab" data-tab="timeline">🗓️ Timeline</button>
+      <button class="tab" data-tab="notes">📝 Notes</button>
+      <button class="tab" data-tab="revenue">💰 Revenue</button>
+      <button class="tab" data-tab="command">🖥️ Command Center</button>
+      <button class="tab" data-tab="family">👨‍👩‍👦 Family</button>
+      <button class="tab" data-tab="intel">🦅 Intel</button>
+    </div>
+    <div class="nav-right">
+      <input type="search" placeholder="Search... (⌘K)">
+      <span class="status"><span class="dot"></span>Online</span>
+    </div>
+  </nav>
+  <div class="content">
+    <div id="dashboard" class="tab-content active">
+      <h1><span style="color: #e5e7eb;">Good morning, </span><span style="color: #a78bfa;">Gary</span></h1>
+      <div id="current-time" class="date" style="color: #6b7280; font-size: 14px;"></div>
+      <div class="stats">
+        <div class="stat-card stat-goal">
+          <div class="stat-main">12%</div>
+          <div class="stat-label">Goal Progress</div>
+          <div class="stat-change up">↑ 3% this week</div>
+        </div>
+        <div class="stat-card stat-projects">
+          <div class="stat-main">5</div>
+          <div class="stat-label">Active Projects</div>
+          <div class="stat-change up">↑ 2 new</div>
+        </div>
+        <div class="stat-card stat-tasks">
+          <div class="stat-main">8</div>
+          <div class="stat-label">Tasks Today</div>
+          <div class="stat-change down">↓ 3 remaining</div>
+        </div>
+        <div class="stat-card stat-days">
+          <div class="stat-main">90</div>
+          <div class="stat-label">Days to Goal</div>
+          <div class="stat-change countdown">countdown</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">ACTIVITY FEED</div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Mission Control dashboard created</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Banksy spawned for avatar edits</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>API keys stored in ~/.openclaw/.env</span>
+          </div>
+          <div class="activity-item">
+            <div class="dot-blue"></div>
+            <span>Harriet folder created on Google Drive</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">TOP PRIORITIES</div>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p1">
+              <span></span>
+            </div>
+            Complete Mission Control v1
+          </label>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p2">
+              <span></span>
+            </div>
+            Review agent overnight work
+          </label>
+          <label class="priority-item">
+            <div class="priority-checkbox">
+              <input type="checkbox" id="p3">
+              <span></span>
+            </div>
+            Set up daily report system
+          </label>
+          <div class="add-priority">
+            <input type="text" placeholder="New priority...">
+            <button class="btn">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="projects" class="tab-content">
+      <h1>📁 Projects</h1>
+      <div class="kanban">
+        <div class="kanban-column">
+          <div class="column-header">BACKLOG</div>
+          <div class="task-card">
+            <div class="task-title priority-high">Base44.ai Integration</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Replicate Mission Control for remote access</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-medium">Higgsfield.ai Experiment</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Banksy API key testing + video gen</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+        <div class="kanban-column">
+          <div class="column-header">IN PROGRESS</div>
+          <div class="task-card">
+            <div class="task-title priority-high">Avatar Redesigns</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">Banksy editing all team avatars with names</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-high">Mission Control v1</div>
+            <div class="task-date">2026-02-25</div>
+            <div class="task-desc">Build local Node.js dashboard</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+        <div class="kanban-column">
+          <div class="column-header">DONE</div>
+          <div class="task-card">
+            <div class="task-title priority-medium">Team Folder Setup</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">Google Drive + EncryptedStorage mirrors</div>
+          </div>
+          <div class="task-card">
+            <div class="task-title priority-high">Agent Overnight Test</div>
+            <div class="task-date">2026-02-24</div>
+            <div class="task-desc">All 9 agents completed sample tasks</div>
+          </div>
+          <button class="add-task">+ Add Task</button>
+        </div>
+      </div>
+    </div>
+    <div id="timeline" class="tab-content">
+      <h1>🗓️ Roadmap</h1>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-phase">Phase 1: Foundation</div>
+          <div class="timeline-dates">Feb 23-25 2026</div>
+          <ul class="checklist">
+            <li class="done">Oz+Harriet SSH bridge</li>
+            <li class="done">All 10 agents created</li>
+            <li class="done">Overnight test run</li>
+            <li class="done">API keys secured</li>
+            <li>Mission Control v1</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-phase">Phase 2: Local Intelligence</div>
+          <div class="timeline-dates">Feb 26-Mar 5</div>
+          <ul class="checklist">
+            <li>qwen2.5:72b as orchestrator</li>
+            <li>Agent model assignments optimized</li>
+            <li>Daily report system automated</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-phase">Phase 3: Remote Access</div>
+          <div class="timeline-dates">Mar 6-15</div>
+          <ul class="checklist">
+            <li>Base44.ai replication</li>
+            <li>Google OAuth sign-in</li>
+            <li>Mobile-responsive dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="notes" class="tab-content">
+      <h1>📝 Notes</h1>
+      <div class="notes-grid">
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Meeting with Client A</h3>
+          <p style="color: #9ca3af; margin: 0;">Discuss project scope and timeline. Next steps: send proposal.</p>
+        </div>
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Agent Optimizations</h3>
+          <p style="color: #9ca3af; margin: 0;">Test qwen2.5 models for better performance.</p>
+        </div>
+        <div class="note-card">
+          <h3 style="margin: 0 0 12px 0; color: #e5e7eb;">Daily Review</h3>
+          <p style="color: #9ca3af; margin: 0;">Check overnight agent outputs.</p>
+        </div>
+      </div>
+      <button class="btn" style="margin-top: 24px;">+ New Note</button>
+    </div>
+    <div id="revenue" class="tab-content">
+      <h1>💰 Revenue</h1>
+      <div class="revenue-grid">
+        <div class="card gauge-container" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <svg class="gauge-svg" viewBox="0 0 100 100">
+            <circle class="gauge-circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="gauge-circle-progress" cx="50" cy="50" r="40"></circle>
+          </svg>
+          <div class="gauge-value" style="font-size: 36px; color: #6366f1;">$4,000</div>
+          <div style="color: #9ca3af; margin-top: 8px;">of $25,000 goal</div>
+        </div>
+        <div class="card chart-container">
+          <div class="chart-label">REVENUE — LAST 6 MONTHS</div>
+          <svg class="revenue-svg" viewBox="0 0 400 200">
+            <defs>
+              <linearGradient id="barGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a78bfa"/>
+              </linearGradient>
+            </defs>
+            <rect class="bar" x="20" y="120" width="40" height="80" rx="4"/> <!-- Sep $8k -->
+            <text x="40" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Sep</text>
+            <text x="40" y="140" text-anchor="middle" font-size="12" fill="#e5e7eb">$8k</text>
+            <rect class="bar" x="90" y="100" width="40" height="100" rx="4"/> <!-- Oct $10.5k -->
+            <text x="110" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Oct</text>
+            <text x="110" y="115" text-anchor="middle" font-size="12" fill="#e5e7eb">$10.5k</text>
+            <rect class="bar" x="160" y="80" width="40" height="120" rx="4"/>
+            <text x="180" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Nov</text>
+            <text x="180" y="90" text-anchor="middle" font-size="12" fill="#e5e7eb">$12k</text>
+            <rect class="bar" x="230" y="60" width="40" height="140" rx="4"/>
+            <text x="250" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Dec</text>
+            <text x="250" y="65" text-anchor="middle" font-size="12" fill="#e5e7eb">$14.5k</text>
+            <rect class="bar" x="300" y="40" width="40" height="160" rx="4"/>
+            <text x="320" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Jan</text>
+            <text x="320" y="45" text-anchor="middle" font-size="12" fill="#e5e7eb">$16k</text>
+            <rect class="bar" x="370" y="20" width="40" height="180" rx="4"/>
+            <text x="390" y="195" text-anchor="middle" font-size="11" fill="#9ca3af">Feb</text>
+            <text x="390" y="25" text-anchor="middle" font-size="12" fill="#e5e7eb">$18.5k</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">CLIENTS</div>
+        <table class="clients-table">
+          <thead>
+            <tr>
+              <th>NAME</th>
+              <th>MONTHLY VALUE</th>
+              <th>STATUS</th>
+              <th>START DATE</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sample Client A</td>
+              <td>$2,500</td>
+              <td><span class="badge active">active</span></td>
+              <td>2026-01-15</td>
+              <td><span class="delete-icon">🗑️</span></td>
+            </tr>
+            <tr>
+              <td>Sample Client B</td>
+              <td>$1,500</td>
+              <td><span class="badge active">active</span></td>
+              <td>2026-02-01</td>
+              <td><span class="delete-icon">🗑️</span></td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="add-client-row">
+                  <input type="text" placeholder="Client name">
+                  <input type="text" placeholder="$ Monthly value">
+                </div>
+              </td>
+              <td><span class="badge active">active</span></td>
+              <td><input type="date"></td>
+              <td><button class="btn">Add Client</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="projections">
+        <div class="projection-item">
+          <div class="projection-value projection-mrr">$4,000</div>
+          <div style="color: #9ca3af;">Current MRR</div>
+        </div>
+        <div class="projection-item">
+          <div class="projection-value projection-annual">$48,000</div>
+          <div style="color: #9ca3af;">Projected Annual</div>
+        </div>
+        <div class="projection-item">
+          <div class="projection-value projection-growth">$21,000</div>
+          <div style="color: #9ca3af;">Monthly Growth Needed</div>
+        </div>
+      </div>
+    </div>
+    <div id="command" class="tab-content">
+      <h1>🖥️ Agent Command Center</h1>
+      <div class="agents-grid">
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #ff6b6b;">A</div>
+          <div class="agent-name">Andy</div>
+          <div class="agent-role">Finance/Accountant</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #4ecdc4;">B</div>
+          <div class="agent-name">Banksy</div>
+          <div class="agent-role">Visual/Creative</div>
+          <div class="agent-status">
+            <span class="status-dot yellow"></span>
+            <span>busy</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #45b7d1;">C</div>
+          <div class="agent-name">Chris Knight</div>
+          <div class="agent-role">Sales/Closer</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #96ceb4;">Cl</div>
+          <div class="agent-name">Clu</div>
+          <div class="agent-role">Master Developer</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">coder:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #feca57;">E</div>
+          <div class="agent-name">Ed Lewis</div>
+          <div class="agent-role">Leverage/Credit</div>
+          <div class="agent-status">
+            <span class="status-dot gray"></span>
+            <span>offline</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #ff9ff3;">M</div>
+          <div class="agent-name">Marissa</div>
+          <div class="agent-role">Customer Service</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">mistral-nemo:12b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #54a0ff;">Ma</div>
+          <div class="agent-name">Matlock</div>
+          <div class="agent-role">Legal</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #5f27cd;">P</div>
+          <div class="agent-name">Phineas</div>
+          <div class="agent-role">Travel & Experience</div>
+          <div class="agent-status">
+            <span class="status-dot gray"></span>
+            <span>offline</span>
+          </div>
+          <span class="model-badge">qwen2.5:7b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-avatar" style="background: #00d2d3;">S</div>
+          <div class="agent-name">Spencer</div>
+          <div class="agent-role">Long-Term Strategy</div>
+          <div class="agent-status">
+            <span class="status-dot green"></span>
+            <span>online</span>
+          </div>
+          <span class="model-badge">qwen2.5:32b</span>
+          <div class="tokens">0 tokens</div>
+        </div>
+      </div>
+      <div class="decisions card">
+        <div class="card-header">EXECUTIVE DECISIONS</div>
+        <div class="decision">
+          <div class="decision-date">2026-02-04</div>
+          <div class="decision-question">Should all agents have Opus as fallback?</div>
+          <div class="decision-answer">Removed Opus fallback from all agents to prevent silent API burns. Local-only fallbacks now.</div>
+          <div class="decision-consulted">Consulted: Oz, All agents</div>
+        </div>
+        <div class="decision">
+          <div class="decision-date">2026-02-04</div>
+          <div class="decision-question">Team structure — who runs agents?</div>
+          <div class="decision-answer">Harriet is ONLY agent on laptop. All 10 team agents run on Oz (Mac Studio) only.</div>
+          <div class="decision-consulted">Consulted: Harriet, Oz</div>
+        </div>
+      </div>
+    </div>
+    <div id="family" class="tab-content">
+      <h1>👨‍👩‍👦 Family</h1>
+      <div class="family-grid">
+        <div class="family-card">
+          <h2>Health</h2>
+          <p>All checkups up to date. Next: dental in March.</p>
+        </div>
+        <div class="family-card">
+          <h2>Education</h2>
+          <p>School progress good. Homework reminders set.</p>
+        </div>
+        <div class="family-card">
+          <h2>Social</h2>
+          <p>Upcoming events: family dinner this weekend.</p>
+        </div>
+        <div class="family-card">
+          <h2>Work</h2>
+          <p>Family schedules synced. No conflicts.</p>
+        </div>
+      </div>
+    </div>
+    <div id="intel" class="tab-content">
+      <h1>🦅 Intel</h1>
+      <div class="intel-list">
+        <div class="intel-item" style="border-left-color: #6366f1;">
+          <span class="intel-source">TechCrunch</span>
+          <div class="intel-title">OpenClaw releases new agent orchestration features</div>
+          <div class="intel-time">2 hours ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #22c55e;">
+          <span class="intel-source">Reuters</span>
+          <div class="intel-title">AI models see 20% efficiency boost</div>
+          <div class="intel-time">5 hours ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #eab308;">
+          <span class="intel-source">ClawHub</span>
+          <div class="intel-title">New skills available: mcporter, agent-browser</div>
+          <div class="intel-time">1 day ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #ef4444;">
+          <span class="intel-source">Ars Technica</span>
+          <div class="intel-title">Security patch for local LLMs released</div>
+          <div class="intel-time">2 days ago</div>
+        </div>
+        <div class="intel-item" style="border-left-color: #a78bfa;">
+          <span class="intel-source">Hacker News</span>
+          <div class="intel-title">Discussion: Scaling agent teams at home</div>
+          <div class="intel-time">3 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.dataset.tab;
+        document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Live date/time
+    function updateTime() {
+      const now = new Date();
+      const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'America/Santo_Domingo'
+      };
+      const dateStr = now.toLocaleDateString('en-US', options);
+      const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'America/Santo_Domingo', hour: '2-digit', minute: '2-digit' });
+      document.getElementById('current-time').textContent = `${dateStr} ${timeStr}`;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Gauge animation (16% = 0.16 * 251.3 ≈ 40.2)
+    const progressCircle = document.querySelector('.gauge-circle-progress');
+    const circumference = 2 * Math.PI * 40;
+    const progress = 0.16;
+    const offset = circumference - progress * circumference;
+    progressCircle.style.strokeDasharray = `${progress * circumference} ${circumference}`;
+    progressCircle.style.strokeDashoffset = '0';
+  </script>
+</body>
+</html>

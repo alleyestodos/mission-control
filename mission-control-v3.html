@@ -1,0 +1,1811 @@
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Mission Control&lt;/title&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;style&gt;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0d0d11;
+      color: #e5e7eb;
+      overflow-x: hidden;
+    }
+
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background-color: #13131a;
+      border-bottom: 1px solid #1e1e2e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+      padding-left: 20px;
+    }
+
+    .nav-left .title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #a78bfa;
+      line-height: 1.2;
+    }
+
+    .nav-left #company-name {
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      justify-content: center;
+      max-width: 800px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tab-btn:hover {
+      background-color: rgba(156, 163, 175, 0.1);
+    }
+
+    .tab-btn.active {
+      background-color: #1e1b4b;
+      color: #c4b5fd;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background-color: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 6px;
+      color: #9ca3af;
+      width: 160px;
+      height: 32px;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .search-input::placeholder {
+      color: #6b7280;
+    }
+
+    #online-pill {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      background-color: #16161e;
+      border: 1px solid #22c55e;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #22c55e;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #online-pill::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background-color: #22c55e;
+      border-radius: 50%;
+    }
+
+    #content {
+      margin-top: 56px;
+      padding: 24px 32px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      #content {
+        padding: 16px;
+      }
+    }
+
+    .tab {
+      display: none;
+    }
+
+    .tab.active {
+      display: block;
+    }
+
+    .tab-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    /* Stat cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .stat-goal::before { background-color: #6366f1; }
+    .stat-projects::before { background-color: #22c55e; }
+    .stat-tasks::before { background-color: #eab308; }
+    .stat-days::before { background-color: #ef4444; }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .stat-change {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Activity feed and priorities */
+    .feed-priorities {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .feed-priorities {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card-header {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .activity-columns {
+      display: flex;
+      gap: 0;
+    }
+
+    .activity-column {
+      flex: 1;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 12px;
+    }
+
+    .activity-column:last-child {
+      padding-right: 0;
+      padding-left: 12px;
+      border-left: 1px solid #2d2d44;
+    }
+
+    .sub-header {
+      color: #a78bfa;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2d2d44;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .agents-sub-header {
+      color: #22c55e;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .human-dot { background-color: #6366f1; }
+    .agent-dot { background-color: #22c55e; }
+
+    .priority-list {
+      list-style: none;
+    }
+
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-bottom: 8px;
+    }
+
+    .priority-item:hover {
+      background-color: #1a1a2e;
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #3f3f5c;
+      border-radius: 50%;
+      background: transparent;
+      flex-shrink: 0;
+    }
+
+    .add-priority {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .add-priority input {
+      flex: 1;
+      background-color: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .add-priority button {
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .priority-name {
+      color: #a78bfa;
+      font-style: italic;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-delete {
+      background-color: #dc2626;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-complete {
+      background-color: #22c55e;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background-color: #6b7280;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+
+    .avatar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .row-label {
+      width: 100%;
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .avatar-pill {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      position: relative;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .avatar-pill.selected {
+      border-color: #f59e0b;
+    }
+
+    .avatar-pill.selected::after {
+      content: '✓';
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #f59e0b;
+      color: white;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    .tag-dev { background-color: #6366f1; color: white; }
+    .tag-ops { background-color: #22c55e; color: white; }
+    .tag-business { background-color: #f59e0b; color: white; }
+
+    /* Kanban */
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .kanban {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kanban-column {
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .column-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      background-color: #6366f1;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .kanban-card {
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .priority-badge-high {
+      background-color: #dc2626;
+      color: white;
+    }
+
+    .priority-badge-med {
+      background-color: #f59e0b;
+      color: white;
+    }
+
+    .date {
+      color: #6b7280;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .add-task {
+      border: 2px dashed #2d2d44;
+      background: transparent;
+      color: #6b7280;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #2d2d44;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -36px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 3px solid #22c55e;
+      background-color: #0d0d11;
+    }
+
+    .timeline-dot.gray {
+      border-color: #6b7280;
+      background-color: #0d0d11;
+    }
+
+    /* Notes grid */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .new-note-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Revenue */
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .revenue-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .donut-container {
+      text-align: center;
+    }
+
+    .donut-svg {
+      width: 160px;
+      height: 160px;
+    }
+
+    .donut-arc {
+      fill: none;
+      stroke-width: 20;
+      stroke-linecap: round;
+    }
+
+    .donut-track {
+      stroke: #2d2d44;
+    }
+
+    .donut-fill {
+      stroke: #6366f1;
+      stroke-dasharray: 80 314;
+    }
+
+    .revenue-value {
+      font-size: 36px;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+
+    .revenue-subtitle {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .bar-chart {
+      height: 200px;
+    }
+
+    .bar-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .bar {
+      fill: #6366f1;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      fill: #9ca3af;
+    }
+
+    .month-label {
+      font-size: 12px;
+      fill: #6b7280;
+    }
+
+    .clients-section {
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #2d2d44;
+    }
+
+    th {
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .status-badge {
+      background-color: #22c55e;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .delete-btn {
+      color: #ef4444;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .add-client {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .add-client input {
+      flex: 1;
+      background-color: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #e5e7eb;
+    }
+
+    .add-client button {
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+
+    .projections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .projections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .projection-card {
+      text-align: center;
+      padding: 20px;
+      background-color: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+    }
+
+    /* Command Center */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .agents-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .agents-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .agents-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .agent-card {
+      min-height: 120px;
+      position: relative;
+    }
+
+    .agent-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .agent-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 4px;
+    }
+
+    .agent-role {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-online { background-color: #22c55e; }
+    .status-busy { background-color: #eab308; }
+    .status-offline { background-color: #6b7280; }
+
+    .model-badge {
+      background-color: #2d2d44;
+      color: #9ca3af;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .exec-decisions .card-header {
+      color: #9ca3af;
+    }
+
+    .decision-card {
+      border-left: 3px solid #6366f1;
+      padding-left: 16px;
+      margin-bottom: 16px;
+    }
+
+    .decision-date {
+      color: #6b7280;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .decision-question {
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 4px;
+    }
+
+    .decision-answer {
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .consulted {
+      color: #a78bfa;
+      font-style: italic;
+      font-size: 12px;
+    }
+
+    /* Family */
+    .family-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .family-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .family-section ul {
+      list-style: none;
+    }
+
+    .family-section li {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .family-section li::before {
+      content: '•';
+      color: #6366f1;
+      position: absolute;
+      left: 0;
+    }
+
+    .family-members {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .family-avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    /* Intel */
+    .intel-sections {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .intel-sections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .news-card {
+      background-color: #16161e;
+      border-left: 4px solid #6366f1;
+      padding: 14px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+    }
+
+    .news-title {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .news-source {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .source-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .triage-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #22c55e;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      z-index: 1001;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Responsive tabs */
+    .tab-btn .full { display: block; }
+    .tab-btn .med { display: none; }
+    .tab-btn .emoji-only { display: none; }
+
+    @media (max-width: 1100px) {
+      .tabs {
+        max-width: 600px;
+      }
+      .tab-btn .full { display: none; }
+      .tab-btn .med { display: block; }
+    }
+
+    @media (max-width: 768px) {
+      .tab-btn .med { display: none; }
+      .tab-btn .emoji-only { display: block; }
+      .tabs {
+        gap: 2px;
+      }
+      .tab-btn {
+        padding: 6px 6px;
+        font-size: 16px;
+      }
+    }
+
+    /* Greeting */
+    .greeting {
+      margin-bottom: 8px;
+    }
+
+    .greeting-name {
+      color: #a78bfa;
+    }
+
+    .live-time {
+      color: #6b7280;
+      font-size: 13px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav id=&quot;nav&quot;&gt;
+    &lt;div class=&quot;nav-left&quot;&gt;
+      &lt;div class=&quot;title&quot;&gt;Mission Control&lt;/div&gt;
+      &lt;div id=&quot;company-name&quot;&gt;Todos los OjOs&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;tabs&quot;&gt;
+      &lt;button class=&quot;tab-btn active&quot; data-tab=&quot;dashboard&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;📊 Dashboard&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;📊 Dash&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;📊&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;projects&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;📁 Projects&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;📁 Projs&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;📁&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;timeline&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;🗓️ Timeline&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;🗓️ Time&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;🗓️&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;notes&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;📝 Notes&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;📝 Notes&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;📝&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;revenue&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;💰 Revenue&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;💰 Rev&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;💰&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;command&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;🖥️ Command Center&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;🖥️ Cmd&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;🖥️&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;family&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;👨‍👩‍👦 Family&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;👨‍👩‍👦 Fam&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;👨‍👩‍👦&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;tab-btn&quot; data-tab=&quot;intel&quot;&gt;
+        &lt;span class=&quot;full&quot;&gt;🦅 Intel&lt;/span&gt;
+        &lt;span class=&quot;med&quot;&gt;🦅 Intel&lt;/span&gt;
+        &lt;span class=&quot;emoji-only&quot;&gt;🦅&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;nav-right&quot;&gt;
+      &lt;input type=&quot;text&quot; class=&quot;search-input&quot; placeholder=&quot;Search... (⌘K)&quot;&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div id=&quot;online-pill&quot;&gt;Online&lt;/div&gt;
+
+  &lt;div id=&quot;content&quot;&gt;
+    &lt;!-- Tab 1: Dashboard --&gt;
+    &lt;div id=&quot;dashboard&quot; class=&quot;tab active&quot;&gt;
+      &lt;div class=&quot;greeting&quot;&gt;
+        &lt;div&gt;&lt;span style=&quot;color: #e5e7eb; font-weight: 700; font-size: 26px;&quot;&gt;Good morning, &lt;/span&gt;&lt;span class=&quot;greeting-name&quot; style=&quot;font-size: 26px; font-weight: 700;&quot;&gt;Gary&lt;/span&gt;&lt;/div&gt;
+        &lt;div id=&quot;live-time&quot; class=&quot;live-time&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;stats-grid&quot;&gt;
+        &lt;div class=&quot;stat-card stat-goal&quot;&gt;
+          &lt;div class=&quot;stat-value&quot;&gt;12%&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Goal Progress&lt;/div&gt;
+          &lt;div class=&quot;stat-change&quot; style=&quot;color: #22c55e;&quot;&gt;↑ 3% this week&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-projects&quot;&gt;
+          &lt;div class=&quot;stat-value&quot;&gt;5&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Active Projects&lt;/div&gt;
+          &lt;div class=&quot;stat-change&quot; style=&quot;color: #22c55e;&quot;&gt;↑ 2 new&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-tasks&quot;&gt;
+          &lt;div class=&quot;stat-value&quot;&gt;8&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Tasks Today&lt;/div&gt;
+          &lt;div class=&quot;stat-change&quot; style=&quot;color: #eab308;&quot;&gt;↓ 3 remaining&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-card stat-days&quot;&gt;
+          &lt;div class=&quot;stat-value&quot;&gt;90&lt;/div&gt;
+          &lt;div class=&quot;stat-label&quot;&gt;Days to Goal&lt;/div&gt;
+          &lt;div class=&quot;stat-change&quot; style=&quot;color: #ef4444;&quot;&gt;countdown&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;feed-priorities&quot;&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div class=&quot;card-header&quot;&gt;ACTIVITY FEED&lt;/div&gt;
+          &lt;div class=&quot;activity-columns&quot;&gt;
+            &lt;div class=&quot;activity-column&quot;&gt;
+              &lt;div class=&quot;sub-header&quot;&gt;Humans&lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot human-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Gave UI feedback on Mission Control&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot human-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Uploaded screenshots to Google Drive&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot human-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Reviewed agent overnight results&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;activity-column&quot;&gt;
+              &lt;div class=&quot;sub-header agents-sub-header&quot;&gt;Agents&lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot agent-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Rebuilt dashboard HTML v3&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot agent-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Analyzed 8 UI screenshots&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot agent-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Pushed code to GitHub&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;activity-item&quot;&gt;
+                &lt;div class=&quot;dot agent-dot&quot;&gt;&lt;/div&gt;
+                &lt;span&gt;Synced files to Oz&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div class=&quot;card-header&quot;&gt;TOP PRIORITIES&lt;/div&gt;
+          &lt;ul class=&quot;priority-list&quot;&gt;
+            &lt;li class=&quot;priority-item&quot; data-priority=&quot;Complete Mission Control v1&quot;&gt;
+              &lt;div class=&quot;radio-circle&quot;&gt;&lt;/div&gt;
+              &lt;span&gt;Complete Mission Control v1&lt;/span&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;priority-item&quot; data-priority=&quot;Review agent overnight work&quot;&gt;
+              &lt;div class=&quot;radio-circle&quot;&gt;&lt;/div&gt;
+              &lt;span&gt;Review agent overnight work&lt;/span&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;priority-item&quot; data-priority=&quot;Set up daily report system&quot;&gt;
+              &lt;div class=&quot;radio-circle&quot;&gt;&lt;/div&gt;
+              &lt;span&gt;Set up daily report system&lt;/span&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;div class=&quot;add-priority&quot;&gt;
+            &lt;input type=&quot;text&quot; placeholder=&quot;+ Add Priority&quot;&gt;
+            &lt;button&gt;Add&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 2: Projects --&gt;
+    &lt;div id=&quot;projects&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;📁 Projects&lt;/div&gt;
+      &lt;div class=&quot;kanban&quot;&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;
+            &lt;span&gt;BACKLOG&lt;/span&gt;
+            &lt;span class=&quot;badge&quot;&gt;2&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-high&quot;&gt;HIGH&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div&gt;Base44.ai Integration&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;Replicate Mission Control for remote access&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-med&quot;&gt;MEDIUM&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div&gt;Higgsfield.ai Experiment&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;Banksy API key testing + video gen&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;
+            &lt;span&gt;IN PROGRESS&lt;/span&gt;
+            &lt;span class=&quot;badge&quot;&gt;2&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-high&quot;&gt;HIGH&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div&gt;Avatar Redesigns&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;Banksy editing all team avatars with names&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-high&quot;&gt;HIGH&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-25&lt;/div&gt;
+            &lt;div&gt;Mission Control v1&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;Build local Node.js dashboard&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;kanban-column&quot;&gt;
+          &lt;div class=&quot;column-header&quot;&gt;
+            &lt;span&gt;DONE&lt;/span&gt;
+            &lt;span class=&quot;badge&quot;&gt;2&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-med&quot;&gt;MEDIUM&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div&gt;Team Folder Setup&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;Google Drive + EncryptedStorage mirrors&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kanban-card&quot;&gt;
+            &lt;span class=&quot;priority-badge-high&quot;&gt;HIGH&lt;/span&gt;
+            &lt;div class=&quot;date&quot;&gt;2026-02-24&lt;/div&gt;
+            &lt;div&gt;Agent Overnight Test&lt;/div&gt;
+            &lt;div class=&quot;note&quot;&gt;All 9 agents completed sample tasks&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;add-task&quot;&gt;+ Add Task&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 3: Timeline --&gt;
+    &lt;div id=&quot;timeline&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;🗓️ Roadmap&lt;/div&gt;
+      &lt;div class=&quot;timeline&quot;&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot&quot;&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;strong&gt;Phase 1: Foundation&lt;/strong&gt; Feb 23-25&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;✓ Oz+Harriet SSH, ✓ All 10 agents, ✓ Overnight test, ✓ API keys secured, ○ Mission Control v1&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot gray&quot;&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;strong&gt;Phase 2: Local Intelligence&lt;/strong&gt; Feb 26-Mar 5&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;○ qwen2.5:72b orchestrator, ○ Agent model assignments, ○ Daily reports automated&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;timeline-item&quot;&gt;
+          &lt;div class=&quot;timeline-dot gray&quot;&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;strong&gt;Phase 3: Remote Access&lt;/strong&gt; Mar 6-15&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;○ Base44.ai replication, ○ Google OAuth, ○ Mobile-responsive&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 4: Notes --&gt;
+    &lt;div id=&quot;notes&quot; class=&quot;tab&quot;&gt;
+      &lt;div style=&quot;position: relative;&quot;&gt;
+        &lt;div class=&quot;tab-title&quot;&gt;📝 Notes&lt;/div&gt;
+        &lt;button class=&quot;new-note-btn&quot;&gt;+ New Note&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;notes-grid&quot;&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div&gt;&lt;strong&gt;Mission Control Build Notes&lt;/strong&gt;&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;Rebuild from screenshots. Push to GitHub Pages for live preview. Tab by tab with Gary.&lt;/div&gt;
+          &lt;span class=&quot;tag tag-dev&quot;&gt;Dev&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div&gt;&lt;strong&gt;Agent Rules&lt;/strong&gt;&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;Harriet = laptop only. All agents run on Oz. Gary talks to Harriet only. Never expose Oz IP.&lt;/div&gt;
+          &lt;span class=&quot;tag tag-ops&quot;&gt;Ops&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card&quot;&gt;
+          &lt;div&gt;&lt;strong&gt;Gumroad Launch&lt;/strong&gt;&lt;/div&gt;
+          &lt;div class=&quot;note&quot;&gt;White-label company name. Gamified trophy system. Sell as SaaS dashboard.&lt;/div&gt;
+          &lt;span class=&quot;tag tag-business&quot;&gt;Business&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 5: Revenue --&gt;
+    &lt;div id=&quot;revenue&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;💰 Revenue&lt;/div&gt;
+      &lt;div class=&quot;revenue-grid&quot;&gt;
+        &lt;div class=&quot;donut-container&quot;&gt;
+          &lt;svg class=&quot;donut-svg&quot; viewBox=&quot;0 0 100 100&quot;&gt;
+            &lt;circle class=&quot;donut-arc donut-track&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;&gt;&lt;/circle&gt;
+            &lt;circle class=&quot;donut-arc donut-fill&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; transform=&quot;rotate(-90 50 50)&quot;&gt;&lt;/circle&gt;
+          &lt;/svg&gt;
+          &lt;div class=&quot;revenue-value&quot;&gt;$4,000&lt;/div&gt;
+          &lt;div class=&quot;revenue-subtitle&quot;&gt;of $25,000 goal&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;div style=&quot;font-size: 14px; color: #9ca3af; margin-bottom: 12px; font-weight: 500;&quot;&gt;REVENUE — LAST 6 MONTHS&lt;/div&gt;
+          &lt;svg class=&quot;bar-svg&quot; viewBox=&quot;0 0 400 150&quot;&gt;
+            &lt;defs&gt;
+              &lt;linearGradient id=&quot;barGrad&quot; x1=&quot;0%&quot; y1=&quot;100%&quot; x2=&quot;0%&quot; y2=&quot;0%&quot;&gt;
+                &lt;stop offset=&quot;0%&quot; stop-color=&quot;#a78bfa&quot;/&gt;
+                &lt;stop offset=&quot;100%&quot; stop-color=&quot;#6366f1&quot;/&gt;
+              &lt;/linearGradient&gt;
+            &lt;/defs&gt;
+            &lt;g class=&quot;bar-labels&quot;&gt;
+              &lt;text x=&quot;30&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$8k&lt;/text&gt;
+              &lt;text x=&quot;85&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$10.5k&lt;/text&gt;
+              &lt;text x=&quot;140&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$12k&lt;/text&gt;
+              &lt;text x=&quot;195&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$14.5k&lt;/text&gt;
+              &lt;text x=&quot;250&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$16k&lt;/text&gt;
+              &lt;text x=&quot;305&quot; y=&quot;20&quot; class=&quot;bar-label&quot; text-anchor=&quot;middle&quot;&gt;$18.5k&lt;/text&gt;
+            &lt;/g&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;20&quot; y=&quot;60&quot; width=&quot;20&quot; height=&quot;60&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;75&quot; y=&quot;45&quot; width=&quot;20&quot; height=&quot;75&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;130&quot; y=&quot;35&quot; width=&quot;20&quot; height=&quot;85&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;185&quot; y=&quot;25&quot; width=&quot;20&quot; height=&quot;95&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;240&quot; y=&quot;30&quot; width=&quot;20&quot; height=&quot;90&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;rect class=&quot;bar&quot; x=&quot;295&quot; y=&quot;15&quot; width=&quot;20&quot; height=&quot;100&quot; rx=&quot;2&quot; fill=&quot;url(#barGrad)&quot;/&gt;
+            &lt;g class=&quot;month-labels&quot;&gt;
+              &lt;text x=&quot;30&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Sep&lt;/text&gt;
+              &lt;text x=&quot;85&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Oct&lt;/text&gt;
+              &lt;text x=&quot;140&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Nov&lt;/text&gt;
+              &lt;text x=&quot;195&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Dec&lt;/text&gt;
+              &lt;text x=&quot;250&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Jan&lt;/text&gt;
+              &lt;text x=&quot;305&quot; y=&quot;140&quot; class=&quot;month-label&quot; text-anchor=&quot;middle&quot;&gt;Feb&lt;/text&gt;
+            &lt;/g&gt;
+          &lt;/svg&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;clients-section&quot;&gt;
+        &lt;div class=&quot;card-header&quot;&gt;CLIENTS&lt;/div&gt;
+        &lt;table&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Name&lt;/th&gt;
+              &lt;th&gt;Monthly Value&lt;/th&gt;
+              &lt;th&gt;Status&lt;/th&gt;
+              &lt;th&gt;Start Date&lt;/th&gt;
+              &lt;th&gt;&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;Sample Client A&lt;/td&gt;
+              &lt;td&gt;$2,500&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;status-badge&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;2026-01-15&lt;/td&gt;
+              &lt;td&gt;&lt;button class=&quot;delete-btn&quot;&gt;❌&lt;/button&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;Sample Client B&lt;/td&gt;
+              &lt;td&gt;$1,500&lt;/td&gt;
+              &lt;td&gt;&lt;span class=&quot;status-badge&quot;&gt;active&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;2026-02-01&lt;/td&gt;
+              &lt;td&gt;&lt;button class=&quot;delete-btn&quot;&gt;❌&lt;/button&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;div class=&quot;add-client&quot;&gt;
+          &lt;input type=&quot;text&quot; placeholder=&quot;Client name&quot;&gt;
+          &lt;input type=&quot;text&quot; placeholder=&quot;Monthly $&quot;&gt;
+          &lt;button&gt;Add Client&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;projections&quot;&gt;
+        &lt;div class=&quot;projection-card&quot; style=&quot;color: #6366f1;&quot;&gt;$4,000 Current MRR&lt;/div&gt;
+        &lt;div class=&quot;projection-card&quot; style=&quot;color: #22c55e;&quot;&gt;$48,000 Projected Annual&lt;/div&gt;
+        &lt;div class=&quot;projection-card&quot; style=&quot;color: #f59e0b;&quot;&gt;$21,000 Monthly Growth Needed&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 6: Command Center --&gt;
+    &lt;div id=&quot;command&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;🖥️ Agent Command Center&lt;/div&gt;
+      &lt;div class=&quot;agents-grid&quot;&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #3b82f6;&quot;&gt;A&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Andy&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Finance/Accountant&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 1.2k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #ec4899;&quot;&gt;B&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Banksy&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Visual/Creative&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-busy&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;busy&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 2.1k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #f97316;&quot;&gt;C&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Chris Knight&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Sales/Closer&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 1.8k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #8b5cf6;&quot;&gt;C&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Clu&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Master Developer&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;coder:32b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 3.4k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #6b7280;&quot;&gt;E&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Ed Lewis&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Leverage/Credit&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-offline&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;offline&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 0.8k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #a78bfa;&quot;&gt;H&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Harriet&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Orchestrator&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;sonnet-4-6&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 2.5k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #ec4899;&quot;&gt;M&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Marissa&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Customer Service&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;mistral:12b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 1.1k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #10b981;&quot;&gt;M&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Matlock&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Legal&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 1.9k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #f59e0b;&quot;&gt;P&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Phineas&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Travel &amp; Experience&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-offline&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;offline&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:7b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 0.9k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;agent-card card&quot;&gt;
+          &lt;div class=&quot;agent-avatar&quot; style=&quot;background-color: #6366f1;&quot;&gt;S&lt;/div&gt;
+          &lt;div class=&quot;agent-name&quot;&gt;Spencer&lt;/div&gt;
+          &lt;div class=&quot;agent-role&quot;&gt;Long-Term Strategy&lt;/div&gt;
+          &lt;div class=&quot;status-row&quot;&gt;
+            &lt;div class=&quot;status-dot status-online&quot;&gt;&lt;/div&gt;
+            &lt;span&gt;online&lt;/span&gt;
+            &lt;span class=&quot;model-badge&quot;&gt;qwen2.5:32b&lt;/span&gt;
+            &lt;span style=&quot;color: #6b7280;&quot;&gt;• 2.7k tokens&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;card exec-decisions&quot;&gt;
+        &lt;div class=&quot;card-header&quot;&gt;EXECUTIVE DECISIONS&lt;/div&gt;
+        &lt;div class=&quot;decision-card&quot;&gt;
+          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
+          &lt;div class=&quot;decision-question&quot;&gt;Should all agents have Opus as fallback?&lt;/div&gt;
+          &lt;div class=&quot;decision-answer&quot;&gt;Removed Opus fallback. Local-only now.&lt;/div&gt;
+          &lt;div class=&quot;consulted&quot;&gt;Consulted: Oz, All agents&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;decision-card&quot;&gt;
+          &lt;div class=&quot;decision-date&quot;&gt;2026-02-04&lt;/div&gt;
+          &lt;div class=&quot;decision-question&quot;&gt;Team structure — who runs agents?&lt;/div&gt;
+          &lt;div class=&quot;decision-answer&quot;&gt;Harriet is ONLY agent on laptop. All 10 team agents run on Oz.&lt;/div&gt;
+          &lt;div class=&quot;consulted&quot;&gt;Consulted: Harriet, Oz&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 7: Family --&gt;
+    &lt;div id=&quot;family&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;👨‍👩‍👦 Family&lt;/div&gt;
+      &lt;div class=&quot;family-grid&quot;&gt;
+        &lt;div class=&quot;card family-section&quot;&gt;
+          &lt;div style=&quot;font-size: 18px; margin-bottom: 16px;&quot;&gt;🏥 Health&lt;/div&gt;
+          &lt;ul&gt;
+            &lt;li&gt;Annual checkups: Up to date&lt;/li&gt;
+            &lt;li&gt;Exercise log: 3x/week&lt;/li&gt;
+            &lt;li&gt;Medications: None active&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card family-section&quot;&gt;
+          &lt;div style=&quot;font-size: 18px; margin-bottom: 16px;&quot;&gt;📚 Education&lt;/div&gt;
+          &lt;ul&gt;
+            &lt;li&gt;Current courses: AI &amp; Automation&lt;/li&gt;
+            &lt;li&gt;Books reading: 2 active&lt;/li&gt;
+            &lt;li&gt;Certifications: 1 in progress&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card family-section&quot;&gt;
+          &lt;div style=&quot;font-size: 18px; margin-bottom: 16px;&quot;&gt;👥 Social&lt;/div&gt;
+          &lt;ul&gt;
+            &lt;li&gt;Family calls: Weekly&lt;/li&gt;
+            &lt;li&gt;Network events: 2 this month&lt;/li&gt;
+            &lt;li&gt;Community: Active&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card family-section&quot;&gt;
+          &lt;div style=&quot;font-size: 18px; margin-bottom: 16px;&quot;&gt;💼 Work&lt;/div&gt;
+          &lt;ul&gt;
+            &lt;li&gt;Active projects: 5&lt;/li&gt;
+            &lt;li&gt;Client meetings: 3 this week&lt;/li&gt;
+            &lt;li&gt;Revenue goal: On track&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;family-members&quot;&gt;
+        &lt;div class=&quot;family-avatar&quot;&gt;
+          &lt;div style=&quot;width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;&quot;&gt;G&lt;/div&gt;
+          &lt;div&gt;Gary&lt;/div&gt;
+          &lt;div&gt;Self&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;family-avatar&quot;&gt;
+          &lt;div style=&quot;width: 48px; height: 48px; border-radius: 50%; background: #ec4899; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;&quot;&gt;W&lt;/div&gt;
+          &lt;div&gt;Wife&lt;/div&gt;
+          &lt;div&gt;Partner&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;family-avatar&quot;&gt;
+          &lt;div style=&quot;width: 48px; height: 48px; border-radius: 50%; background: #10b981; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 18px;&quot;&gt;K&lt;/div&gt;
+          &lt;div&gt;Kid&lt;/div&gt;
+          &lt;div&gt;Child&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab 8: Intel --&gt;
+    &lt;div id=&quot;intel&quot; class=&quot;tab&quot;&gt;
+      &lt;div class=&quot;tab-title&quot;&gt;🦅 Intel&lt;/div&gt;
+      &lt;div class=&quot;intel-sections&quot;&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;card-header&quot;&gt;NEWS FEED&lt;/div&gt;
+          &lt;div class=&quot;news-card&quot; style=&quot;border-left-color: #3b82f6;&quot;&gt;
+            &lt;div class=&quot;news-title&quot;&gt;OpenAI announces GPT-5 in Q2 2026&lt;/div&gt;
+            &lt;div class=&quot;news-source&quot;&gt;
+              &lt;span class=&quot;source-badge&quot; style=&quot;background-color: #3b82f6; color: white;&quot;&gt;TechCrunch&lt;/span&gt;
+              &lt;span&gt;2h ago&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;news-card&quot; style=&quot;border-left-color: #22c55e;&quot;&gt;
+            &lt;div class=&quot;news-title&quot;&gt;Real estate market shifts in Latin America&lt;/div&gt;
+            &lt;div class=&quot;news-source&quot;&gt;
+              &lt;span class=&quot;source-badge&quot; style=&quot;background-color: #22c55e; color: white;&quot;&gt;Bloomberg&lt;/span&gt;
+              &lt;span&gt;4h ago&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;news-card&quot; style=&quot;border-left-color: #a78bfa;&quot;&gt;
+            &lt;div class=&quot;news-title&quot;&gt;WhatsApp Business API expands features&lt;/div&gt;
+            &lt;div class=&quot;news-source&quot;&gt;
+              &lt;span class=&quot;source-badge&quot; style=&quot;background-color: #a78bfa; color: white;&quot;&gt;Meta&lt;/span&gt;
+              &lt;span&gt;6h ago&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;news-card&quot; style=&quot;border-left-color: #f59e0b;&quot;&gt;
+            &lt;div class=&quot;news-title&quot;&gt;AI agent frameworks see 300% growth&lt;/div&gt;
+            &lt;div class=&quot;news-source&quot;&gt;
+              &lt;span class=&quot;source-badge&quot; style=&quot;background-color: #f59e0b; color: white;&quot;&gt;Forbes&lt;/span&gt;
+              &lt;span&gt;8h ago&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;news-card&quot; style=&quot;border-left-color: #ef4444;&quot;&gt;
+            &lt;div class=&quot;news-title&quot;&gt;Gumroad adds new SaaS tools category&lt;/div&gt;
+            &lt;div class=&quot;news-source&quot;&gt;
+              &lt;span class=&quot;source-badge&quot; style=&quot;background-color: #ef4444; color: white;&quot;&gt;ProductHunt&lt;/span&gt;
+              &lt;span&gt;12h ago&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;card-header&quot;&gt;TRIAGE&lt;/div&gt;
+          &lt;div class=&quot;triage-item&quot;&gt;
+            &lt;span style=&quot;font-size: 20px;&quot;&gt;🔴&lt;/span&gt;
+            &lt;span&gt;&lt;input type=&quot;checkbox&quot;&gt; Review AI cost report&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;triage-item&quot;&gt;
+            &lt;span style=&quot;font-size: 20px;&quot;&gt;🟡&lt;/span&gt;
+            &lt;span&gt;&lt;input type=&quot;checkbox&quot;&gt; Update client proposals&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;triage-item&quot;&gt;
+            &lt;span style=&quot;font-size: 20px;&quot;&gt;🟢&lt;/span&gt;
+            &lt;span&gt;&lt;input type=&quot;checkbox&quot;&gt; Schedule weekly briefing&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;triage-item&quot;&gt;
+            &lt;span style=&quot;font-size: 20px;&quot;&gt;🟡&lt;/span&gt;
+            &lt;span&gt;&lt;input type=&quot;checkbox&quot;&gt; Check Oz server health&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Priority Modal --&gt;
+  &lt;div id=&quot;priority-modal&quot; class=&quot;modal-overlay&quot;&gt;
+    &lt;div class=&quot;modal-box&quot;&gt;
+      &lt;button class=&quot;close-btn&quot;&gt;&amp;#215;&lt;/button&gt;
+      &lt;div id=&quot;modal-content&quot;&gt;
+        &lt;div class=&quot;modal-title&quot;&gt;What do you want to do with this priority?&lt;/div&gt;
+        &lt;div id=&quot;modal-priority-name&quot; class=&quot;priority-name&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;modal-buttons&quot;&gt;
+          &lt;button class=&quot;btn-delete&quot;&gt;DELETE&lt;/button&gt;
+          &lt;button class=&quot;btn-complete&quot;&gt;COMPLETE&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Toast --&gt;
+  &lt;div id=&quot;toast&quot;&gt;Trophies awarded! 🏆&lt;/div&gt;
+
+  &lt;script&gt;
+    // Live time
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('live-time').textContent = now.toLocaleString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        timeZoneName: 'short' 
+      });
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn =&gt; {
+      btn.addEventListener('click', () =&gt; {
+        const tabId = btn.dataset.tab;
+        document.querySelectorAll('.tab').forEach(tab =&gt; tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b =&gt; b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+      });
+    });
+
+    // Priority modal
+    let currentPriority = '';
+    document.querySelectorAll('.priority-item').forEach(item =&gt; {
+      item.addEventListener('click', () =&gt; {
+        currentPriority = item.dataset.priority;
+        document.getElementById('modal-priority-name').textContent = currentPriority;
+        document.getElementById('priority-modal').classList.add('show');
+        showInitialModal();
+      });
+    });
+
+    const closeBtn = document.querySelector('.close-btn');
+    const modalOverlay = document.getElementById('priority-modal');
+    closeBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) =&gt; {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+      showInitialModal();
+    }
+
+    function showInitialModal() {
+      document.getElementById('modal-content').innerHTML = `
+        &lt;div class=&quot;modal-title&quot;&gt;What do you want to do with this priority?&lt;/div&gt;
+        &lt;div id=&quot;modal-priority-name&quot; class=&quot;priority-name&quot;&gt;${currentPriority}&lt;/div&gt;
+        &lt;div class=&quot;modal-buttons&quot;&gt;
+          &lt;button class=&quot;btn-delete&quot;&gt;DELETE&lt;/button&gt;
+          &lt;button class=&quot;btn-complete&quot;&gt;COMPLETE&lt;/button&gt;
+        &lt;/div&gt;
+      `;
+      document.querySelector('.btn-delete').addEventListener('click', showDeleteConfirm);
+      document.querySelector('.btn-complete').addEventListener('click', showCompleteModal);
+    }
+
+    function showDeleteConfirm() {
+      document.getElementById('modal-content').innerHTML = `
+        &lt;div class=&quot;modal-title&quot;&gt;Are you sure you want to DELETE rather than COMPLETE this Top Priority?&lt;/div&gt;
+        &lt;div class=&quot;modal-buttons&quot;&gt;
+          &lt;button class=&quot;btn-delete&quot;&gt;DELETE&lt;/button&gt;
+          &lt;button class=&quot;btn-cancel&quot;&gt;CANCEL&lt;/button&gt;
+        &lt;/div&gt;
+      `;
+      document.querySelector('.btn-delete').onclick = () =&gt; {
+        // Simulate delete
+        closeModal();
+        alert('Priority deleted!');
+      };
+      document.querySelector('.btn-cancel').onclick = showInitialModal;
+    }
+
+    function showCompleteModal() {
+      document.getElementById('modal-content').innerHTML = `
+        &lt;div class=&quot;modal-title&quot;&gt;Who helped you most to complete this Top Priority? 🏆&lt;/div&gt;
+        &lt;div style=&quot;color: #9ca3af; margin-bottom: 24px;&quot;&gt;Select all that helped. They&apos;ll each earn a unique trophy!&lt;/div&gt;
+        &lt;div class=&quot;avatar-row&quot;&gt;
+          &lt;div class=&quot;row-label&quot;&gt;Humans:&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;gary&quot; style=&quot;background-color: #6366f1;&quot;&gt;👤&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;wife&quot; style=&quot;background-color: #ec4899;&quot;&gt;W&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;kid&quot; style=&quot;background-color: #10b981;&quot;&gt;K&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;avatar-row&quot;&gt;
+          &lt;div class=&quot;row-label&quot;&gt;Agents:&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;andy&quot; style=&quot;background-color: #3b82f6;&quot;&gt;A&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;banksy&quot; style=&quot;background-color: #ec4899;&quot;&gt;B&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;chris&quot; style=&quot;background-color: #f97316;&quot;&gt;C&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;clu&quot; style=&quot;background-color: #8b5cf6;&quot;&gt;Cl&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;ed&quot; style=&quot;background-color: #6b7280;&quot;&gt;E&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;harriet&quot; style=&quot;background-color: #a78bfa;&quot;&gt;H&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;marissa&quot; style=&quot;background-color: #ec4899;&quot;&gt;M&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;matlock&quot; style=&quot;background-color: #10b981;&quot;&gt;M&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;phineas&quot; style=&quot;background-color: #f59e0b;&quot;&gt;P&lt;/div&gt;
+          &lt;div class=&quot;avatar-pill&quot; data-avatar=&quot;spencer&quot; style=&quot;background-color: #6366f1;&quot;&gt;S&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;color: #9ca3af; font-size: 12px; margin-top: 16px;&quot;&gt;🏆 Each helper earns a unique trophy — no two are alike!&lt;/div&gt;
+        &lt;div class=&quot;modal-buttons&quot;&gt;
+          &lt;button class=&quot;btn-cancel&quot; style=&quot;background-color: #6b7280;&quot;&gt;Back&lt;/button&gt;
+          &lt;button id=&quot;award-btn&quot; class=&quot;btn-complete&quot;&gt;Award Trophies &amp; Complete&lt;/button&gt;
+        &lt;/div&gt;
+      `;
+      document.querySelectorAll('.avatar-pill').forEach(pill =&gt; {
+        pill.addEventListener('click', function() {
+          this.classList.toggle('selected');
+        });
+      });
+      document.querySelector('.btn-cancel').onclick = showInitialModal;
+      document.getElementById('award-btn').onclick = awardTrophies;
+    }
+
+    function awardTrophies() {
+      showToast();
+      closeModal();
+      // Simulate complete
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() =&gt; toast.classList.remove('show'), 3000);
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
