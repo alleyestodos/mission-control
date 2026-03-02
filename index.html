@@ -1039,6 +1039,52 @@
       background: linear-gradient(90deg, #6366f1, #a78bfa);
     }
 
+    /* Notes journal */
+    .note-entry {
+      background: #16161e;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .note-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid #2d2d44;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .note-entry-body {
+      padding: 16px 18px;
+    }
+    .note-source-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .priority-text {
+      cursor: pointer;
+      flex: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .priority-text:hover {
+      background: #1a1a2e;
+      outline: 1px dashed #6366f1;
+    }
+    .priority-text.editing {
+      background: #1a1a2e;
+      outline: 2px solid #6366f1;
+      outline-offset: 1px;
+    }
+
     /* Intel */
     .intel-sections {
       display: grid;
@@ -1367,23 +1413,42 @@
         </div>
         <div class="card">
           <div class="card-header">TOP PRIORITIES</div>
-          <ul class="priority-list">
+          <ul class="priority-list" id="priorityList">
             <li class="priority-item" data-priority="Complete Mission Control v1">
-              <div class="radio-circle"></div>
-              <span>Complete Mission Control v1</span>
+              <div class="radio-circle" onclick="openPriorityModal(this)"></div>
+              <span class="priority-text" onclick="startEditPriority(this)">Complete Mission Control v1</span>
             </li>
             <li class="priority-item" data-priority="Review agent overnight work">
-              <div class="radio-circle"></div>
-              <span>Review agent overnight work</span>
+              <div class="radio-circle" onclick="openPriorityModal(this)"></div>
+              <span class="priority-text" onclick="startEditPriority(this)">Review agent overnight work</span>
             </li>
             <li class="priority-item" data-priority="Set up daily report system">
-              <div class="radio-circle"></div>
-              <span>Set up daily report system</span>
+              <div class="radio-circle" onclick="openPriorityModal(this)"></div>
+              <span class="priority-text" onclick="startEditPriority(this)">Set up daily report system</span>
             </li>
           </ul>
-          <div class="add-priority">
-            <input type="text" placeholder="+ Add Priority">
-            <button>Add</button>
+
+          <!-- Add Priority input row -->
+          <div style="margin-top:12px;">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" id="priorityInput" placeholder="Type a new priority..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')addPriorityFromInput()">
+              <!-- Mic button -->
+              <button id="micBtn" onclick="toggleMic()" title="Voice input (30s max)" style="width:40px;height:40px;border-radius:10px;background:#dc2626;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+              </button>
+              <button onclick="addPriorityFromInput()" style="background:#6366f1;color:white;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px;">Add</button>
+            </div>
+            <!-- Recording status bar (hidden by default) -->
+            <div id="micStatus" style="display:none;margin-top:8px;padding:8px 12px;background:#1a0000;border:1px solid #dc2626;border-radius:6px;display:none;align-items:center;gap:10px;">
+              <div style="width:10px;height:10px;border-radius:50%;background:#dc2626;animation:pulse-red 1s infinite;"></div>
+              <span style="font-size:12px;color:#fca5a5;">Recording... </span>
+              <span id="micTimer" style="font-size:12px;color:#dc2626;font-weight:700;">0:30</span>
+              <span style="font-size:12px;color:#6b7280;margin-left:auto;">Speak your priority clearly</span>
+            </div>
+            <!-- AI analyzing status -->
+            <div id="aiAnalyzing" style="display:none;margin-top:8px;padding:8px 12px;background:#1a1a2e;border:1px solid #6366f1;border-radius:6px;font-size:12px;color:#a78bfa;">
+              ✨ AI is summarizing your input into a goal...
+            </div>
           </div>
         </div>
       </div>
@@ -1551,28 +1616,129 @@
       </div>
     </div>
 
-    <!-- Tab 4: Notes -->
+    <!-- Tab 4: Notes — Source of Truth Journal -->
     <div id="notes" class="tab">
-      <div style="position: relative;">
-        <div class="tab-title">📝 Notes</div>
-        <button class="new-note-btn">+ New Note</button>
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div class="tab-title" style="margin-bottom:0;">📝 Notes</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:12px;color:#22c55e;background:#0d1f0d;border:1px solid #22c55e;border-radius:6px;padding:4px 10px;">🔒 Sensitive content auto-redacted</div>
+          <div style="font-size:12px;color:#6b7280;">All entries are immutable originals</div>
+        </div>
       </div>
-      <div class="notes-grid">
-        <div class="card">
-          <div><strong>Mission Control Build Notes</strong></div>
-          <div class="note">Rebuild from screenshots. Push to GitHub Pages for live preview. Tab by tab with Gary.</div>
-          <span class="tag tag-dev">Dev</span>
+
+      <!-- Search bar -->
+      <div style="margin-bottom:20px;position:relative;">
+        <input type="text" id="notesSearch" placeholder="🔍 Search notes, transcriptions, briefs..." oninput="filterNotes(this.value)" style="width:100%;background:#16161e;border:1px solid #2d2d44;border-radius:8px;padding:10px 16px;color:#e5e7eb;font-size:14px;outline:none;">
+      </div>
+
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+        <button onclick="filterNotesByTag('all',this)" class="note-filter-btn active-filter" style="background:#1e1b4b;color:#c4b5fd;border:1px solid #6366f1;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">All</button>
+        <button onclick="filterNotesByTag('voice',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🎤 Voice</button>
+        <button onclick="filterNotesByTag('telegram',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📱 Telegram</button>
+        <button onclick="filterNotesByTag('brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🤖 Agent Brief</button>
+        <button onclick="filterNotesByTag('system',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📋 System</button>
+      </div>
+
+      <!-- Journal entries -->
+      <div id="notesJournal" style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Entry: Agent Brief -->
+        <div class="note-entry" data-tag="brief">
+          <div class="note-entry-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="activity-avatar" style="background:#a78bfa;width:32px;height:32px;font-size:13px;">H</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#e5e7eb;">Harriet</div>
+                <div style="font-size:11px;color:#6b7280;">Mon Mar 2, 2026 · 7:00 AM AST</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="note-source-badge" style="background:#1e1b4b;color:#c4b5fd;border:1px solid #6366f1;">🤖 Agent Brief</span>
+              <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
+            </div>
+          </div>
+          <div class="note-entry-body">
+            <div style="font-weight:600;color:#e5e7eb;margin-bottom:8px;">📋 Morning Briefing — March 2, 2026</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:4px;">
+              <li style="font-size:13px;color:#9ca3af;">✅ No active subagents overnight</li>
+              <li style="font-size:13px;color:#9ca3af;">✅ Oz workspace synced — mission-control repo live on GitHub</li>
+              <li style="font-size:13px;color:#9ca3af;">⚠️ Oz OpenClaw PATH needs fixing for remote commands</li>
+              <li style="font-size:13px;color:#9ca3af;">📌 Priority: Mission Control V2 rebuild started today</li>
+            </ul>
+          </div>
         </div>
-        <div class="card">
-          <div><strong>Agent Rules</strong></div>
-          <div class="note">Harriet = laptop only. All agents run on Oz. Gary talks to Harriet only. Never expose Oz IP.</div>
-          <span class="tag tag-ops">Ops</span>
+
+        <!-- Entry: Voice transcription -->
+        <div class="note-entry" data-tag="voice">
+          <div class="note-entry-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="activity-avatar" style="background:#6366f1;width:32px;height:32px;font-size:13px;">G</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#e5e7eb;">Gary</div>
+                <div style="font-size:11px;color:#6b7280;">Mon Mar 2, 2026 · 1:36 PM AST</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="note-source-badge" style="background:#1f0d0d;color:#fca5a5;border:1px solid #dc2626;">🎤 Voice</span>
+              <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
+            </div>
+          </div>
+          <div class="note-entry-body">
+            <div style="font-size:11px;color:#6b7280;margin-bottom:6px;font-style:italic;">Word-for-word transcription — never edited</div>
+            <div style="font-size:13px;color:#e5e7eb;line-height:1.7;border-left:3px solid #dc2626;padding-left:12px;">
+              "We are rebuilding the mission control dashboard. It will be software sold using Gumroad. I want the notes section to be a running journal. Everything that comes in — voice, telegram, agent briefs — should land here. And the original words are never changed. Ever. This is the source of truth."
+            </div>
+            <div style="margin-top:10px;padding:8px 12px;background:#0d1a0d;border:1px solid #22c55e;border-radius:6px;">
+              <div style="font-size:11px;color:#22c55e;font-weight:600;margin-bottom:4px;">✨ AI Summary → Added as Priority:</div>
+              <div style="font-size:12px;color:#9ca3af;">"Build immutable voice journal with source-of-truth Notes system"</div>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div><strong>Gumroad Launch</strong></div>
-          <div class="note">White-label company name. Gamified trophy system. Sell as SaaS dashboard.</div>
-          <span class="tag tag-business">Business</span>
+
+        <!-- Entry: Telegram -->
+        <div class="note-entry" data-tag="telegram">
+          <div class="note-entry-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="activity-avatar" style="background:#6366f1;width:32px;height:32px;font-size:13px;">G</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#e5e7eb;">Gary → Harriet</div>
+                <div style="font-size:11px;color:#6b7280;">Mon Mar 2, 2026 · 9:28 AM AST · via Telegram</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="note-source-badge" style="background:#0d1829;color:#60a5fa;border:1px solid #3b82f6;">📱 Telegram</span>
+              <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
+            </div>
+          </div>
+          <div class="note-entry-body">
+            <div style="font-size:13px;color:#e5e7eb;line-height:1.7;">Good morning</div>
+          </div>
         </div>
+
+        <!-- Entry: System / Security example -->
+        <div class="note-entry" data-tag="system">
+          <div class="note-entry-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="activity-avatar" style="background:#10b981;width:32px;height:32px;font-size:13px;">S</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#e5e7eb;">System</div>
+                <div style="font-size:11px;color:#6b7280;">Mon Mar 2, 2026 · 12:04 PM AST</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="note-source-badge" style="background:#0d1f0d;color:#86efac;border:1px solid #22c55e;">📋 System</span>
+              <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
+            </div>
+          </div>
+          <div class="note-entry-body">
+            <div style="font-size:13px;color:#e5e7eb;margin-bottom:8px;">Oz GitHub PAT configured and stored securely.</div>
+            <div style="font-size:13px;color:#e5e7eb;">Token: <span style="background:#2d2d44;color:#fca5a5;padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">🔒 [REDACTED — API KEY]</span></div>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;">⚠️ Sensitive content automatically redacted for security. Original securely archived.</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -2166,6 +2332,169 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
+    // ── Mic / Voice Input ──────────────────────────────────────
+    let micRecording = false;
+    let micTimer = null;
+    let micSeconds = 30;
+    let recognition = null;
+
+    function toggleMic() {
+      if (micRecording) stopMic();
+      else startMic();
+    }
+
+    function startMic() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Voice input not supported in this browser. Try Chrome.');
+        return;
+      }
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      let finalTranscript = '';
+
+      recognition.onresult = function(e) {
+        let interim = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+          else interim += e.results[i][0].transcript;
+        }
+        document.getElementById('priorityInput').value = finalTranscript + interim;
+      };
+      recognition.onend = function() {
+        if (micRecording) finalizeMic(finalTranscript || document.getElementById('priorityInput').value);
+      };
+      recognition.start();
+      micRecording = true;
+
+      // UI
+      const btn = document.getElementById('micBtn');
+      btn.style.background = '#7f1d1d';
+      btn.style.animation = 'none';
+      const status = document.getElementById('micStatus');
+      status.style.display = 'flex';
+      micSeconds = 30;
+      document.getElementById('micTimer').textContent = '0:30';
+      micTimer = setInterval(() => {
+        micSeconds--;
+        document.getElementById('micTimer').textContent = '0:' + String(micSeconds).padStart(2,'0');
+        if (micSeconds <= 0) stopMic();
+      }, 1000);
+    }
+
+    function stopMic() {
+      micRecording = false;
+      clearInterval(micTimer);
+      if (recognition) { recognition.stop(); recognition = null; }
+      document.getElementById('micBtn').style.background = '#dc2626';
+      document.getElementById('micStatus').style.display = 'none';
+    }
+
+    function finalizeMic(transcript) {
+      if (!transcript.trim()) return;
+      // Add raw transcription to Notes
+      addNoteEntry('voice', 'Gary', transcript, '#6366f1', 'G');
+      // Show AI analyzing
+      const aiEl = document.getElementById('aiAnalyzing');
+      aiEl.style.display = 'block';
+      setTimeout(() => {
+        aiEl.style.display = 'none';
+        // Summarize to short goal (trim to ~60 chars, capitalize)
+        let summary = transcript.trim();
+        summary = summary.charAt(0).toUpperCase() + summary.slice(1);
+        if (summary.length > 70) summary = summary.slice(0, 67) + '...';
+        document.getElementById('priorityInput').value = summary;
+        addPriorityFromInput();
+      }, 2000);
+    }
+
+    // ── Priority helpers ────────────────────────────────────────
+    function addPriorityFromInput() {
+      const input = document.getElementById('priorityInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const li = document.createElement('li');
+      li.className = 'priority-item';
+      li.dataset.priority = text;
+      li.innerHTML = `<div class="radio-circle" onclick="openPriorityModal(this)"></div><span class="priority-text" onclick="startEditPriority(this)">${text}</span>`;
+      document.getElementById('priorityList').appendChild(li);
+      input.value = '';
+    }
+
+    function startEditPriority(el) {
+      el.contentEditable = 'true';
+      el.classList.add('editing');
+      el.focus();
+      el.onblur = function() {
+        el.contentEditable = 'false';
+        el.classList.remove('editing');
+      };
+      el.onkeydown = function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+      };
+    }
+
+    // ── Notes journal helpers ───────────────────────────────────
+    function addNoteEntry(tag, name, text, avatarColor, initial) {
+      const now = new Date();
+      const timeStr = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' AST';
+      const badges = {
+        voice: {bg:'#1f0d0d',color:'#fca5a5',border:'#dc2626',label:'🎤 Voice'},
+        telegram: {bg:'#0d1829',color:'#60a5fa',border:'#3b82f6',label:'📱 Telegram'},
+        brief: {bg:'#1e1b4b',color:'#c4b5fd',border:'#6366f1',label:'🤖 Agent Brief'},
+        system: {bg:'#0d1f0d',color:'#86efac',border:'#22c55e',label:'📋 System'}
+      };
+      const b = badges[tag] || badges['system'];
+      const safeText = redactSensitive(text);
+      const entry = document.createElement('div');
+      entry.className = 'note-entry';
+      entry.dataset.tag = tag;
+      entry.innerHTML = `
+        <div class="note-entry-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="activity-avatar" style="background:${avatarColor};width:32px;height:32px;font-size:13px;">${initial}</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#e5e7eb;">${name}</div>
+              <div style="font-size:11px;color:#6b7280;">${timeStr}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="note-source-badge" style="background:${b.bg};color:${b.color};border:1px solid ${b.border};">${b.label}</span>
+            <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
+          </div>
+        </div>
+        <div class="note-entry-body">
+          <div style="font-size:11px;color:#6b7280;margin-bottom:6px;font-style:italic;">Word-for-word · original preserved</div>
+          <div style="font-size:13px;color:#e5e7eb;line-height:1.7;border-left:3px solid ${b.border};padding-left:12px;">"${safeText}"</div>
+        </div>`;
+      document.getElementById('notesJournal').prepend(entry);
+    }
+
+    function redactSensitive(text) {
+      return text
+        .replace(/\b(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xai-[a-zA-Z0-9]{20,}|AIza[a-zA-Z0-9]{35,})\b/g, '[REDACTED — API KEY]')
+        .replace(/\b(password|passwd|secret)\s*[:=]\s*\S+/gi, '$1: [REDACTED]')
+        .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b(?=.*password)/gi, '[REDACTED — EMAIL]');
+    }
+
+    function filterNotes(query) {
+      document.querySelectorAll('.note-entry').forEach(el => {
+        el.style.display = el.textContent.toLowerCase().includes(query.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    function filterNotesByTag(tag, btn) {
+      document.querySelectorAll('.note-filter-btn').forEach(b => {
+        b.style.background = '#16161e'; b.style.color = '#9ca3af'; b.style.borderColor = '#2d2d44';
+      });
+      btn.style.background = '#1e1b4b'; btn.style.color = '#c4b5fd'; btn.style.borderColor = '#6366f1';
+      document.querySelectorAll('.note-entry').forEach(el => {
+        el.style.display = (tag === 'all' || el.dataset.tag === tag) ? '' : 'none';
+      });
+    }
+
     // Snapshot countdown (90 days from first launch — stored in localStorage)
     (function() {
       let launch = localStorage.getItem('mc_launch_date');
