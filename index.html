@@ -1200,6 +1200,51 @@
     .vm-btn-cancel { background: #1a1a2e; border: 1px solid #3f3f5c; color: #9ca3af; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; }
     .vm-btn-submit { background: #6366f1; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; }
 
+    /* ── Smart Voice Capture Modal ── */
+    .svc-overlay { display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:5000;align-items:center;justify-content:center; }
+    .svc-overlay.active { display:flex; }
+    .svc-box { background:#13131a;border:1px solid #2d2d44;border-radius:20px;padding:32px;max-width:520px;width:92%;position:relative;max-height:90vh;overflow-y:auto; }
+    .svc-close { position:absolute;top:16px;right:16px;background:none;border:none;color:#6b7280;font-size:22px;cursor:pointer;line-height:1; }
+    .svc-close:hover { color:#e5e7eb; }
+
+    /* Phase 1 — mic */
+    .svc-phase { display:none; }
+    .svc-phase.active { display:block; }
+    .svc-mic-center { display:flex;flex-direction:column;align-items:center;padding:24px 0 8px; }
+    .svc-big-mic { width:90px;height:90px;border-radius:50%;background:#dc2626;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;box-shadow:0 0 0 0 rgba(220,38,38,0.4); }
+    .svc-big-mic:hover { transform:scale(1.06); }
+    .svc-big-mic.recording { background:#7f1d1d;animation:svc-pulse 1.2s infinite; }
+    @keyframes svc-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.5)} 60%{box-shadow:0 0 0 22px rgba(220,38,38,0)} }
+    .svc-mic-label { margin-top:18px;font-size:16px;font-weight:700;color:#e5e7eb; }
+    .svc-mic-sub { margin-top:6px;font-size:13px;color:#6b7280;text-align:center; }
+    .svc-rec-timer { margin-top:10px;font-size:24px;font-weight:800;color:#dc2626;font-variant-numeric:tabular-nums; }
+    .svc-live-text { margin-top:16px;width:100%;background:#0d0d11;border:1px solid #2d2d44;border-radius:10px;padding:12px 14px;font-size:13px;color:#9ca3af;min-height:52px;line-height:1.6;font-style:italic; }
+
+    /* Phase 2 — analyzing */
+    .svc-analyzing { display:flex;flex-direction:column;align-items:center;padding:40px 0; }
+    .svc-spinner { width:56px;height:56px;border:4px solid #1e1b4b;border-top:4px solid #a78bfa;border-radius:50%;animation:svc-spin 0.8s linear infinite;margin-bottom:20px; }
+    @keyframes svc-spin { to { transform:rotate(360deg); } }
+    .svc-analyzing-label { font-size:15px;font-weight:600;color:#e5e7eb; }
+    .svc-analyzing-sub { font-size:12px;color:#6b7280;margin-top:6px; }
+
+    /* Phase 3 — results */
+    .svc-result-title { font-size:18px;font-weight:800;color:#e5e7eb;margin-bottom:4px; }
+    .svc-result-sub { font-size:12px;color:#6b7280;margin-bottom:20px; }
+    .svc-field-card { background:#16161e;border:1px solid #2d2d44;border-radius:12px;padding:14px 16px;margin-bottom:10px; }
+    .svc-field-card.gap { border-color:#f59e0b;background:#1c1500; }
+    .svc-field-label { font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#6b7280;margin-bottom:8px; }
+    .svc-field-value { font-size:14px;color:#e5e7eb;font-weight:600; }
+    .svc-field-gap { font-size:13px;color:#f59e0b;font-weight:600; }
+    .svc-gap-options { display:flex;flex-wrap:wrap;gap:8px;margin-top:10px; }
+    .svc-gap-opt { background:#1a1a2e;border:1px solid #2d2d44;color:#9ca3af;border-radius:20px;padding:5px 14px;font-size:12px;cursor:pointer;transition:all 0.15s; }
+    .svc-gap-opt:hover,.svc-gap-opt.chosen { background:#1e1b4b;border-color:#6366f1;color:#c4b5fd; }
+    .svc-assignee-pills { display:flex;flex-wrap:wrap;gap:10px;margin-top:6px; }
+    .svc-confirm-btn { width:100%;background:#6366f1;color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;margin-top:14px;transition:background 0.2s; }
+    .svc-confirm-btn:hover { background:#4f46e5; }
+    .svc-type-badge { display:inline-flex;align-items:center;gap:6px;background:#1e1b4b;border:1px solid #6366f1;color:#c4b5fd;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600; }
+    .svc-priority-badge { display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600; }
+    .svc-transcript-raw { font-size:11px;color:#4b5563;font-style:italic;border-top:1px solid #1e1e2e;padding-top:10px;margin-top:10px;line-height:1.5; }
+
     /* Notes export */
     .notes-export-btn {
       background: #1a1a2e; border: 1px solid #2d2d44; color: #9ca3af;
@@ -2676,221 +2721,111 @@
       </div>
     </div>
 
-    <!-- ── Add Project Modal ── -->
-    <div class="voice-modal-overlay" id="addProjectModal">
-      <div class="voice-modal-box">
-        <button class="vm-close" onclick="closeAddProjectModal()">✕</button>
-        <div class="vm-title">📁 New Project</div>
-        <div class="vm-subtitle">Type or speak — Clu will read this and know exactly what to build.</div>
+    <!-- ── Smart Voice Capture Modal (unified: task + project) ── -->
+    <div class="svc-overlay" id="svcModal">
+      <div class="svc-box">
+        <button class="svc-close" onclick="closeSVC()">✕</button>
 
-        <div class="vm-field">
-          <div class="vm-label">Project Title</div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input type="text" class="vm-input" id="newProjectTitle" placeholder="e.g. Build Revenue Dashboard">
-            <button class="voice-mic-btn" id="projMicBtn" onclick="startVoice('newProjectDesc','projMicBtn','projVoiceTimer','projVoiceSave',null,true,'newProjectTitle')" title="Speak title + description">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+        <!-- Phase 1: Record -->
+        <div class="svc-phase active" id="svcPhase1">
+          <div style="font-size:13px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;" id="svcModeLabel">New Task</div>
+          <div style="font-size:22px;font-weight:800;color:#e5e7eb;margin-bottom:4px;">Tell me what needs to happen.</div>
+          <div style="font-size:13px;color:#6b7280;margin-bottom:24px;">Speak naturally — who, what, when, why. I'll figure out the rest.</div>
+          <div class="svc-mic-center">
+            <button class="svc-big-mic" id="svcMicBtn" onclick="svcToggleRecord()">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
             </button>
-            <span class="voice-timer" id="projVoiceTimer"></span>
+            <div class="svc-mic-label" id="svcMicLabel">Tap to record</div>
+            <div class="svc-mic-sub">Up to 60 seconds · local Whisper transcribes · no API cost</div>
+            <div class="svc-rec-timer" id="svcTimer" style="display:none;"></div>
+          </div>
+          <div class="svc-live-text" id="svcLiveText" style="display:none;"></div>
+          <div style="margin-top:20px;display:flex;gap:10px;">
+            <button onclick="closeSVC()" style="flex:1;background:#1a1a2e;border:1px solid #3f3f5c;color:#9ca3af;padding:11px;border-radius:10px;font-size:13px;cursor:pointer;">Cancel</button>
+            <button id="svcStopBtn" onclick="svcStopRecord()" style="display:none;flex:1;background:#dc2626;color:white;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">⏹ Stop & Analyze</button>
+          </div>
+          <div style="margin-top:16px;text-align:center;">
+            <button onclick="svcShowTypeForm()" style="background:none;border:none;color:#4b5563;font-size:12px;cursor:pointer;text-decoration:underline;">Prefer to type instead →</button>
           </div>
         </div>
 
-        <div class="vm-field">
-          <div class="vm-label">Description <span style="color:#4b5563;font-weight:400;text-transform:none;">(voice transcription appears here)</span></div>
-          <textarea class="vm-textarea" id="newProjectDesc" placeholder="Describe the project... or tap the mic and speak it."></textarea>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div class="vm-field">
-            <div class="vm-label">Priority</div>
-            <select class="vm-select" id="newProjectPriority">
-              <option value="high">🔴 High</option>
-              <option value="med" selected>🟡 Medium</option>
-              <option value="low">🟢 Low</option>
-            </select>
-          </div>
-          <div class="vm-field">
-            <div class="vm-label">Column</div>
-            <select class="vm-select" id="newProjectColumn">
-              <option value="recurring">🔁 Recurring</option>
-              <option value="backlog" selected>📋 Backlog</option>
-              <option value="inprogress">🔵 In Progress</option>
-              <option value="review">🟡 Review</option>
-              <option value="done">✅ Done</option>
-            </select>
+        <!-- Phase 1b: Type fallback -->
+        <div class="svc-phase" id="svcPhase1b">
+          <div style="font-size:22px;font-weight:800;color:#e5e7eb;margin-bottom:6px;">Describe it in plain English.</div>
+          <div style="font-size:13px;color:#6b7280;margin-bottom:16px;">Write like you'd say it out loud. Include who, what, and when if you know them.</div>
+          <textarea id="svcTypeInput" style="width:100%;background:#0d0d11;border:1px solid #2d2d44;border-radius:10px;padding:14px;color:#e5e7eb;font-size:14px;outline:none;min-height:110px;resize:vertical;line-height:1.6;" placeholder='e.g. "Ask Clu to finish the revenue dashboard by end of March — high priority"&#10;or: "Schedule a client call with Joe next Tuesday"'></textarea>
+          <div style="display:flex;gap:10px;margin-top:12px;">
+            <button onclick="document.getElementById('svcPhase1b').classList.remove('active');document.getElementById('svcPhase1').classList.add('active');" style="flex:1;background:#1a1a2e;border:1px solid #3f3f5c;color:#9ca3af;padding:11px;border-radius:10px;font-size:13px;cursor:pointer;">← Back to mic</button>
+            <button onclick="svcAnalyzeText(document.getElementById('svcTypeInput').value)" style="flex:1;background:#6366f1;color:white;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Analyze →</button>
           </div>
         </div>
 
-        <div class="vm-field">
-          <div class="vm-label">Assign To — <span style="font-weight:400;text-transform:none;color:#4b5563;">tap to select (gold ring = assigned)</span></div>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
-            <div class="avatar-pill proj-assignee selected" data-name="gary" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <div class="avatar-pill-init" style="background:#6366f1;">G</div>
-              <span class="avatar-pill-name">Gary</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="harriet" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/harriet.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Harriet</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="clu" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/clu.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Clu</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="oz" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/oz.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Oz</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="banksy" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/banksy.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Banksy</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="spencer" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/spencer.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Spencer</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="andy" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/andy.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Andy</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill proj-assignee" data-name="matlock" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/matlock.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Matlock</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
+        <!-- Phase 2: Analyzing -->
+        <div class="svc-phase" id="svcPhase2">
+          <div class="svc-analyzing">
+            <div class="svc-spinner"></div>
+            <div class="svc-analyzing-label">Reading your words...</div>
+            <div class="svc-analyzing-sub" id="svcAnalyzingStep">Transcribing audio · local Whisper</div>
           </div>
         </div>
 
-        <div id="projVoiceSave" style="display:none;font-size:12px;color:#22c55e;margin-top:4px;">✅ Voice transcribed — edit above if needed</div>
+        <!-- Phase 3: Results + gaps -->
+        <div class="svc-phase" id="svcPhase3">
+          <div class="svc-result-title" id="svcResultTitle">Here's what I understood</div>
+          <div class="svc-result-sub">Review each field. Tap yellow prompts to fill in missing details.</div>
 
-        <div class="vm-actions">
-          <button class="vm-btn-cancel" onclick="closeAddProjectModal()">Cancel</button>
-          <button class="vm-btn-submit" onclick="submitNewProject()">Create Project →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Add Task Modal ── -->
-    <div class="voice-modal-overlay" id="addTaskModal">
-      <div class="voice-modal-box">
-        <button class="vm-close" onclick="closeAddTaskModal()">✕</button>
-        <div class="vm-title" id="addTaskModalTitle">✅ New Task</div>
-        <div class="vm-subtitle">Speak or type. Agents can read this from Notes.</div>
-
-        <div class="vm-field">
-          <div class="vm-label">Task Description</div>
-          <!-- Mic row -->
-          <div style="display:flex;gap:10px;align-items:center;background:#0d0d11;border:1px solid #2d2d44;border-radius:8px;padding:10px 14px;margin-bottom:8px;">
-            <button class="voice-mic-btn" id="taskMicBtn" onclick="startVoice('newTaskDesc','taskMicBtn','taskVoiceTimer',null,null,false,null)" title="Speak task — transcription fills the box below">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
-            </button>
-            <div>
-              <div style="font-size:12px;color:#e5e7eb;font-weight:600;">Tap mic → speak → words appear below</div>
-              <div style="font-size:11px;color:#6b7280;">Live via Web Speech · finalized by local Whisper · 30s max</div>
-            </div>
-            <span class="voice-timer" id="taskVoiceTimer" style="margin-left:auto;"></span>
+          <!-- Title -->
+          <div class="svc-field-card" id="svcCardTitle">
+            <div class="svc-field-label">📝 Task / Project Title</div>
+            <div class="svc-field-value" id="svcValTitle" contenteditable="true" style="outline:none;border-bottom:1px dashed #3f3f5c;padding-bottom:4px;" title="Click to edit"></div>
           </div>
-          <textarea class="vm-textarea" id="newTaskDesc" placeholder="Type here — or tap mic above and speak, transcription flows in live..."></textarea>
-        </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div class="vm-field">
-            <div class="vm-label">Priority</div>
-            <select class="vm-select" id="newTaskPriority">
-              <option value="high">🔴 High</option>
-              <option value="med" selected>🟡 Medium</option>
-              <option value="low">🟢 Low</option>
-            </select>
+          <!-- Assignees -->
+          <div class="svc-field-card" id="svcCardAssignees">
+            <div class="svc-field-label">👥 Assigned To</div>
+            <div id="svcValAssignees" class="svc-assignee-pills"></div>
+            <div style="margin-top:10px;font-size:11px;color:#6b7280;">Tap to add more:</div>
+            <div class="svc-assignee-pills" id="svcExtraAssignees"></div>
           </div>
-          <div class="vm-field">
-            <div class="vm-label">Task Type</div>
-            <select class="vm-select" id="newTaskType">
-              <option value="human">👤 Human Task</option>
-              <option value="agent">🤖 Agent Task</option>
-            </select>
-          </div>
-        </div>
 
-        <div class="vm-field">
-          <div class="vm-label" style="margin-bottom:10px;">Assign To — <span style="font-weight:400;text-transform:none;color:#4b5563;">tap an avatar to assign (gold = assigned)</span></div>
-          <div style="display:flex;flex-wrap:wrap;gap:14px;">
-            <div class="avatar-pill task-assignee selected" data-name="gary" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <div class="avatar-pill-init" style="background:#6366f1;">G</div>
-              <span class="avatar-pill-name">Gary</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="nardellly" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <div class="avatar-pill-init" style="background:#8b5cf6;">N</div>
-              <span class="avatar-pill-name">Nardellly</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="alan" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <div class="avatar-pill-init" style="background:#0ea5e9;">A</div>
-              <span class="avatar-pill-name">Alan</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="milo" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <div class="avatar-pill-init" style="background:#f59e0b;">M</div>
-              <span class="avatar-pill-name">Milo</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="harriet" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/harriet.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Harriet</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="clu" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/clu.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Clu</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="oz" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/oz.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Oz</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="banksy" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/banksy.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Banksy</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="andy" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/andy.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Andy</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="spencer" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/spencer.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Spencer</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="marissa" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/marissa.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Marissa</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="matlock" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/matlock.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Matlock</span>
-              <span class="avatar-pill-check">✓</span>
-            </div>
-            <div class="avatar-pill task-assignee" data-name="phineas" onclick="this.classList.toggle('selected')" style="position:relative;">
-              <img src="avatars/phineas.png" class="avatar-pill-img">
-              <span class="avatar-pill-name">Phineas</span>
-              <span class="avatar-pill-check">✓</span>
+          <!-- Priority -->
+          <div class="svc-field-card" id="svcCardPriority">
+            <div class="svc-field-label">🎯 Priority</div>
+            <div class="svc-gap-options">
+              <div class="svc-gap-opt" id="svcPriHigh" onclick="svcSetPriority('high')">🔴 High</div>
+              <div class="svc-gap-opt" id="svcPriMed" onclick="svcSetPriority('med')">🟡 Medium</div>
+              <div class="svc-gap-opt" id="svcPriLow" onclick="svcSetPriority('low')">🟢 Low</div>
             </div>
           </div>
+
+          <!-- Type -->
+          <div class="svc-field-card" id="svcCardType">
+            <div class="svc-field-label">⚙️ Task Type</div>
+            <div class="svc-gap-options">
+              <div class="svc-gap-opt" id="svcTypeHuman" onclick="svcSetType('human')">👤 Human</div>
+              <div class="svc-gap-opt" id="svcTypeAgent" onclick="svcSetType('agent')">🤖 Agent</div>
+            </div>
+          </div>
+
+          <!-- Due date (gap-style prompt) -->
+          <div class="svc-field-card gap" id="svcCardDue" style="display:none;">
+            <div class="svc-field-label">📅 When does this need to be done?</div>
+            <div class="svc-gap-options">
+              <div class="svc-gap-opt" onclick="svcSetDue('Today')">Today</div>
+              <div class="svc-gap-opt" onclick="svcSetDue('Tomorrow')">Tomorrow</div>
+              <div class="svc-gap-opt" onclick="svcSetDue('This week')">This week</div>
+              <div class="svc-gap-opt" onclick="svcSetDue('End of month')">End of month</div>
+              <div class="svc-gap-opt" onclick="svcSetDue('No deadline')">No deadline</div>
+            </div>
+          </div>
+
+          <!-- Raw transcript (collapsed) -->
+          <div class="svc-transcript-raw" id="svcRawTranscript"></div>
+
+          <button class="svc-confirm-btn" onclick="svcConfirm()" id="svcConfirmBtn">✅ Create — looks right</button>
+          <button onclick="svcReset()" style="width:100%;background:none;border:none;color:#4b5563;font-size:12px;cursor:pointer;margin-top:10px;">← Start over</button>
         </div>
 
-        <div class="vm-actions">
-          <button class="vm-btn-cancel" onclick="closeAddTaskModal()">Cancel</button>
-          <button class="vm-btn-submit" onclick="submitNewTask()">Add Task →</button>
-        </div>
       </div>
     </div>
 
@@ -3544,47 +3479,257 @@
       directVoiceActive = false;
     }
 
-    function openAddProjectModal() {
-      document.getElementById('newProjectTitle').value = '';
-      document.getElementById('newProjectDesc').value = '';
-      document.querySelectorAll('.proj-assignee').forEach(p => p.classList.remove('selected'));
-      document.getElementById('addProjectModal').classList.add('active');
+    // ── Smart Voice Capture (SVC) — unified Add Task + Add Project ──
+    const SVC_AGENTS = ['harriet','oz','clu','banksy','andy','marissa','matlock','spencer','phineas','chris'];
+    const SVC_HUMANS = ['gary','nardellly','alan','milo'];
+    const SVC_ALL = [...SVC_HUMANS, ...SVC_AGENTS];
+    const SVC_AVATARS = { harriet:'avatars/harriet.png', oz:'avatars/oz.png', clu:'avatars/clu.png', banksy:'avatars/banksy.png', andy:'avatars/andy.png', marissa:'avatars/marissa.png', matlock:'avatars/matlock.png', spencer:'avatars/spencer.png', phineas:'avatars/phineas.png' };
+    const SVC_COLORS = { gary:'#6366f1', nardellly:'#8b5cf6', alan:'#0ea5e9', milo:'#f59e0b' };
+    let svcMode = 'task'; // 'task' | 'project'
+    let svcData = {};
+    let svcMediaRecorder = null;
+    let svcAudioChunks = [];
+    let svcRecInterval = null;
+    let svcLiveSpeech = null;
+    let svcLiveText = '';
+
+    function openSVC(mode) {
+      svcMode = mode || 'task';
+      svcData = { priority: 'med', type: 'human', assignees: ['gary'], due: null };
+      svcLiveText = '';
+      document.getElementById('svcModeLabel').textContent = mode === 'project' ? '📁 New Project' : '✅ New Task';
+      // Reset phases
+      ['svcPhase1','svcPhase1b','svcPhase2','svcPhase3'].forEach(id => document.getElementById(id).classList.remove('active'));
+      document.getElementById('svcPhase1').classList.add('active');
+      document.getElementById('svcMicBtn').classList.remove('recording');
+      document.getElementById('svcMicLabel').textContent = 'Tap to record';
+      document.getElementById('svcTimer').style.display = 'none';
+      document.getElementById('svcLiveText').style.display = 'none';
+      document.getElementById('svcStopBtn').style.display = 'none';
+      document.getElementById('svcModal').classList.add('active');
     }
-    function closeAddProjectModal() {
-      document.getElementById('addProjectModal').classList.remove('active');
+    function closeSVC() {
+      if (svcMediaRecorder?.state === 'recording') svcMediaRecorder.stop();
+      if (svcRecInterval) clearInterval(svcRecInterval);
+      if (svcLiveSpeech) { try { svcLiveSpeech.stop(); } catch(e){} }
+      document.getElementById('svcModal').classList.remove('active');
     }
-    function submitNewProject() {
-      const title = document.getElementById('newProjectTitle').value.trim();
-      const desc = document.getElementById('newProjectDesc').value.trim();
-      if (!title) { document.getElementById('newProjectTitle').focus(); return; }
-      // Add to Notes as a project creation entry
-      addNoteEntry('system', 'Gary', `New project created: "${title}". ${desc}`, '#6366f1', 'G');
-      closeAddProjectModal();
-      showToast('Project "' + title.slice(0,30) + '" created — added to Notes for agents');
+    function svcReset() {
+      ['svcPhase2','svcPhase3'].forEach(id => document.getElementById(id).classList.remove('active'));
+      document.getElementById('svcPhase1').classList.add('active');
+      document.getElementById('svcMicBtn').classList.remove('recording');
+      document.getElementById('svcMicLabel').textContent = 'Tap to record';
+      document.getElementById('svcTimer').style.display = 'none';
+      document.getElementById('svcLiveText').style.display = 'none';
+      document.getElementById('svcStopBtn').style.display = 'none';
+      svcLiveText = '';
+    }
+    function svcShowTypeForm() {
+      document.getElementById('svcPhase1').classList.remove('active');
+      document.getElementById('svcPhase1b').classList.add('active');
     }
 
-    // ── Add Task Modal ──────────────────────────────────────────
-    function openAddTaskModal(type) {
-      document.getElementById('newTaskDesc').value = '';
-      document.getElementById('addTaskModalTitle').textContent = type === 'agent' ? '🤖 New Agent Task' : '✅ New Task';
-      document.getElementById('newTaskType').value = type || 'human';
-      // Reset assignees — Gary selected by default
-      document.querySelectorAll('.task-assignee').forEach(p => {
-        p.classList.toggle('selected', p.dataset.name === 'gary');
+    async function svcToggleRecord() {
+      if (svcMediaRecorder?.state === 'recording') { svcStopRecord(); return; }
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch(e) { alert('Mic access denied — allow microphone in browser settings (lock icon in address bar).'); return; }
+
+      svcAudioChunks = []; svcLiveText = '';
+      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      svcMediaRecorder = new MediaRecorder(stream, { mimeType: mime });
+      svcMediaRecorder.ondataavailable = e => { if (e.data.size > 0) svcAudioChunks.push(e.data); };
+      svcMediaRecorder.onstop = async () => {
+        clearInterval(svcRecInterval);
+        stream.getTracks().forEach(t => t.stop());
+        if (svcLiveSpeech) { try { svcLiveSpeech.stop(); } catch(e){} }
+        // Show analyzing phase
+        svcSetPhase(2);
+        document.getElementById('svcAnalyzingStep').textContent = 'Transcribing audio · local Whisper';
+        let transcript = svcLiveText.trim();
+        const blob = new Blob(svcAudioChunks, { type: mime });
+        if (blob.size > 500) {
+          try {
+            const res = await fetch('http://localhost:8765/transcribe', { method:'POST', body:blob, signal:AbortSignal.timeout(40000) });
+            if (res.ok) { const d = await res.json(); if (d.transcript?.trim()) transcript = d.transcript.trim(); }
+          } catch(e) {}
+        }
+        document.getElementById('svcAnalyzingStep').textContent = 'Understanding your intent...';
+        await new Promise(r => setTimeout(r, 600));
+        svcAnalyzeText(transcript);
+      };
+
+      // Web Speech live preview
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SR) {
+        svcLiveSpeech = new SR();
+        svcLiveSpeech.continuous = true; svcLiveSpeech.interimResults = true; svcLiveSpeech.lang = 'en-US';
+        svcLiveSpeech.onresult = e => {
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) svcLiveText += e.results[i][0].transcript + ' ';
+            else interim += e.results[i][0].transcript;
+          }
+          const lv = document.getElementById('svcLiveText');
+          lv.textContent = svcLiveText + interim;
+          lv.style.display = 'block';
+        };
+        try { svcLiveSpeech.start(); } catch(e){}
+      }
+
+      svcMediaRecorder.start(200);
+      const micBtn = document.getElementById('svcMicBtn');
+      micBtn.classList.add('recording');
+      document.getElementById('svcMicLabel').textContent = 'Recording... tap to stop';
+      document.getElementById('svcStopBtn').style.display = 'block';
+      let secs = 60, timerEl = document.getElementById('svcTimer');
+      timerEl.style.display = 'block'; timerEl.textContent = '1:00';
+      svcRecInterval = setInterval(() => {
+        secs--;
+        const m = Math.floor(secs/60), s = secs%60;
+        timerEl.textContent = m+':'+String(s).padStart(2,'0');
+        if (secs <= 0 && svcMediaRecorder?.state === 'recording') svcMediaRecorder.stop();
+      }, 1000);
+    }
+
+    function svcStopRecord() {
+      if (svcMediaRecorder?.state === 'recording') svcMediaRecorder.stop();
+    }
+
+    function svcSetPhase(n) {
+      ['svcPhase1','svcPhase1b','svcPhase2','svcPhase3'].forEach((id,i) => {
+        document.getElementById(id).classList.toggle('active', i+1 === n || (n===2 && i===1 && false));
       });
-      document.getElementById('addTaskModal').classList.add('active');
+      if (n === 2) {
+        document.getElementById('svcPhase1').classList.remove('active');
+        document.getElementById('svcPhase1b').classList.remove('active');
+        document.getElementById('svcPhase2').classList.add('active');
+        document.getElementById('svcPhase3').classList.remove('active');
+      } else if (n === 3) {
+        ['svcPhase1','svcPhase1b','svcPhase2'].forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('svcPhase3').classList.add('active');
+      }
     }
-    function closeAddTaskModal() {
-      document.getElementById('addTaskModal').classList.remove('active');
+
+    function svcAnalyzeText(text) {
+      if (!text || text.length < 3) {
+        svcSetPhase(1);
+        showToast('No speech detected — try again or use the type option');
+        return;
+      }
+      const t = text.toLowerCase();
+
+      // ── Parse assignees ──
+      const foundAssignees = SVC_ALL.filter(name => t.includes(name));
+      if (!foundAssignees.includes('gary') && svcMode === 'task') foundAssignees.unshift('gary');
+      svcData.assignees = foundAssignees.length ? foundAssignees : ['gary'];
+
+      // ── Parse priority ──
+      if (t.match(/urgent|asap|critical|immediately|top priority|high priority|important/)) svcData.priority = 'high';
+      else if (t.match(/low priority|when you can|no rush|whenever|low|later/)) svcData.priority = 'low';
+      else svcData.priority = 'med';
+
+      // ── Parse task type ──
+      if (t.match(/build|code|develop|program|generate|create|design|implement|deploy|write the|fix the|debug/)) svcData.type = 'agent';
+      else if (t.match(/call|email|meet|schedule|review|approve|decide|talk to|contact/)) svcData.type = 'human';
+      else svcData.type = svcData.assignees.some(a => SVC_AGENTS.includes(a)) ? 'agent' : 'human';
+
+      // ── Parse due date ──
+      let due = null;
+      if (t.match(/\btoday\b/)) due = 'Today';
+      else if (t.match(/\btomorrow\b/)) due = 'Tomorrow';
+      else if (t.match(/this week|end of week|friday/)) due = 'This week';
+      else if (t.match(/end of month|end of (march|april|may|june|july|august|september|october|november|december)/)) due = 'End of month';
+      else if (t.match(/next week/)) due = 'Next week';
+      else if (t.match(/by (march|april|may|june|july|august|september|october|november|december)/)) {
+        const m = t.match(/by (march|april|may|june|july|august|september|october|november|december)/);
+        due = 'By ' + m[1].charAt(0).toUpperCase() + m[1].slice(1);
+      }
+      svcData.due = due;
+
+      // ── Parse title ──
+      // Strip known names and filler words, take first meaningful clause
+      let title = text
+        .replace(/\b(harriet|oz|clu|banksy|andy|marissa|matlock|spencer|phineas|gary|nardellly|alan|milo)\b/gi, '')
+        .replace(/\b(please|can you|could you|i need|i want|make sure|asap|urgent|high priority|low priority|today|tomorrow|this week|by end of|by march|by april)\b/gi, '')
+        .replace(/\s{2,}/g, ' ').trim();
+      // Capitalize and trim to ~60 chars
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      if (title.length > 70) title = title.slice(0, 67).replace(/\s\S*$/, '') + '...';
+      svcData.title = title || text.slice(0, 60);
+      svcData.rawTranscript = text;
+
+      svcRenderResults();
     }
-    function submitNewTask() {
-      const desc = document.getElementById('newTaskDesc').value.trim();
-      const type = document.getElementById('newTaskType').value;
-      if (!desc) { document.getElementById('newTaskDesc').focus(); return; }
-      addNoteEntry('system', 'Gary', `New ${type} task: "${desc}"`, '#6366f1', 'G');
-      closeAddTaskModal();
-      showToast('Task added to Notes — Clu & Harriet can read it');
+
+    function svcRenderResults() {
+      svcSetPhase(3);
+      // Title
+      document.getElementById('svcValTitle').textContent = svcData.title;
+      // Assignees — selected
+      const assigneeEl = document.getElementById('svcValAssignees');
+      assigneeEl.innerHTML = '';
+      svcData.assignees.forEach(a => {
+        const pill = document.createElement('div');
+        pill.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;opacity:1;';
+        pill.title = 'Click to remove';
+        pill.onclick = () => { svcData.assignees = svcData.assignees.filter(x=>x!==a); svcRenderResults(); };
+        if (SVC_AVATARS[a]) pill.innerHTML = `<img src="${SVC_AVATARS[a]}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f59e0b;"><span style="font-size:10px;color:#f59e0b;font-weight:600;">${a.charAt(0).toUpperCase()+a.slice(1)}</span>`;
+        else pill.innerHTML = `<div style="width:38px;height:38px;border-radius:50%;background:${SVC_COLORS[a]||'#6366f1'};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;border:2px solid #f59e0b;">${a[0].toUpperCase()}</div><span style="font-size:10px;color:#f59e0b;font-weight:600;">${a.charAt(0).toUpperCase()+a.slice(1)}</span>`;
+        assigneeEl.appendChild(pill);
+      });
+      // Extra assignees to add
+      const extraEl = document.getElementById('svcExtraAssignees');
+      extraEl.innerHTML = '';
+      SVC_ALL.filter(a => !svcData.assignees.includes(a)).forEach(a => {
+        const pill = document.createElement('div');
+        pill.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;opacity:0.5;transition:opacity 0.15s;';
+        pill.onmouseover = () => pill.style.opacity = '1';
+        pill.onmouseout = () => pill.style.opacity = '0.5';
+        pill.onclick = () => { svcData.assignees.push(a); svcRenderResults(); };
+        if (SVC_AVATARS[a]) pill.innerHTML = `<img src="${SVC_AVATARS[a]}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px dashed #3f3f5c;"><span style="font-size:9px;color:#6b7280;">${a.charAt(0).toUpperCase()+a.slice(1)}</span>`;
+        else pill.innerHTML = `<div style="width:32px;height:32px;border-radius:50%;background:${SVC_COLORS[a]||'#4b5563'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;border:1px dashed #3f3f5c;">${a[0].toUpperCase()}</div><span style="font-size:9px;color:#6b7280;">${a.charAt(0).toUpperCase()+a.slice(1)}</span>`;
+        extraEl.appendChild(pill);
+      });
+      // Priority buttons
+      ['high','med','low'].forEach(p => {
+        const el = document.getElementById('svcPri' + p.charAt(0).toUpperCase() + p.slice(1).replace('ed','ed'));
+        if (el) el.classList.toggle('chosen', svcData.priority === p);
+      });
+      document.getElementById('svcPriHigh').classList.toggle('chosen', svcData.priority === 'high');
+      document.getElementById('svcPriMed').classList.toggle('chosen', svcData.priority === 'med');
+      document.getElementById('svcPriLow').classList.toggle('chosen', svcData.priority === 'low');
+      // Type buttons
+      document.getElementById('svcTypeHuman').classList.toggle('chosen', svcData.type === 'human');
+      document.getElementById('svcTypeAgent').classList.toggle('chosen', svcData.type === 'agent');
+      // Due date
+      const dueCard = document.getElementById('svcCardDue');
+      if (!svcData.due) { dueCard.style.display = 'block'; }
+      else { dueCard.style.display = 'none'; }
+      // Raw transcript
+      document.getElementById('svcRawTranscript').textContent = svcData.rawTranscript ? 'Original words: "' + svcData.rawTranscript + '"' : '';
     }
+
+    function svcSetPriority(p) { svcData.priority = p; svcRenderResults(); }
+    function svcSetType(t) { svcData.type = t; svcRenderResults(); }
+    function svcSetDue(d) { svcData.due = d; svcRenderResults(); }
+
+    function svcConfirm() {
+      const title = document.getElementById('svcValTitle').textContent.trim();
+      if (!title) { document.getElementById('svcValTitle').focus(); return; }
+      svcData.title = title;
+      const assigneeNames = svcData.assignees.join(', ');
+      const noteText = `New ${svcMode} created: "${title}". Assigned to: ${assigneeNames}. Priority: ${svcData.priority}. Type: ${svcData.type}.${svcData.due ? ' Due: '+svcData.due+'.' : ''} Original voice: "${svcData.rawTranscript || title}"`;
+      addNoteEntry('system', 'Gary', noteText, '#6366f1', 'G');
+      closeSVC();
+      showToast(`✅ ${svcMode === 'project' ? 'Project' : 'Task'} "${title.slice(0,30)}" created — logged to Notes`);
+    }
+
+    // Compatibility stubs for old button calls
+    function openAddProjectModal() { openSVC('project'); }
+    function openAddTaskModal(type) { svcMode = type==='agent' ? 'task' : 'task'; openSVC('task'); }
+    function closeAddProjectModal() { closeSVC(); }
+    function closeAddTaskModal() { closeSVC(); }
 
     // ── Notes export for agents ──────────────────────────────────
     function copyNotesForAgent() {
@@ -3606,8 +3751,7 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    document.getElementById('addProjectModal').addEventListener('click', function(e){ if(e.target===this) closeAddProjectModal(); });
-    document.getElementById('addTaskModal').addEventListener('click', function(e){ if(e.target===this) closeAddTaskModal(); });
+    document.getElementById('svcModal').addEventListener('click', function(e){ if(e.target===this) closeSVC(); });
 
     // ── Top Priorities mic (wired to universal voice) ──────────
     function toggleMic() {
