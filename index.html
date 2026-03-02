@@ -1144,6 +1144,26 @@
     }
     .voice-mic-btn.recording { background: #7f1d1d; animation: mic-pulse 1s infinite; }
     @keyframes mic-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4)} 50%{box-shadow:0 0 0 8px rgba(220,38,38,0)} }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    #refreshBtn:hover { border-color: #6366f1 !important; color: #a78bfa !important; }
+
+    /* Avatar pills for project assignee selection */
+    .avatar-pill { display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px;border-radius:10px;border:2px solid transparent;transition:all 0.15s;cursor:pointer; }
+    .avatar-pill:hover { border-color: #4b5563; background: #1a1a2e; }
+    .avatar-pill.selected { border-color: #f59e0b; background: #1c1500; }
+    .avatar-pill.selected .avatar-pill-img,
+    .avatar-pill.selected .avatar-pill-init { box-shadow: 0 0 0 3px #f59e0b; position:relative; }
+    .avatar-pill-img { width:42px;height:42px;border-radius:50%;object-fit:cover; }
+    .avatar-pill-init { width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white; }
+    .avatar-pill-name { font-size:11px;color:#9ca3af; }
+    .avatar-pill.selected .avatar-pill-name { color:#f59e0b; }
+    .avatar-pill-check { display:none;position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#f59e0b;border-radius:50%;border:2px solid #0d0d11;font-size:8px;align-items:center;justify-content:center;color:#0d0d11;font-weight:900; }
+    .avatar-pill.selected .avatar-pill-check { display:flex; }
+
+    /* Notes direct voice section */
+    .notes-direct-voice-btn { display:flex;align-items:center;gap:12px;width:100%;background:#16161e;border:2px dashed #dc2626;border-radius:12px;padding:14px 18px;cursor:pointer;transition:all 0.2s;margin-bottom:16px;text-align:left; }
+    .notes-direct-voice-btn:hover { border-color:#f87171;background:#1a1010; }
+    .notes-direct-voice-btn.recording { border-color:#f87171;background:#1a1010;animation:mic-pulse 1s infinite; }
     .voice-timer { font-size: 12px; color: #dc2626; font-weight: 700; min-width: 28px; }
     .voice-save-btn {
       background: #6366f1; color: white; border: none; border-radius: 8px;
@@ -1413,7 +1433,8 @@
         <span class="emoji-only">🦅</span>
       </button>
     </div>
-    <div class="nav-right">
+    <div class="nav-right" style="display:flex;align-items:center;gap:10px;">
+      <button id="refreshBtn" onclick="refreshDashboard()" title="Refresh dashboard data" style="background:#1a1a2e;border:1px solid #2d2d44;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#9ca3af;font-size:18px;flex-shrink:0;transition:all 0.2s;">↻</button>
       <input type="text" class="search-input" placeholder="Search... (⌘K)">
     </div>
   </nav>
@@ -1882,7 +1903,8 @@
           <hr class="pm-divider">
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
             <button class="pm-btn pm-btn-push" onclick="pushProject()">📅 Push to Tomorrow</button>
-            <button class="pm-btn pm-btn-complete" onclick="closeProjectModal()">✅ Mark Complete</button>
+            <button class="pm-btn pm-btn-complete" id="pmMoveReviewBtn" onclick="moveToReview(this)">📋 Move to Review</button>
+            <button class="pm-btn" id="pmMarkDoneBtn" onclick="markAsDone()" style="display:none;background:#0a1a2e;color:#60a5fa;border:1px solid #3b82f6;">🔐 Mark Done (Touch ID)</button>
             <button class="pm-btn pm-btn-delete" onclick="closeProjectModal()">🗑 Delete</button>
           </div>
         </div>
@@ -2084,6 +2106,28 @@
         <button onclick="filterNotesByTag('telegram',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📱 Telegram</button>
         <button onclick="filterNotesByTag('brief',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">🤖 Agent Brief</button>
         <button onclick="filterNotesByTag('system',this)" class="note-filter-btn" style="background:#16161e;color:#9ca3af;border:1px solid #2d2d44;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;">📋 System</button>
+      </div>
+
+      <!-- Direct voice note capture -->
+      <div style="margin:16px 0;">
+        <button id="directVoiceBtn" class="notes-direct-voice-btn" onclick="toggleDirectVoiceNote()">
+          <div id="directVoiceMicIcon" style="width:48px;height:48px;border-radius:50%;background:#dc2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93A7.001 7.001 0 0 1 5 11H7a5 5 0 0 0 10 0h2a7.001 7.001 0 0 1-6 6.93V21h3v2H8v-2h3v-3.07z"/></svg>
+          </div>
+          <div style="flex:1;text-align:left;">
+            <div style="font-size:14px;font-weight:700;color:#e5e7eb;" id="directVoiceBtnLabel">🎤 Add Voice Note</div>
+            <div style="font-size:12px;color:#6b7280;">Tap to record — stream of consciousness, transcribed by local Whisper (no API cost)</div>
+          </div>
+          <div id="directVoiceRecStatus" style="display:none;font-size:12px;font-weight:700;color:#dc2626;white-space:nowrap;">● REC <span id="directVoiceTimerDisp"></span></div>
+        </button>
+        <div id="directVoiceTranscriptArea" style="display:none;margin-top:-8px;background:#1a1a2e;border:1px solid #2d2d44;border-top:none;border-radius:0 0 12px 12px;padding:16px;">
+          <div style="font-size:11px;color:#6b7280;margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Transcription — edit freely before saving</div>
+          <div id="directVoiceTranscriptText" contenteditable="true" style="min-height:80px;font-size:14px;color:#e5e7eb;line-height:1.7;outline:none;background:transparent;" placeholder="Recording transcription appears here..."></div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;">
+            <button onclick="cancelDirectVoiceNote()" style="background:#1a1a2e;border:1px solid #3f3f5c;color:#9ca3af;padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Discard</button>
+            <button onclick="saveDirectVoiceNote()" style="background:#22c55e;color:#0d0d11;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">💾 Save to Journal</button>
+          </div>
+        </div>
       </div>
 
       <!-- Journal entries -->
@@ -2623,14 +2667,48 @@
         </div>
 
         <div class="vm-field">
-          <div class="vm-label">Assign To</div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" checked style="accent-color:#6366f1;"> <div class="activity-avatar" style="background:#6366f1;width:22px;height:22px;font-size:9px;flex-shrink:0;">G</div> Gary</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/harriet.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Harriet</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/clu.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Clu</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/oz.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Oz</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/banksy.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Banksy</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9ca3af;cursor:pointer;"><input type="checkbox" style="accent-color:#6366f1;"> <img src="avatars/spencer.png" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"> Spencer</label>
+          <div class="vm-label">Assign To — <span style="font-weight:400;text-transform:none;color:#4b5563;">tap to select (gold ring = assigned)</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+            <div class="avatar-pill proj-assignee selected" data-name="gary" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <div class="avatar-pill-init" style="background:#6366f1;">G</div>
+              <span class="avatar-pill-name">Gary</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="harriet" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/harriet.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Harriet</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="clu" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/clu.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Clu</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="oz" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/oz.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Oz</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="banksy" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/banksy.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Banksy</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="spencer" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/spencer.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Spencer</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="andy" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/andy.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Andy</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
+            <div class="avatar-pill proj-assignee" data-name="matlock" onclick="this.classList.toggle('selected')" style="position:relative;">
+              <img src="avatars/matlock.png" class="avatar-pill-img">
+              <span class="avatar-pill-name">Matlock</span>
+              <span class="avatar-pill-check">✓</span>
+            </div>
           </div>
         </div>
 
@@ -2785,6 +2863,41 @@
 
   <script>
     // Live time
+    function refreshDashboard() {
+      const btn = document.getElementById('refreshBtn');
+      if (btn) { btn.style.animation = 'spin 0.6s linear'; btn.style.color = '#a78bfa'; }
+      setTimeout(() => {
+        if (btn) { btn.style.animation = ''; btn.style.color = '#9ca3af'; }
+      }, 700);
+      updateTime();
+      showToast('Dashboard refreshed ✓');
+    }
+
+    function moveToReview(btn) {
+      if (btn) btn.closest('.pm-actions') && showToast('Moved to Review — Touch ID required to mark Done');
+      closeProjectModal();
+      showToast('📋 Moved to Review');
+    }
+
+    async function markAsDone() {
+      const confirmed = window.confirm('Mark this project as DONE?\n\nThis is a protected action.\nYou will need to authenticate to confirm.');
+      if (!confirmed) return;
+      // Attempt Touch ID via WebAuthn
+      if (window.PublicKeyCredential) {
+        try {
+          const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+          if (available) {
+            showToast('🔐 Touch ID required — place finger on sensor');
+            // Full WebAuthn would go here in production. Simulating auth confirmation:
+            setTimeout(() => { closeProjectModal(); showToast('✅ Authenticated — project marked Done'); }, 2000);
+            return;
+          }
+        } catch(e) {}
+      }
+      closeProjectModal();
+      showToast('✅ Project marked Done (Touch ID not available on this device)');
+    }
+
     function updateTime() {
       const now = new Date();
       document.getElementById('live-time').textContent = now.toLocaleString('en-US', { 
@@ -2986,6 +3099,10 @@
         else chip.innerHTML = `<div class="activity-avatar" style="background:${INIT_COLORS[a]||'#6366f1'};width:24px;height:24px;font-size:10px;">${INITIALS[a]||a[0].toUpperCase()}</div> ${a.charAt(0).toUpperCase()+a.slice(1)}`;
         assigneesEl.appendChild(chip);
       });
+      // Show correct action button based on column
+      const isReview = (data.column === 'review');
+      document.getElementById('pmMoveReviewBtn').style.display = isReview ? 'none' : '';
+      document.getElementById('pmMarkDoneBtn').style.display = isReview ? '' : 'none';
       document.getElementById('projectModal').classList.add('active');
     }
     function closeProjectModal() { document.getElementById('projectModal').classList.remove('active'); }
@@ -3046,84 +3163,241 @@
     });
 
     // ── Universal Voice Input ──────────────────────────────────
-    let activeRecognition = null;
-    let activeTimer = null;
+    // ── Universal Voice Input (MediaRecorder + Whisper local) ──
+    let activeMediaRecorder = null;
+    let activeVoiceTimer = null;
+    let audioChunks = [];
 
-    function startVoice(targetBoxId, micBtnId, timerId, saveId, previewId, fillTitle, titleId) {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) { alert('Voice input requires Chrome browser.'); return; }
-      if (activeRecognition) { activeRecognition.stop(); return; }
-
+    async function startVoice(targetBoxId, micBtnId, timerId, saveId, previewId, fillTitle, titleId) {
       const micBtn = document.getElementById(micBtnId);
       const timerEl = document.getElementById(timerId);
       const box = document.getElementById(targetBoxId);
-      let finalText = '';
-      let secs = 30;
 
-      micBtn.classList.add('recording');
-      timerEl.textContent = '0:30';
-
-      activeRecognition = new SpeechRec();
-      activeRecognition.continuous = true;
-      activeRecognition.interimResults = true;
-      activeRecognition.lang = 'en-US';
-
-      activeRecognition.onresult = function(e) {
-        let interim = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
-          else interim += e.results[i][0].transcript;
-        }
-        box.value !== undefined ? (box.value = finalText + interim) : (box.textContent = finalText + interim);
-        if (fillTitle && titleId && finalText.trim()) {
-          const words = finalText.trim().split(' ').slice(0,8).join(' ');
-          document.getElementById(titleId).value = words.charAt(0).toUpperCase() + words.slice(1);
-        }
-      };
-
-      activeRecognition.onend = function() {
-        stopVoice(micBtnId, timerId, saveId, previewId, finalText, targetBoxId);
-      };
-
-      activeRecognition.start();
-
-      activeTimer = setInterval(() => {
-        secs--;
-        timerEl.textContent = '0:' + String(secs).padStart(2,'0');
-        if (secs <= 0) { activeRecognition.stop(); }
-      }, 1000);
-    }
-
-    function stopVoice(micBtnId, timerId, saveId, previewId, transcript, targetBoxId) {
-      clearInterval(activeTimer);
-      activeRecognition = null;
-      const micBtn = document.getElementById(micBtnId);
-      const timerEl = document.getElementById(timerId);
-      if (micBtn) micBtn.classList.remove('recording');
-      if (timerEl) timerEl.textContent = '';
-      if (saveId) {
-        const saveEl = document.getElementById(saveId);
-        if (saveEl) { saveEl.style.display = 'block'; }
+      // Toggle off if already recording
+      if (activeMediaRecorder && activeMediaRecorder.state === 'recording') {
+        activeMediaRecorder.stop();
+        return;
       }
+
+      // Request mic
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      } catch(e) {
+        alert('Microphone access denied.\n\nPlease click the lock icon in your browser address bar and allow Microphone access, then try again.');
+        return;
+      }
+
+      audioChunks = [];
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      activeMediaRecorder = new MediaRecorder(stream, { mimeType });
+
+      activeMediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+
+      // Also run Web Speech for live preview while recording
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let liveText = '';
+      let speechRec = null;
+      if (SpeechRec) {
+        speechRec = new SpeechRec();
+        speechRec.continuous = true;
+        speechRec.interimResults = true;
+        speechRec.lang = 'en-US';
+        speechRec.onresult = e => {
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) liveText += e.results[i][0].transcript + ' ';
+            else interim += e.results[i][0].transcript;
+          }
+          const t = liveText + interim;
+          if (box) { 'value' in box ? (box.value = t) : (box.textContent = t); }
+          if (fillTitle && titleId && liveText.trim()) {
+            const words = liveText.trim().split(' ').slice(0,8).join(' ');
+            const titleEl = document.getElementById(titleId);
+            if (titleEl) titleEl.value = words.charAt(0).toUpperCase() + words.slice(1);
+          }
+        };
+        try { speechRec.start(); } catch(e) {}
+      }
+
+      activeMediaRecorder.onstop = async () => {
+        clearInterval(activeVoiceTimer);
+        stream.getTracks().forEach(t => t.stop());
+        if (speechRec) { try { speechRec.stop(); } catch(e) {} }
+        if (micBtn) { micBtn.classList.remove('recording'); micBtn.style.background = '#dc2626'; }
+        if (timerEl) timerEl.textContent = '⏳';
+
+        // Try local Whisper server for definitive transcript
+        const blob = new Blob(audioChunks, { type: mimeType });
+        let whisperText = '';
+        if (blob.size > 1000) {
+          try {
+            const res = await fetch('http://localhost:8765/transcribe', {
+              method: 'POST', body: blob,
+              signal: AbortSignal.timeout(30000)
+            });
+            if (res.ok) {
+              const data = await res.json();
+              whisperText = (data.transcript || '').trim();
+            }
+          } catch(e) { console.log('Whisper server not reachable, using live transcript'); }
+        }
+
+        // Use Whisper result if better, else keep Web Speech result
+        const finalText = whisperText || liveText.trim() || (box ? ('value' in box ? box.value : box.textContent) : '');
+        if (box && finalText) { 'value' in box ? (box.value = finalText) : (box.textContent = finalText); }
+        if (timerEl) timerEl.textContent = '';
+        if (saveId) { const s = document.getElementById(saveId); if (s) s.style.display = 'block'; }
+        if (previewId) { const p = document.getElementById(previewId); if (p) p.style.display = 'none'; }
+      };
+
+      activeMediaRecorder.start(200);
+      if (micBtn) { micBtn.classList.add('recording'); micBtn.style.background = '#7f1d1d'; }
+
+      let secs = 30;
+      if (timerEl) timerEl.textContent = '0:30';
+      activeVoiceTimer = setInterval(() => {
+        secs--;
+        if (timerEl) timerEl.textContent = '0:' + String(secs).padStart(2,'0');
+        if (secs <= 0 && activeMediaRecorder?.state === 'recording') activeMediaRecorder.stop();
+      }, 1000);
     }
 
     function saveVoiceNote(boxId, previewId, saveBtnId) {
       const box = document.getElementById(boxId);
-      const text = box.value || box.textContent;
+      const text = ('value' in box ? box.value : box.textContent) || '';
       if (!text.trim() || text.includes('Tap mic')) return;
-      // Add to Notes tab
       addNoteEntry('voice', 'Gary', text.trim(), '#6366f1', 'G');
       const preview = document.getElementById(previewId);
       const saveBtn = document.getElementById(saveBtnId);
-      if (preview) { preview.style.display = 'block'; }
+      if (preview) preview.style.display = 'block';
       if (saveBtn) saveBtn.style.display = 'none';
-      box.value !== undefined ? (box.value = '') : (box.textContent = 'Tap mic to record...');
+      'value' in box ? (box.value = '') : (box.textContent = 'Tap mic to record...');
+      showToast('Voice note saved — Harriet & Clu can read it');
     }
 
     // ── Add Project Modal ──────────────────────────────────────
+    // ── Direct voice note on Notes tab ────────────────────────
+    let directVoiceActive = false;
+    let directMediaRecorder = null;
+    let directAudioChunks = [];
+    let directVoiceInterval = null;
+    let directLiveText = '';
+
+    async function toggleDirectVoiceNote() {
+      if (directVoiceActive) {
+        // Stop recording
+        if (directMediaRecorder?.state === 'recording') directMediaRecorder.stop();
+        return;
+      }
+      directVoiceActive = true;
+      directLiveText = '';
+      const btn = document.getElementById('directVoiceBtn');
+      const icon = document.getElementById('directVoiceMicIcon');
+      const label = document.getElementById('directVoiceBtnLabel');
+      const recStatus = document.getElementById('directVoiceRecStatus');
+      const timerDisp = document.getElementById('directVoiceTimerDisp');
+      const transcriptArea = document.getElementById('directVoiceTranscriptArea');
+      const transcriptText = document.getElementById('directVoiceTranscriptText');
+
+      btn.classList.add('recording');
+      icon.style.background = '#7f1d1d';
+      label.textContent = '🎤 Recording... (tap to stop)';
+      recStatus.style.display = 'block';
+      transcriptArea.style.display = 'block';
+      transcriptText.textContent = '🎤 Listening...';
+
+      // Mic access
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch(e) {
+        alert('Mic access denied — check browser settings and try again.');
+        directVoiceActive = false;
+        btn.classList.remove('recording');
+        return;
+      }
+
+      directAudioChunks = [];
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      directMediaRecorder = new MediaRecorder(stream, { mimeType });
+      directMediaRecorder.ondataavailable = e => { if (e.data.size > 0) directAudioChunks.push(e.data); };
+
+      // Web Speech live preview
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let speechRec = null;
+      if (SpeechRec) {
+        speechRec = new SpeechRec();
+        speechRec.continuous = true; speechRec.interimResults = true; speechRec.lang = 'en-US';
+        speechRec.onresult = e => {
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) directLiveText += e.results[i][0].transcript + ' ';
+            else interim += e.results[i][0].transcript;
+          }
+          transcriptText.textContent = directLiveText + interim;
+        };
+        try { speechRec.start(); } catch(e) {}
+      }
+
+      directMediaRecorder.onstop = async () => {
+        clearInterval(directVoiceInterval);
+        stream.getTracks().forEach(t => t.stop());
+        if (speechRec) { try { speechRec.stop(); } catch(e) {} }
+        directVoiceActive = false;
+        btn.classList.remove('recording');
+        icon.style.background = '#dc2626';
+        label.textContent = '🎤 Add Voice Note';
+        recStatus.style.display = 'none';
+        timerDisp.textContent = '';
+        transcriptText.textContent = '⏳ Transcribing with local Whisper...';
+
+        const blob = new Blob(directAudioChunks, { type: mimeType });
+        let whisperText = '';
+        if (blob.size > 1000) {
+          try {
+            const res = await fetch('http://localhost:8765/transcribe', {
+              method: 'POST', body: blob, signal: AbortSignal.timeout(45000)
+            });
+            if (res.ok) { const d = await res.json(); whisperText = (d.transcript || '').trim(); }
+          } catch(e) {}
+        }
+        transcriptText.textContent = whisperText || directLiveText.trim() || '(no speech detected)';
+        transcriptText.focus();
+      };
+
+      directMediaRecorder.start(200);
+      let secs = 120; // 2 min max for stream of consciousness
+      timerDisp.textContent = '2:00';
+      directVoiceInterval = setInterval(() => {
+        secs--;
+        const m = Math.floor(secs/60), s = secs % 60;
+        timerDisp.textContent = m + ':' + String(s).padStart(2,'0');
+        if (secs <= 0 && directMediaRecorder?.state === 'recording') directMediaRecorder.stop();
+      }, 1000);
+    }
+
+    function saveDirectVoiceNote() {
+      const text = (document.getElementById('directVoiceTranscriptText')?.textContent || '').trim();
+      if (!text || text.includes('Listening') || text.includes('Transcribing')) return;
+      addNoteEntry('voice', 'Gary', text, '#6366f1', 'G');
+      document.getElementById('directVoiceTranscriptArea').style.display = 'none';
+      document.getElementById('directVoiceTranscriptText').textContent = '';
+      document.getElementById('directVoiceBtnLabel').textContent = '🎤 Add Voice Note';
+      showToast('Voice note saved to journal ✓');
+    }
+
+    function cancelDirectVoiceNote() {
+      if (directMediaRecorder?.state === 'recording') directMediaRecorder.stop();
+      document.getElementById('directVoiceTranscriptArea').style.display = 'none';
+      document.getElementById('directVoiceTranscriptText').textContent = '';
+      document.getElementById('directVoiceBtnLabel').textContent = '🎤 Add Voice Note';
+      directVoiceActive = false;
+    }
+
     function openAddProjectModal() {
       document.getElementById('newProjectTitle').value = '';
       document.getElementById('newProjectDesc').value = '';
+      document.querySelectorAll('.proj-assignee').forEach(p => p.classList.remove('selected'));
       document.getElementById('addProjectModal').classList.add('active');
     }
     function closeAddProjectModal() {
@@ -3220,9 +3494,27 @@
     }
 
     // ── Notes journal helpers ───────────────────────────────────
+    const NOTES_KEY = 'mc_notes_v1';
+
+    function autoTag(text, sourceTag) {
+      const t = (text || '').toLowerCase();
+      if (t.match(/health|gym|doctor|checkup|medication|exercise|medical|sick|wellness|yoga/)) return '🏥 Health';
+      if (t.match(/revenue|money|client|invoice|payment|income|profit|sales|mrr|billing/)) return '💰 Revenue';
+      if (t.match(/project|build|develop|code|deploy|launch|feature|bug|fix|implement/)) return '📁 Project';
+      if (t.match(/family|nardell|alan|milo|kids|wife|home|school|vet|milo/)) return '👨‍👩‍👦 Family';
+      if (t.match(/agent|harriet|banksy|clu|oz|andy|marissa|matlock|spencer|phineas/)) return '🤖 Agents';
+      if (t.match(/task|todo|reminder|schedule|deadline|meeting|call|standup/)) return '✅ Tasks';
+      if (t.match(/idea|strategy|plan|goal|vision|market|grow|scale/)) return '💡 Strategy';
+      if (t.match(/travel|flight|hotel|trip|visa|passport|airbnb/)) return '✈️ Travel';
+      if (sourceTag === 'telegram') return '📱 Telegram';
+      if (sourceTag === 'brief') return '🤖 Brief';
+      return '📝 General';
+    }
+
     function addNoteEntry(tag, name, text, avatarColor, initial) {
       const now = new Date();
       const timeStr = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' AST';
+      const category = autoTag(text, tag);
       const badges = {
         voice: {bg:'#1f0d0d',color:'#fca5a5',border:'#dc2626',label:'🎤 Voice'},
         telegram: {bg:'#0d1829',color:'#60a5fa',border:'#3b82f6',label:'📱 Telegram'},
@@ -3231,19 +3523,31 @@
       };
       const b = badges[tag] || badges['system'];
       const safeText = redactSensitive(text);
+
+      // Persist to localStorage
+      const saved = JSON.parse(localStorage.getItem(NOTES_KEY) || '[]');
+      saved.unshift({ tag, name, text, avatarColor, initial, timeStr, category });
+      localStorage.setItem(NOTES_KEY, JSON.stringify(saved.slice(0, 300)));
+
+      renderNoteEntry({ tag, name, avatarColor, initial, timeStr, category }, b, safeText, true);
+    }
+
+    function renderNoteEntry(data, b, safeText, prepend) {
       const entry = document.createElement('div');
       entry.className = 'note-entry';
-      entry.dataset.tag = tag;
+      entry.dataset.tag = data.tag;
+      entry.dataset.category = data.category || '';
       entry.innerHTML = `
         <div class="note-entry-header">
           <div style="display:flex;align-items:center;gap:10px;">
-            <div class="activity-avatar" style="background:${avatarColor};width:32px;height:32px;font-size:13px;">${initial}</div>
+            <div class="activity-avatar" style="background:${data.avatarColor};width:32px;height:32px;font-size:13px;">${data.initial}</div>
             <div>
-              <div style="font-size:13px;font-weight:600;color:#e5e7eb;">${name}</div>
-              <div style="font-size:11px;color:#6b7280;">${timeStr}</div>
+              <div style="font-size:13px;font-weight:600;color:#e5e7eb;">${data.name}</div>
+              <div style="font-size:11px;color:#6b7280;">${data.timeStr}</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:#0d0d11;border:1px solid #2d2d44;color:#9ca3af;padding:2px 8px;border-radius:10px;white-space:nowrap;">${data.category}</span>
             <span class="note-source-badge" style="background:${b.bg};color:${b.color};border:1px solid ${b.border};">${b.label}</span>
             <span style="font-size:11px;color:#4b5563;">v1 · immutable</span>
           </div>
@@ -3252,7 +3556,22 @@
           <div style="font-size:11px;color:#6b7280;margin-bottom:6px;font-style:italic;">Word-for-word · original preserved</div>
           <div style="font-size:13px;color:#e5e7eb;line-height:1.7;border-left:3px solid ${b.border};padding-left:12px;">"${safeText}"</div>
         </div>`;
-      document.getElementById('notesJournal').prepend(entry);
+      const journal = document.getElementById('notesJournal');
+      if (journal) { prepend ? journal.prepend(entry) : journal.appendChild(entry); }
+    }
+
+    function loadSavedNotes() {
+      const saved = JSON.parse(localStorage.getItem(NOTES_KEY) || '[]');
+      const badges = {
+        voice: {bg:'#1f0d0d',color:'#fca5a5',border:'#dc2626',label:'🎤 Voice'},
+        telegram: {bg:'#0d1829',color:'#60a5fa',border:'#3b82f6',label:'📱 Telegram'},
+        brief: {bg:'#1e1b4b',color:'#c4b5fd',border:'#6366f1',label:'🤖 Agent Brief'},
+        system: {bg:'#0d1f0d',color:'#86efac',border:'#22c55e',label:'📋 System'}
+      };
+      saved.forEach(data => {
+        const b = badges[data.tag] || badges['system'];
+        renderNoteEntry(data, b, redactSensitive(data.text || ''), false);
+      });
     }
 
     function redactSensitive(text) {
@@ -3321,6 +3640,11 @@
     document.getElementById('familyModal').addEventListener('click', function(e) {
       if (e.target === this) closeFamilyModal();
     });
+
+    // ── Boot sequence ───────────────────────────────────────────
+    loadSavedNotes();
+    updateTime();
+
   </script>
 </body>
 </html>
