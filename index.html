@@ -503,76 +503,116 @@
     .tag-business { background-color: #f59e0b; color: white; }
 
     /* Kanban */
-    .kanban {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 24px;
+    /* Kanban — 5 col horizontal scroll */
+    .kanban-board {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      align-items: flex-start;
     }
+    .kanban-board::-webkit-scrollbar { height: 6px; }
+    .kanban-board::-webkit-scrollbar-track { background: #1a1a2e; border-radius: 3px; }
+    .kanban-board::-webkit-scrollbar-thumb { background: #3f3f5c; border-radius: 3px; }
 
-    @media (max-width: 1024px) {
-      .kanban {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .kanban-column {
-      background-color: #16161e;
+    .kanban-col {
+      min-width: 260px;
+      max-width: 260px;
+      background: #16161e;
       border: 1px solid #2d2d44;
       border-radius: 12px;
-      padding: 20px;
+      padding: 14px;
+      flex-shrink: 0;
     }
-
-    .column-header {
+    .kanban-col-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2d2d44;
     }
+    .col-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .col-title { font-size: 13px; font-weight: 700; color: #e5e7eb; flex: 1; }
+    .col-count { font-size: 12px; color: #6b7280; background: #2d2d44; border-radius: 10px; padding: 1px 8px; }
+    .col-add { background: none; border: none; color: #4b5563; font-size: 18px; cursor: pointer; line-height: 1; padding: 0 4px; }
+    .col-add:hover { color: #a78bfa; }
+    .kanban-col-body { max-height: calc(100vh - 200px); overflow-y: auto; }
+    .kanban-col-body::-webkit-scrollbar { width: 4px; }
+    .kanban-col-body::-webkit-scrollbar-thumb { background: #3f3f5c; border-radius: 2px; }
 
-    .badge {
-      background-color: #6366f1;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .kanban-card {
-      background-color: #16161e;
+    .kcard {
+      background: #1a1a2e;
       border: 1px solid #2d2d44;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .priority-badge-high {
-      background-color: #dc2626;
-      color: white;
-    }
-
-    .priority-badge-med {
-      background-color: #f59e0b;
-      color: white;
-    }
-
-    .date {
-      color: #6b7280;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .add-task {
-      border: 2px dashed #2d2d44;
-      background: transparent;
-      color: #6b7280;
-      padding: 12px;
       border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
       cursor: pointer;
-      text-align: center;
-      font-size: 13px;
+      transition: border-color 0.15s, transform 0.1s;
     }
+    .kcard:hover { border-color: #6366f1; transform: translateY(-1px); }
+    .kcard-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: middle; }
+    .kcard-title { font-size: 13px; font-weight: 600; color: #e5e7eb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+    .kcard-desc { font-size: 12px; color: #6b7280; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; line-height: 1.4; }
+    .kcard-footer { display: flex; align-items: center; justify-content: space-between; }
+    .kcard-assignees { display: flex; gap: -4px; }
+    .kcard-avatar { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #1a1a2e; object-fit: cover; margin-left: -4px; }
+    .kcard-avatar:first-child { margin-left: 0; }
+    .kcard-avatar-init { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #1a1a2e; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: white; margin-left: -4px; flex-shrink: 0; }
+    .kcard-avatar-init:first-child { margin-left: 0; }
+    .kcard-tag { font-size: 11px; color: #6b7280; }
+    .kcard-time { font-size: 11px; color: #4b5563; }
+    .kcard-push { font-size: 14px; cursor: pointer; flex-shrink: 0; }
+    .col-empty { text-align: center; color: #4b5563; font-size: 13px; padding: 24px 0; }
+    .add-task-btn { width: 100%; border: 1px dashed #2d2d44; background: transparent; color: #4b5563; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-top: 8px; transition: border-color 0.15s, color 0.15s; }
+    .add-task-btn:hover { border-color: #6366f1; color: #a78bfa; }
+
+    /* Project/Task modal */
+    .project-modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center;
+    }
+    .project-modal-overlay.active { display: flex; }
+    .project-modal-box {
+      background: #16161e; border: 1px solid #2d2d44; border-radius: 16px;
+      padding: 28px; max-width: 560px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto;
+    }
+    .pm-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #6b7280; font-size: 20px; cursor: pointer; }
+    .pm-close:hover { color: #e5e7eb; }
+    .pm-title { font-size: 20px; font-weight: 700; color: #e5e7eb; margin-bottom: 4px; }
+    .pm-desc { font-size: 13px; color: #9ca3af; margin-bottom: 20px; line-height: 1.6; }
+    .pm-row { display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+    .pm-field { flex: 1; min-width: 120px; }
+    .pm-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: 4px; }
+    .pm-value { font-size: 13px; color: #e5e7eb; }
+    .pm-divider { border: none; border-top: 1px solid #2d2d44; margin: 16px 0; }
+    .push-frustrated { font-size: 18px; }
+    .pm-assignee-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .pm-assignee-chip { display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: #1a1a2e; border: 1px solid #2d2d44; border-radius: 20px; font-size: 12px; color: #e5e7eb; }
+    .pm-btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; }
+    .pm-btn-push { background: #2d1f00; color: #f59e0b; border: 1px solid #f59e0b; }
+    .pm-btn-complete { background: #0d1f0d; color: #22c55e; border: 1px solid #22c55e; }
+    .pm-btn-delete { background: #1f0d0d; color: #dc2626; border: 1px solid #dc2626; }
+
+    /* Assignee dropdown */
+    .assignee-dropdown { position: relative; }
+    .assignee-dropdown-menu {
+      display: none; position: absolute; bottom: 100%; left: 0; right: 0;
+      background: #16161e; border: 1px solid #2d2d44; border-radius: 8px;
+      padding: 8px; z-index: 500; margin-bottom: 4px; min-width: 200px;
+    }
+    .assignee-dropdown-menu.open { display: block; }
+    .assignee-option { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+    .assignee-option:hover { background: #1a1a2e; }
+    .assignee-option input[type="checkbox"] { accent-color: #6366f1; }
+    .assignee-option img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+    .assignee-option .ao-init { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; }
+
+    .badge { background-color: #6366f1; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .priority-badge-high { background-color: #dc2626; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+    .priority-badge-med { background-color: #f59e0b; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+    .date { color: #6b7280; font-size: 12px; }
+    .add-task { border: 2px dashed #2d2d44; background: transparent; color: #6b7280; padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; font-size: 13px; }
 
     /* Timeline */
     .timeline {
@@ -1039,6 +1079,14 @@
       background: linear-gradient(90deg, #6366f1, #a78bfa);
     }
 
+    /* Task rows */
+    .task-row {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: #1a1a2e; border-radius: 8px; border: 1px solid #2d2d44;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .task-row:hover { border-color: #6366f1; }
+
     /* Notes journal */
     .note-entry {
       background: #16161e;
@@ -1454,106 +1502,352 @@
       </div>
     </div>
 
-    <!-- Tab 2: Projects -->
+    <!-- Tab 2: Projects — 5-col scrollable kanban -->
     <div id="projects" class="tab">
-      <div class="tab-title">📁 Projects</div>
-      <div class="kanban">
-        <div class="kanban-column">
-          <div class="column-header">
-            <span>BACKLOG</span>
-            <span class="badge">2</span>
-          </div>
-          <div class="kanban-card">
-            <span class="priority-badge-high">HIGH</span>
-            <div class="date">2026-02-25</div>
-            <div>Base44.ai Integration</div>
-            <div class="note">Replicate Mission Control for remote access</div>
-          </div>
-          <div class="kanban-card">
-            <span class="priority-badge-med">MEDIUM</span>
-            <div class="date">2026-02-25</div>
-            <div>Higgsfield.ai Experiment</div>
-            <div class="note">Banksy API key testing + video gen</div>
-          </div>
-          <button class="add-task">+ Add Task</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+        <div class="tab-title" style="margin-bottom:0;">📁 Projects</div>
+        <div style="display:flex;gap:20px;align-items:center;">
+          <span style="font-size:13px;color:#9ca3af;"><span style="color:#e5e7eb;font-weight:700;">4</span> completed</span>
+          <span style="font-size:13px;color:#9ca3af;"><span style="color:#6366f1;font-weight:700;">5</span> in progress</span>
+          <span style="font-size:13px;color:#9ca3af;"><span style="color:#e5e7eb;font-weight:700;">11</span> total</span>
+          <span style="font-size:13px;color:#9ca3af;"><span style="color:#a78bfa;font-weight:700;">36%</span> complete</span>
+          <button onclick="openProjectModal(null)" style="background:#6366f1;color:white;border:none;border-radius:20px;padding:7px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New Project</button>
         </div>
-        <div class="kanban-column">
-          <div class="column-header">
-            <span>IN PROGRESS</span>
-            <span class="badge">2</span>
+      </div>
+
+      <div class="kanban-board">
+
+        <!-- Recurring -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="col-dot" style="background:#f59e0b;"></div>
+            <span class="col-title">Recurring</span>
+            <span class="col-count">2</span>
+            <button class="col-add">+</button>
           </div>
-          <div class="kanban-card">
-            <span class="priority-badge-high">HIGH</span>
-            <div class="date">2026-02-24</div>
-            <div>Avatar Redesigns</div>
-            <div class="note">Banksy editing all team avatars with names</div>
+          <div class="kanban-col-body">
+            <div class="kcard" onclick="openProjectModal({title:'Weekly Agent Briefing',desc:'Every Monday 7AM — Harriet briefs Gary on all agent activity, costs, and priorities.',assignees:['harriet','gary'],tag:'Ops',pushCount:0,start:'2026-02-21',due:'Recurring',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#f59e0b;"></span>Weekly Agent Briefing</div>
+              <div class="kcard-desc">Every Monday 7AM — Harriet briefs Gary on all agent activity, costs, and priorities.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                </div>
+                <span class="kcard-tag">Ops</span>
+                <span class="kcard-time">weekly</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Daily Cost Report',desc:'Andy compiles daily API spend by agent and reports to Harriet.',assignees:['andy'],tag:'Finance',pushCount:1,start:'2026-02-21',due:'Recurring',priority:'med'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#f59e0b;"></span>Daily Cost Report <span title="Pushed 1 time" style="font-size:13px;">😤</span></div>
+              <div class="kcard-desc">Andy compiles daily API spend by agent and reports to Harriet.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/andy.png" class="kcard-avatar" title="Andy">
+                </div>
+                <span class="kcard-tag">Finance</span>
+                <span class="kcard-time">daily</span>
+              </div>
+            </div>
           </div>
-          <div class="kanban-card">
-            <span class="priority-badge-high">HIGH</span>
-            <div class="date">2026-02-25</div>
-            <div>Mission Control v1</div>
-            <div class="note">Build local Node.js dashboard</div>
-          </div>
-          <button class="add-task">+ Add Task</button>
+          <button class="add-task-btn">+ Add project</button>
         </div>
-        <div class="kanban-column">
-          <div class="column-header">
-            <span>DONE</span>
-            <span class="badge">2</span>
+
+        <!-- Backlog -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="col-dot" style="background:#6366f1;"></div>
+            <span class="col-title">Backlog</span>
+            <span class="col-count">3</span>
+            <button class="col-add">+</button>
           </div>
-          <div class="kanban-card">
-            <span class="priority-badge-med">MEDIUM</span>
-            <div class="date">2026-02-24</div>
-            <div>Team Folder Setup</div>
-            <div class="note">Google Drive + EncryptedStorage mirrors</div>
+          <div class="kanban-col-body">
+            <div class="kcard" onclick="openProjectModal({title:'Base44.ai Integration',desc:'Replicate Mission Control for remote access via Base44 platform.',assignees:['gary','clu'],tag:'Dev',pushCount:0,start:'2026-02-25',due:'2026-03-15',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#dc2626;"></span>Base44.ai Integration</div>
+              <div class="kcard-desc">Replicate Mission Control for remote access via Base44 platform.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                  <img src="avatars/clu.png" class="kcard-avatar" title="Clu">
+                </div>
+                <span class="kcard-tag">Dev</span>
+                <span class="kcard-time">15 days ago</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Higgsfield.ai Experiment',desc:'Banksy API key testing + video generation pipeline.',assignees:['banksy'],tag:'Creative',pushCount:2,start:'2026-02-25',due:'2026-03-10',priority:'med'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#f59e0b;"></span>Higgsfield.ai Experiment <span title="Pushed 2 times">😠</span></div>
+              <div class="kcard-desc">Banksy API key testing + video generation pipeline.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/banksy.png" class="kcard-avatar" title="Banksy">
+                </div>
+                <span class="kcard-tag">Creative</span>
+                <span class="kcard-time">15 days ago</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Gumroad Launch Plan',desc:'White-label Mission Control. Set pricing, landing page, and launch sequence.',assignees:['gary','spencer'],tag:'Business',pushCount:0,start:'2026-03-02',due:'2026-04-01',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#dc2626;"></span>Gumroad Launch Plan</div>
+              <div class="kcard-desc">White-label Mission Control. Set pricing, landing page, and launch sequence.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                  <img src="avatars/spencer.png" class="kcard-avatar" title="Spencer">
+                </div>
+                <span class="kcard-tag">Business</span>
+                <span class="kcard-time">today</span>
+              </div>
+            </div>
           </div>
-          <div class="kanban-card">
-            <span class="priority-badge-high">HIGH</span>
-            <div class="date">2026-02-24</div>
-            <div>Agent Overnight Test</div>
-            <div class="note">All 9 agents completed sample tasks</div>
+          <button class="add-task-btn">+ Add project</button>
+        </div>
+
+        <!-- In Progress -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="col-dot" style="background:#3b82f6;"></div>
+            <span class="col-title">In Progress</span>
+            <span class="col-count">4</span>
+            <button class="col-add">+</button>
           </div>
-          <button class="add-task">+ Add Task</button>
+          <div class="kanban-col-body">
+            <div class="kcard" onclick="openProjectModal({title:'Mission Control V7',desc:'Full rebuild of dashboard. Tab by tab with Gary directing UI design.',assignees:['harriet','clu','gary'],tag:'Dev',pushCount:0,start:'2026-03-02',due:'2026-03-15',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#3b82f6;"></span>Mission Control V7</div>
+              <div class="kcard-desc">Full rebuild of dashboard. Tab by tab with Gary directing UI design.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                  <img src="avatars/clu.png" class="kcard-avatar" title="Clu">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                </div>
+                <span class="kcard-tag">Dev</span>
+                <span class="kcard-time">today</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Avatar Redesigns',desc:'Banksy editing all team avatars with names and personality.',assignees:['banksy'],tag:'Creative',pushCount:0,start:'2026-02-24',due:'2026-03-05',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#3b82f6;"></span>Avatar Redesigns</div>
+              <div class="kcard-desc">Banksy editing all team avatars with names and personality.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/banksy.png" class="kcard-avatar" title="Banksy">
+                </div>
+                <span class="kcard-tag">Creative</span>
+                <span class="kcard-time">6 days ago</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Client Outreach — Todos OjOs',desc:'Reach 5 new potential clients in Latin America via WhatsApp.',assignees:['gary','marissa'],tag:'Sales',pushCount:3,start:'2026-02-28',due:'2026-03-07',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#dc2626;"></span>Client Outreach <span title="Pushed 3 times">😡</span></div>
+              <div class="kcard-desc">Reach 5 new potential clients in Latin America via WhatsApp.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                  <img src="avatars/marissa.png" class="kcard-avatar" title="Marissa">
+                </div>
+                <span class="kcard-tag">Sales</span>
+                <span class="kcard-time">2 days ago</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Obsidian Vault Migration',desc:'Move MEMORY.md structure into Obsidian vault synced between Harriet and Oz.',assignees:['harriet','clu'],tag:'Ops',pushCount:0,start:'2026-03-01',due:'2026-03-10',priority:'med'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#f59e0b;"></span>Obsidian Vault Migration</div>
+              <div class="kcard-desc">Move MEMORY.md into Obsidian vault synced between Harriet and Oz.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                  <img src="avatars/clu.png" class="kcard-avatar" title="Clu">
+                </div>
+                <span class="kcard-tag">Ops</span>
+                <span class="kcard-time">1 day ago</span>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn">+ Add project</button>
+        </div>
+
+        <!-- Review -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="col-dot" style="background:#eab308;"></div>
+            <span class="col-title">Review</span>
+            <span class="col-count">2</span>
+            <button class="col-add">+</button>
+          </div>
+          <div class="kanban-col-body">
+            <div class="kcard" onclick="openProjectModal({title:'GitHub Repo Setup',desc:'oz-workspace repo live. mission-control repo with Pages. Verify branches and permissions.',assignees:['oz','gary'],tag:'Ops',pushCount:0,start:'2026-03-02',due:'2026-03-03',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#eab308;"></span>GitHub Repo Setup</div>
+              <div class="kcard-desc">oz-workspace and mission-control repos live. Verify branches and permissions.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/oz.png" class="kcard-avatar" title="Oz">
+                  <div class="kcard-avatar-init" style="background:#6366f1;" title="Gary">G</div>
+                </div>
+                <span class="kcard-tag">Ops</span>
+                <span class="kcard-time">today</span>
+              </div>
+            </div>
+            <div class="kcard" onclick="openProjectModal({title:'Security Audit V1',desc:'Harriet ran full security audit. Review findings and implement hardening steps.',assignees:['harriet','matlock'],tag:'Security',pushCount:1,start:'2026-02-24',due:'2026-03-02',priority:'high'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#dc2626;"></span>Security Audit V1 <span title="Pushed 1 time">😤</span></div>
+              <div class="kcard-desc">Harriet ran full security audit. Review findings and implement hardening steps.</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                  <img src="avatars/matlock.png" class="kcard-avatar" title="Matlock">
+                </div>
+                <span class="kcard-tag">Security</span>
+                <span class="kcard-time">6 days ago</span>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn">+ Add project</button>
+        </div>
+
+        <!-- Done -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="col-dot" style="background:#22c55e;"></div>
+            <span class="col-title">Done</span>
+            <span class="col-count">4</span>
+            <button class="col-add">+</button>
+          </div>
+          <div class="kanban-col-body">
+            <div class="kcard" style="opacity:0.7;" onclick="openProjectModal({title:'Team Folder Setup',desc:'Google Drive + EncryptedStorage mirrors for all agents.',assignees:['oz'],tag:'Ops',pushCount:0,start:'2026-02-23',due:'2026-02-24',priority:'med',completed:'2026-02-24'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#22c55e;"></span>Team Folder Setup</div>
+              <div class="kcard-desc">Google Drive + EncryptedStorage mirrors. ✓ Complete</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees"><img src="avatars/oz.png" class="kcard-avatar" title="Oz"></div>
+                <span class="kcard-tag">Ops</span>
+                <span class="kcard-time">Feb 24</span>
+              </div>
+            </div>
+            <div class="kcard" style="opacity:0.7;" onclick="openProjectModal({title:'Agent Overnight Test',desc:'All 9 agents completed sample tasks successfully.',assignees:['harriet','oz'],tag:'Ops',pushCount:0,start:'2026-02-23',due:'2026-02-24',priority:'high',completed:'2026-02-24'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#22c55e;"></span>Agent Overnight Test</div>
+              <div class="kcard-desc">All 9 agents completed sample tasks. ✓ Complete</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                  <img src="avatars/oz.png" class="kcard-avatar" title="Oz">
+                </div>
+                <span class="kcard-tag">Ops</span>
+                <span class="kcard-time">Feb 24</span>
+              </div>
+            </div>
+            <div class="kcard" style="opacity:0.7;" onclick="openProjectModal({title:'API Keys Secured',desc:'All 8 Harriet keys and Oz keys stored in 1Password vaults.',assignees:['harriet'],tag:'Security',pushCount:0,start:'2026-02-23',due:'2026-02-24',priority:'high',completed:'2026-02-24'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#22c55e;"></span>API Keys Secured</div>
+              <div class="kcard-desc">All keys in 1Password. ✓ Complete</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees"><img src="avatars/harriet.png" class="kcard-avatar" title="Harriet"></div>
+                <span class="kcard-tag">Security</span>
+                <span class="kcard-time">Feb 24</span>
+              </div>
+            </div>
+            <div class="kcard" style="opacity:0.7;" onclick="openProjectModal({title:'Tailscale Bridge',desc:'Oz + Harriet SSH via Tailscale fully operational.',assignees:['oz','harriet'],tag:'Infra',pushCount:0,start:'2026-02-21',due:'2026-02-22',priority:'high',completed:'2026-02-22'})">
+              <div class="kcard-title"><span class="kcard-dot" style="background:#22c55e;"></span>Tailscale Bridge</div>
+              <div class="kcard-desc">Oz + Harriet SSH operational. ✓ Complete</div>
+              <div class="kcard-footer">
+                <div class="kcard-assignees">
+                  <img src="avatars/oz.png" class="kcard-avatar" title="Oz">
+                  <img src="avatars/harriet.png" class="kcard-avatar" title="Harriet">
+                </div>
+                <span class="kcard-tag">Infra</span>
+                <span class="kcard-time">Feb 22</span>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn">+ Add project</button>
+        </div>
+
+      </div>
+
+      <!-- Project / Card Modal -->
+      <div class="project-modal-overlay" id="projectModal">
+        <div class="project-modal-box">
+          <button class="pm-close" onclick="closeProjectModal()">✕</button>
+          <div class="pm-title" id="pmTitle"></div>
+          <div class="pm-desc" id="pmDesc"></div>
+          <hr class="pm-divider">
+          <div class="pm-row">
+            <div class="pm-field"><div class="pm-label">Start</div><div class="pm-value" id="pmStart"></div></div>
+            <div class="pm-field"><div class="pm-label">Due</div><div class="pm-value" id="pmDue"></div></div>
+            <div class="pm-field"><div class="pm-label">Priority</div><div class="pm-value" id="pmPriority"></div></div>
+            <div class="pm-field"><div class="pm-label">Times Pushed</div><div class="pm-value" id="pmPush"></div></div>
+          </div>
+          <div class="pm-label" style="margin-bottom:8px;">Assigned To</div>
+          <div class="pm-assignee-row" id="pmAssignees"></div>
+          <hr class="pm-divider">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+            <button class="pm-btn pm-btn-push" onclick="pushProject()">📅 Push to Tomorrow</button>
+            <button class="pm-btn pm-btn-complete" onclick="closeProjectModal()">✅ Mark Complete</button>
+            <button class="pm-btn pm-btn-delete" onclick="closeProjectModal()">🗑 Delete</button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Tab: Tasks -->
     <div id="tasks" class="tab">
-      <div class="tab-title">✅ Tasks</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+        <div class="tab-title" style="margin-bottom:0;">✅ Tasks</div>
+        <div style="font-size:11px;color:#4b5563;">resets at midnight · recurring tasks excluded</div>
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
 
         <!-- Human Tasks -->
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
             <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#a78bfa;">👤 Human Tasks</div>
-            <div style="font-size:11px;color:#4b5563;">resets midnight</div>
+            <div style="font-size:12px;color:#4b5563;">3 of 5 remaining</div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
-              <span style="font-size:13px;color:#e5e7eb;">Review Mission Control feedback</span>
-              <span style="margin-left:auto;font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
+          <div style="display:flex;flex-direction:column;gap:8px;" id="humanTaskList">
+
+            <!-- Task with push count -->
+            <div class="task-row" onclick="openTaskModal({title:'Review Mission Control feedback',type:'human',assignees:['gary'],priority:'high',pushCount:0,start:'2026-03-02',created:'today'})">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
+              <img src="avatars/harriet.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" title="Gary">
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Review Mission Control feedback</span>
+              <span style="font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
-              <span style="font-size:13px;color:#e5e7eb;">Call client — Sample Client A</span>
-              <span style="margin-left:auto;font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">Med</span>
+
+            <div class="task-row" onclick="openTaskModal({title:'Call client — Sample Client A',type:'human',assignees:['gary'],priority:'med',pushCount:2,start:'2026-03-01',created:'yesterday'})">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
+              <div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div>
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Call client — Sample Client A</span>
+              <span title="Pushed 2 times" style="font-size:16px;cursor:pointer;" onclick="event.stopPropagation();pushTask(this)">😠</span>
+              <span style="font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">Med</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;opacity:0.5;">
-              <input type="checkbox" checked style="accent-color:#22c55e;width:16px;height:16px;">
-              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;">Upload screenshots to Drive</span>
-              <span style="margin-left:auto;font-size:11px;color:#22c55e;">Done</span>
+
+            <div class="task-row" onclick="openTaskModal({title:'Vet visit with Milo',type:'human',assignees:['gary','milo'],priority:'high',pushCount:1,start:'2026-03-02',created:'today'})">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;" onclick="event.stopPropagation()">
+              <div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div>
+              <div class="activity-avatar" style="background:#f59e0b;width:24px;height:24px;font-size:10px;flex-shrink:0;margin-left:-8px;">M</div>
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Vet visit with Milo</span>
+              <span title="Pushed 1 time" style="font-size:16px;cursor:pointer;" onclick="event.stopPropagation();pushTask(this)">😤</span>
+              <span style="font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
-              <span style="font-size:13px;color:#e5e7eb;">Review agent overnight work</span>
-              <span style="margin-left:auto;font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
+
+            <div class="task-row" style="opacity:0.5;">
+              <input type="checkbox" checked style="accent-color:#22c55e;width:16px;height:16px;" onclick="event.stopPropagation()">
+              <div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div>
+              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;flex:1;">Upload screenshots to Drive</span>
+              <span style="font-size:11px;color:#22c55e;">✓ Done</span>
             </div>
+
           </div>
-          <div style="margin-top:12px;display:flex;gap:8px;">
-            <input type="text" placeholder="+ Add human task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;">
-            <button style="background:#6366f1;color:white;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;">Add</button>
+
+          <!-- Add task with assignee dropdown -->
+          <div style="margin-top:14px;position:relative;">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="assignee-dropdown" style="flex-shrink:0;">
+                <button onclick="toggleAssigneeDropdown('humanAssignees')" style="display:flex;align-items:center;gap:6px;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:7px 10px;color:#9ca3af;font-size:12px;cursor:pointer;">
+                  👥 Assign <span style="font-size:10px;">▲</span>
+                </button>
+                <div class="assignee-dropdown-menu" id="humanAssignees">
+                  <div class="assignee-option"><input type="checkbox" checked><div class="activity-avatar" style="background:#6366f1;width:24px;height:24px;font-size:10px;flex-shrink:0;">G</div><span style="font-size:13px;color:#e5e7eb;">Gary</span></div>
+                  <div class="assignee-option"><input type="checkbox"><div class="activity-avatar" style="background:#8b5cf6;width:24px;height:24px;font-size:10px;flex-shrink:0;">N</div><span style="font-size:13px;color:#e5e7eb;">Nardellly</span></div>
+                  <div class="assignee-option"><input type="checkbox"><div class="activity-avatar" style="background:#10b981;width:24px;height:24px;font-size:10px;flex-shrink:0;">A</div><span style="font-size:13px;color:#e5e7eb;">Alan</span></div>
+                  <div class="assignee-option"><input type="checkbox"><div class="activity-avatar" style="background:#f59e0b;width:24px;height:24px;font-size:10px;flex-shrink:0;">M</div><span style="font-size:13px;color:#e5e7eb;">Milo</span></div>
+                </div>
+              </div>
+              <input type="text" placeholder="+ Add task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;outline:none;">
+              <button style="background:#6366f1;color:white;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px;">Add</button>
+            </div>
           </div>
         </div>
 
@@ -1561,36 +1855,78 @@
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
             <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#22c55e;">🤖 Agent Tasks</div>
-            <div style="font-size:11px;color:#4b5563;">resets midnight</div>
+            <div style="font-size:12px;color:#4b5563;">3 of 4 active</div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <div class="activity-avatar" style="background:#a78bfa;width:24px;height:24px;font-size:10px;">H</div>
-              <span style="font-size:13px;color:#e5e7eb;">Rebuild Mission Control v5</span>
-              <span style="margin-left:auto;font-size:11px;color:#22c55e;">🔄 Active</span>
+          <div style="display:flex;flex-direction:column;gap:8px;" id="agentTaskList">
+
+            <div class="task-row" onclick="openTaskModal({title:'Rebuild Mission Control V7',type:'agent',assignees:['harriet'],priority:'high',pushCount:0,start:'2026-03-02',created:'today',isOrchestrator:true})">
+              <img src="avatars/harriet.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Harriet">
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Rebuild Mission Control V7</span>
+              <span style="font-size:11px;color:#22c55e;background:#0d1f0d;padding:2px 8px;border-radius:4px;">🔄 Active</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <div class="activity-avatar" style="background:#ec4899;width:24px;height:24px;font-size:10px;">B</div>
-              <span style="font-size:13px;color:#e5e7eb;">Generate agent avatar images</span>
-              <span style="margin-left:auto;font-size:11px;color:#f59e0b;">⏳ Pending</span>
+
+            <div class="task-row" onclick="openTaskModal({title:'Generate avatar images for all agents',type:'agent',assignees:['banksy'],priority:'med',pushCount:1,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
+              <img src="avatars/banksy.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Banksy">
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Generate avatar images</span>
+              <span title="Pushed 1 time" style="font-size:16px;">😤</span>
+              <span style="font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">⏳ Pending</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;opacity:0.5;">
-              <div class="activity-avatar" style="background:#10b981;width:24px;height:24px;font-size:10px;">M</div>
-              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;">Push code to GitHub</span>
-              <span style="margin-left:auto;font-size:11px;color:#22c55e;">✓ Done</span>
+
+            <div class="task-row" style="opacity:0.5;">
+              <img src="avatars/oz.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Oz">
+              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;flex:1;">Push code to GitHub</span>
+              <span style="font-size:11px;color:#22c55e;">✓ Done</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
-              <div class="activity-avatar" style="background:#8b5cf6;width:24px;height:24px;font-size:10px;">C</div>
-              <span style="font-size:13px;color:#e5e7eb;">Sync Obsidian vault to Oz</span>
-              <span style="margin-left:auto;font-size:11px;color:#f59e0b;">⏳ Pending</span>
+
+            <div class="task-row" onclick="openTaskModal({title:'Sync Obsidian vault to Oz',type:'agent',assignees:['clu'],priority:'med',pushCount:3,start:'2026-03-01',created:'yesterday',isOrchestrator:false})">
+              <img src="avatars/clu.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;" title="Clu">
+              <span style="font-size:13px;color:#e5e7eb;flex:1;">Sync Obsidian vault to Oz</span>
+              <span title="Pushed 3 times — agent struggling" style="font-size:16px;">😡</span>
+              <span style="font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">⏳ Pending</span>
             </div>
+
           </div>
-          <div style="margin-top:12px;display:flex;gap:8px;">
-            <input type="text" placeholder="+ Assign agent task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;">
-            <button style="background:#22c55e;color:#0d0d11;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;">Assign</button>
+          <!-- Assign agent task -->
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <div class="assignee-dropdown" style="flex-shrink:0;">
+              <button onclick="toggleAssigneeDropdown('agentAssignees')" style="display:flex;align-items:center;gap:6px;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:7px 10px;color:#9ca3af;font-size:12px;cursor:pointer;">
+                🤖 Agent <span style="font-size:10px;">▲</span>
+              </button>
+              <div class="assignee-dropdown-menu" id="agentAssignees">
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/harriet.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Harriet</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/andy.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Andy</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/banksy.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Banksy</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/clu.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Clu</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/marissa.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Marissa</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/matlock.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Matlock</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/oz.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Oz</span></div>
+                <div class="assignee-option"><input type="checkbox"><img src="avatars/spencer.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span style="font-size:13px;color:#e5e7eb;">Spencer</span></div>
+              </div>
+            </div>
+            <input type="text" placeholder="+ Assign task to agent..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;outline:none;">
+            <button style="background:#22c55e;color:#0d0d11;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px;">Assign</button>
           </div>
         </div>
+      </div>
 
+      <!-- Task detail modal -->
+      <div class="project-modal-overlay" id="taskModal">
+        <div class="project-modal-box">
+          <button class="pm-close" onclick="document.getElementById('taskModal').classList.remove('active')">✕</button>
+          <div class="pm-title" id="tmTitle"></div>
+          <hr class="pm-divider">
+          <div class="pm-row">
+            <div class="pm-field"><div class="pm-label">Type</div><div class="pm-value" id="tmType"></div></div>
+            <div class="pm-field"><div class="pm-label">Priority</div><div class="pm-value" id="tmPriority"></div></div>
+            <div class="pm-field"><div class="pm-label">Created</div><div class="pm-value" id="tmCreated"></div></div>
+            <div class="pm-field"><div class="pm-label">Times Pushed</div><div class="pm-value" id="tmPush"></div></div>
+          </div>
+          <div class="pm-label" style="margin-bottom:8px;">Assigned To</div>
+          <div class="pm-assignee-row" id="tmAssignees"></div>
+          <hr class="pm-divider">
+          <div id="tmActions" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
+          <div style="margin-top:14px;font-size:11px;color:#4b5563;" id="tmPermNote"></div>
+        </div>
       </div>
     </div>
 
@@ -2332,6 +2668,98 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
+    // ── Project / Task Modals ───────────────────────────────────
+    const AVATARS = {
+      harriet: 'avatars/harriet.png', banksy: 'avatars/banksy.png',
+      andy: 'avatars/andy.png', clu: 'avatars/clu.png',
+      marissa: 'avatars/marissa.png', matlock: 'avatars/matlock.png',
+      oz: 'avatars/oz.png', spencer: 'avatars/spencer.png',
+      phineas: 'avatars/phineas.png', 'ed-lewis': 'avatars/ed-lewis.png'
+    };
+    const INITIALS = { gary:'G', nardellly:'N', alan:'A', milo:'M' };
+    const INIT_COLORS = { gary:'#6366f1', nardellly:'#8b5cf6', alan:'#10b981', milo:'#f59e0b' };
+    const PUSH_EMOJI = ['','😤','😠','😡','🤬','🤬🤬'];
+
+    let currentProject = null;
+
+    function openProjectModal(data) {
+      if (!data) return;
+      currentProject = data;
+      document.getElementById('pmTitle').textContent = data.title;
+      document.getElementById('pmDesc').textContent = data.desc || '';
+      document.getElementById('pmStart').textContent = data.start || '—';
+      document.getElementById('pmDue').textContent = data.due || '—';
+      document.getElementById('pmPriority').innerHTML = `<span style="color:${data.priority==='high'?'#dc2626':'#f59e0b'}">${data.priority?.toUpperCase()}</span>`;
+      const pushCount = data.pushCount || 0;
+      document.getElementById('pmPush').innerHTML = pushCount === 0 ? '<span style="color:#22c55e;">0 — on track</span>' : `<span style="color:#f59e0b;">${pushCount}x ${PUSH_EMOJI[Math.min(pushCount,5)]}</span>`;
+      const assigneesEl = document.getElementById('pmAssignees');
+      assigneesEl.innerHTML = '';
+      (data.assignees || []).forEach(a => {
+        const chip = document.createElement('div');
+        chip.className = 'pm-assignee-chip';
+        if (AVATARS[a]) chip.innerHTML = `<img src="${AVATARS[a]}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"> ${a.charAt(0).toUpperCase()+a.slice(1)}`;
+        else chip.innerHTML = `<div class="activity-avatar" style="background:${INIT_COLORS[a]||'#6366f1'};width:24px;height:24px;font-size:10px;">${INITIALS[a]||a[0].toUpperCase()}</div> ${a.charAt(0).toUpperCase()+a.slice(1)}`;
+        assigneesEl.appendChild(chip);
+      });
+      document.getElementById('projectModal').classList.add('active');
+    }
+    function closeProjectModal() { document.getElementById('projectModal').classList.remove('active'); }
+    function pushProject() {
+      if (currentProject) { currentProject.pushCount = (currentProject.pushCount||0)+1; openProjectModal(currentProject); }
+    }
+    document.getElementById('projectModal').addEventListener('click', function(e){ if(e.target===this) closeProjectModal(); });
+
+    function openTaskModal(data) {
+      document.getElementById('tmTitle').textContent = data.title;
+      document.getElementById('tmType').textContent = data.type === 'human' ? '👤 Human' : '🤖 Agent';
+      document.getElementById('tmPriority').innerHTML = `<span style="color:${data.priority==='high'?'#dc2626':'#f59e0b'}">${data.priority?.toUpperCase()}</span>`;
+      document.getElementById('tmCreated').textContent = data.created || data.start || '—';
+      const pushCount = data.pushCount || 0;
+      document.getElementById('tmPush').innerHTML = pushCount === 0 ? '<span style="color:#22c55e;">0 — on track</span>' : `<span style="color:#f59e0b;">${pushCount}x ${PUSH_EMOJI[Math.min(pushCount,5)]}</span>`;
+      const assigneesEl = document.getElementById('tmAssignees');
+      assigneesEl.innerHTML = '';
+      (data.assignees || []).forEach(a => {
+        const chip = document.createElement('div');
+        chip.className = 'pm-assignee-chip';
+        if (AVATARS[a]) chip.innerHTML = `<img src="${AVATARS[a]}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"> ${a.charAt(0).toUpperCase()+a.slice(1)}`;
+        else chip.innerHTML = `<div class="activity-avatar" style="background:${INIT_COLORS[a]||'#6366f1'};width:24px;height:24px;font-size:10px;">${INITIALS[a]||a[0].toUpperCase()}</div> ${a.charAt(0).toUpperCase()+a.slice(1)}`;
+        assigneesEl.appendChild(chip);
+      });
+      const actionsEl = document.getElementById('tmActions');
+      const noteEl = document.getElementById('tmPermNote');
+      // Orchestrators (Gary = human, Harriet/Oz = agents) can complete/delete
+      // Non-orchestrator agents can only push
+      const isOrchestrator = data.type === 'human' || data.isOrchestrator;
+      if (isOrchestrator) {
+        actionsEl.innerHTML = `<button class="pm-btn pm-btn-push" onclick="pushTaskFromModal()">📅 Push to Tomorrow</button><button class="pm-btn pm-btn-complete" onclick="document.getElementById('taskModal').classList.remove('active')">✅ Mark Complete</button><button class="pm-btn pm-btn-delete" onclick="document.getElementById('taskModal').classList.remove('active')">🗑 Delete</button>`;
+        noteEl.textContent = '';
+      } else {
+        actionsEl.innerHTML = `<button class="pm-btn pm-btn-push" onclick="pushTaskFromModal()">📅 Push to Tomorrow</button>`;
+        noteEl.textContent = '⚠️ Non-orchestrator agents can push tasks but cannot complete or delete. Repeated pushes are flagged.';
+      }
+      document.getElementById('taskModal').classList.add('active');
+    }
+    function pushTaskFromModal() { document.getElementById('taskModal').classList.remove('active'); }
+    document.getElementById('taskModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('active'); });
+
+    function pushTask(emoji) {
+      const pushLevels = ['😤','😠','😡','🤬'];
+      const idx = pushLevels.indexOf(emoji.textContent.trim());
+      if (idx < pushLevels.length - 1) emoji.textContent = pushLevels[idx + 1];
+      const count = idx + 2;
+      emoji.title = `Pushed ${count} times`;
+    }
+
+    function toggleAssigneeDropdown(id) {
+      const menu = document.getElementById(id);
+      menu.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.assignee-dropdown')) {
+        document.querySelectorAll('.assignee-dropdown-menu').forEach(m => m.classList.remove('open'));
+      }
+    });
+
     // ── Mic / Voice Input ──────────────────────────────────────
     let micRecording = false;
     let micTimer = null;
