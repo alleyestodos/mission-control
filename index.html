@@ -282,14 +282,22 @@
       font-size: 13px;
     }
 
-    .dot {
-      width: 6px;
-      height: 6px;
+    .activity-avatar {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
     }
-
-    .human-dot { background-color: #6366f1; }
-    .agent-dot { background-color: #22c55e; }
+    .activity-item-text { flex: 1; }
+    .activity-item-name { font-size: 11px; font-weight: 600; color: #9ca3af; }
+    .activity-item-desc { font-size: 12px; color: #e5e7eb; }
+    .activity-item-time { font-size: 10px; color: #4b5563; }
 
     .priority-list {
       list-style: none;
@@ -1167,6 +1175,11 @@
         <span class="med">📁 Projs</span>
         <span class="emoji-only">📁</span>
       </button>
+      <button class="tab-btn" data-tab="tasks">
+        <span class="full">✅ Tasks</span>
+        <span class="med">✅ Tasks</span>
+        <span class="emoji-only">✅</span>
+      </button>
       <button class="tab-btn" data-tab="timeline">
         <span class="full">🗓️ Timeline</span>
         <span class="med">🗓️ Time</span>
@@ -1213,25 +1226,75 @@
         <div id="live-time" class="live-time"></div>
       </div>
       <div class="stats-grid">
+        <!-- Goals Progress card -->
         <div class="stat-card stat-goal">
-          <div class="stat-value">12%</div>
-          <div class="stat-label">Goals Progress</div>
-          <div class="stat-change" style="color: #22c55e;">↑ 3% this week</div>
+          <div class="stat-label" style="margin-bottom:10px;">Goals Progress</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="text-align:center;">
+              <div style="font-size:18px;">🏥</div>
+              <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:2px 0;">Health</div>
+              <div style="font-size:20px;font-weight:800;color:#22c55e;">A</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:18px;">📚</div>
+              <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:2px 0;">Education</div>
+              <div style="font-size:20px;font-weight:800;color:#a78bfa;">B+</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:18px;">🤝</div>
+              <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:2px 0;">Social</div>
+              <div style="font-size:20px;font-weight:800;color:#f59e0b;">B</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:18px;">💰</div>
+              <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:2px 0;">Revenue</div>
+              <div style="font-size:20px;font-weight:800;color:#22c55e;">A+</div>
+            </div>
+          </div>
         </div>
+        <!-- Active Projects card: 3 columns -->
         <div class="stat-card stat-projects">
-          <div class="stat-value">5</div>
-          <div class="stat-label">Active Projects</div>
-          <div class="stat-change" style="color: #22c55e;">↑ 2 new</div>
+          <div class="stat-label" style="margin-bottom:10px;">Projects</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center;">
+            <div>
+              <div style="font-size:28px;font-weight:700;color:#e5e7eb;">4</div>
+              <div style="font-size:11px;color:#9ca3af;margin:2px 0;">Completed</div>
+              <div style="font-size:11px;color:#22c55e;">↑ 1 new</div>
+            </div>
+            <div style="border-left:1px solid #2d2d44;border-right:1px solid #2d2d44;">
+              <div style="font-size:28px;font-weight:700;color:#e5e7eb;">5</div>
+              <div style="font-size:11px;color:#9ca3af;margin:2px 0;">Active</div>
+              <div style="font-size:11px;color:#22c55e;">↑ 2 new</div>
+            </div>
+            <div>
+              <div style="font-size:28px;font-weight:700;color:#e5e7eb;">3</div>
+              <div style="font-size:11px;color:#9ca3af;margin:2px 0;">Planning</div>
+              <div style="font-size:11px;color:#6b7280;">↑ 0 new</div>
+            </div>
+          </div>
         </div>
+        <!-- Tasks Today card: 2 columns Human/Agent -->
         <div class="stat-card stat-tasks">
-          <div class="stat-value">8</div>
-          <div class="stat-label">Tasks Today</div>
-          <div class="stat-change" style="color: #eab308;">↓ 3 remaining</div>
+          <div class="stat-label" style="margin-bottom:10px;">Tasks Today <span style="font-size:10px;color:#4b5563;">resets midnight</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;text-align:center;">
+            <div>
+              <div style="font-size:28px;font-weight:700;color:#e5e7eb;">5</div>
+              <div style="font-size:11px;color:#a78bfa;margin:2px 0;">Human</div>
+              <div style="font-size:11px;color:#eab308;">↓ 3 left</div>
+            </div>
+            <div style="border-left:1px solid #2d2d44;">
+              <div style="font-size:28px;font-weight:700;color:#e5e7eb;">12</div>
+              <div style="font-size:11px;color:#22c55e;margin:2px 0;">Agent</div>
+              <div style="font-size:11px;color:#22c55e;">✓ on track</div>
+            </div>
+          </div>
         </div>
+        <!-- 90-Day Snapshot Countdown -->
         <div class="stat-card stat-days">
-          <div class="stat-value">90</div>
-          <div class="stat-label">Days to Goal</div>
-          <div class="stat-change" style="color: #ef4444;">countdown</div>
+          <div class="stat-label" style="margin-bottom:6px;">📸 Snapshot Countdown</div>
+          <div class="stat-value" id="snapshotDays">90</div>
+          <div style="font-size:11px;color:#6b7280;margin-top:4px;">days until your report card</div>
+          <div style="font-size:11px;color:#ef4444;margin-top:4px;" id="snapshotDate">Day 1 of 90</div>
         </div>
       </div>
       <div class="feed-priorities">
@@ -1241,35 +1304,63 @@
             <div class="activity-column">
               <div class="sub-header">Humans</div>
               <div class="activity-item">
-                <div class="dot human-dot"></div>
-                <span>Gave UI feedback on Mission Control</span>
+                <div class="activity-avatar" style="background:#6366f1;">G</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Gary</div>
+                  <div class="activity-item-desc">Gave UI feedback on Mission Control</div>
+                  <div class="activity-item-time">just now</div>
+                </div>
               </div>
               <div class="activity-item">
-                <div class="dot human-dot"></div>
-                <span>Uploaded screenshots to Google Drive</span>
+                <div class="activity-avatar" style="background:#6366f1;">G</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Gary</div>
+                  <div class="activity-item-desc">Uploaded screenshots to Google Drive</div>
+                  <div class="activity-item-time">2 min ago</div>
+                </div>
               </div>
               <div class="activity-item">
-                <div class="dot human-dot"></div>
-                <span>Reviewed agent overnight results</span>
+                <div class="activity-avatar" style="background:#8b5cf6;">N</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Nardellly</div>
+                  <div class="activity-item-desc">Reviewed agent overnight results</div>
+                  <div class="activity-item-time">1 hr ago</div>
+                </div>
               </div>
             </div>
             <div class="activity-column">
               <div class="sub-header agents-sub-header">Agents</div>
               <div class="activity-item">
-                <div class="dot agent-dot"></div>
-                <span>Rebuilt dashboard HTML v3</span>
+                <div class="activity-avatar" style="background:#a78bfa;">H</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Harriet</div>
+                  <div class="activity-item-desc">Rebuilt dashboard HTML v5</div>
+                  <div class="activity-item-time">just now</div>
+                </div>
               </div>
               <div class="activity-item">
-                <div class="dot agent-dot"></div>
-                <span>Analyzed 8 UI screenshots</span>
+                <div class="activity-avatar" style="background:#ec4899;">B</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Banksy</div>
+                  <div class="activity-item-desc">Analyzed 8 UI screenshots</div>
+                  <div class="activity-item-time">5 min ago</div>
+                </div>
               </div>
               <div class="activity-item">
-                <div class="dot agent-dot"></div>
-                <span>Pushed code to GitHub</span>
+                <div class="activity-avatar" style="background:#10b981;">M</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Matlock</div>
+                  <div class="activity-item-desc">Pushed code to GitHub</div>
+                  <div class="activity-item-time">10 min ago</div>
+                </div>
               </div>
               <div class="activity-item">
-                <div class="dot agent-dot"></div>
-                <span>Synced files to Oz</span>
+                <div class="activity-avatar" style="background:#8b5cf6;">C</div>
+                <div class="activity-item-text">
+                  <div class="activity-item-name">Clu</div>
+                  <div class="activity-item-desc">Synced files to Oz</div>
+                  <div class="activity-item-time">15 min ago</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1359,6 +1450,82 @@
           </div>
           <button class="add-task">+ Add Task</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Tab: Tasks -->
+    <div id="tasks" class="tab">
+      <div class="tab-title">✅ Tasks</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+        <!-- Human Tasks -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#a78bfa;">👤 Human Tasks</div>
+            <div style="font-size:11px;color:#4b5563;">resets midnight</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
+              <span style="font-size:13px;color:#e5e7eb;">Review Mission Control feedback</span>
+              <span style="margin-left:auto;font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
+              <span style="font-size:13px;color:#e5e7eb;">Call client — Sample Client A</span>
+              <span style="margin-left:auto;font-size:11px;color:#f59e0b;background:#2d1f00;padding:2px 8px;border-radius:4px;">Med</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;opacity:0.5;">
+              <input type="checkbox" checked style="accent-color:#22c55e;width:16px;height:16px;">
+              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;">Upload screenshots to Drive</span>
+              <span style="margin-left:auto;font-size:11px;color:#22c55e;">Done</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <input type="checkbox" style="accent-color:#6366f1;width:16px;height:16px;">
+              <span style="font-size:13px;color:#e5e7eb;">Review agent overnight work</span>
+              <span style="margin-left:auto;font-size:11px;color:#6366f1;background:#1e1b4b;padding:2px 8px;border-radius:4px;">High</span>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <input type="text" placeholder="+ Add human task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;">
+            <button style="background:#6366f1;color:white;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;">Add</button>
+          </div>
+        </div>
+
+        <!-- Agent Tasks -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#22c55e;">🤖 Agent Tasks</div>
+            <div style="font-size:11px;color:#4b5563;">resets midnight</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <div class="activity-avatar" style="background:#a78bfa;width:24px;height:24px;font-size:10px;">H</div>
+              <span style="font-size:13px;color:#e5e7eb;">Rebuild Mission Control v5</span>
+              <span style="margin-left:auto;font-size:11px;color:#22c55e;">🔄 Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <div class="activity-avatar" style="background:#ec4899;width:24px;height:24px;font-size:10px;">B</div>
+              <span style="font-size:13px;color:#e5e7eb;">Generate agent avatar images</span>
+              <span style="margin-left:auto;font-size:11px;color:#f59e0b;">⏳ Pending</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;opacity:0.5;">
+              <div class="activity-avatar" style="background:#10b981;width:24px;height:24px;font-size:10px;">M</div>
+              <span style="font-size:13px;color:#6b7280;text-decoration:line-through;">Push code to GitHub</span>
+              <span style="margin-left:auto;font-size:11px;color:#22c55e;">✓ Done</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d44;">
+              <div class="activity-avatar" style="background:#8b5cf6;width:24px;height:24px;font-size:10px;">C</div>
+              <span style="font-size:13px;color:#e5e7eb;">Sync Obsidian vault to Oz</span>
+              <span style="margin-left:auto;font-size:11px;color:#f59e0b;">⏳ Pending</span>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <input type="text" placeholder="+ Assign agent task..." style="flex:1;background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;padding:8px 12px;color:#e5e7eb;font-size:13px;">
+            <button style="background:#22c55e;color:#0d0d11;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;">Assign</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1999,6 +2166,23 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
+    // Snapshot countdown (90 days from first launch — stored in localStorage)
+    (function() {
+      let launch = localStorage.getItem('mc_launch_date');
+      if (!launch) {
+        launch = new Date().toISOString();
+        localStorage.setItem('mc_launch_date', launch);
+      }
+      const launchDate = new Date(launch);
+      const now = new Date();
+      const daysPassed = Math.floor((now - launchDate) / (1000 * 60 * 60 * 24));
+      const daysLeft = Math.max(0, 90 - daysPassed);
+      const el = document.getElementById('snapshotDays');
+      const el2 = document.getElementById('snapshotDate');
+      if (el) el.textContent = daysLeft;
+      if (el2) el2.textContent = 'Day ' + (daysPassed + 1) + ' of 90';
+    })();
+
     function openFamilyModal(person, category, icon, status, label, pct) {
       document.getElementById('familyModalTitle').textContent = icon + ' ' + category;
       document.getElementById('familyModalPerson').textContent = person;
