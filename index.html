@@ -432,55 +432,95 @@
       cursor: pointer;
     }
 
-    .avatar-row {
+    /* Trophy / complete modal avatar section */
+    .trophy-section {
+      background: #13131a;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .trophy-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .avatar-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 16px;
     }
-
-    .row-label {
-      width: 100%;
-      font-size: 14px;
-      color: #9ca3af;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
     .avatar-pill {
-      width: 40px;
-      height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      position: relative;
+    }
+    .avatar-pill-img {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      object-fit: cover;
+    }
+    .avatar-pill-init {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: white;
-      cursor: pointer;
-      position: relative;
-      border: 2px solid transparent;
-      transition: all 0.2s;
     }
-
-    .avatar-pill.selected {
+    .avatar-pill-name {
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .avatar-pill.selected .avatar-pill-img,
+    .avatar-pill.selected .avatar-pill-init {
       border-color: #f59e0b;
+      box-shadow: 0 0 12px rgba(245,158,11,0.4);
     }
-
+    .avatar-pill.selected .avatar-pill-name { color: #f59e0b; }
     .avatar-pill.selected::after {
       content: '✓';
       position: absolute;
-      top: -4px;
-      right: -4px;
+      top: -2px;
+      right: -2px;
       background: #f59e0b;
-      color: white;
-      width: 16px;
-      height: 16px;
+      color: #0d0d11;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      font-size: 10px;
+      font-size: 11px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .avatar-pill:hover .avatar-pill-img,
+    .avatar-pill:hover .avatar-pill-init { border-color: #a78bfa; }
+    .trophy-note {
+      text-align: center;
+      font-size: 12px;
+      color: #4b5563;
+      margin: 8px 0 16px;
+      font-style: italic;
     }
 
     .note {
@@ -2621,37 +2661,85 @@
 
     function showCompleteModal() {
       document.getElementById('modal-content').innerHTML = `
-        <div class="modal-title">Who helped you most to complete this Top Priority? 🏆</div>
-        <div style="color: #9ca3af; margin-bottom: 24px;">Select all that helped. They'll each earn a unique trophy!</div>
-        <div class="avatar-row">
-          <div class="row-label">Humans:</div>
-          <div class="avatar-pill" data-avatar="gary" style="background-color: #6366f1;">👤</div>
-          <div class="avatar-pill" data-avatar="wife" style="background-color: #ec4899;">W</div>
-          <div class="avatar-pill" data-avatar="kid" style="background-color: #10b981;">K</div>
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:28px;margin-bottom:8px;">🏆</div>
+          <div class="modal-title" style="font-size:18px;margin-bottom:6px;">Who helped to complete this Top Priority?</div>
+          <div style="font-size:13px;color:#9ca3af;">They'll each earn a unique trophy!</div>
         </div>
-        <div class="avatar-row">
-          <div class="row-label">Agents:</div>
-          <div class="avatar-pill" data-avatar="andy" style="background-color: #3b82f6;">A</div>
-          <div class="avatar-pill" data-avatar="banksy" style="background-color: #ec4899;">B</div>
-          <div class="avatar-pill" data-avatar="chris" style="background-color: #f97316;">C</div>
-          <div class="avatar-pill" data-avatar="clu" style="background-color: #8b5cf6;">Cl</div>
-          <div class="avatar-pill" data-avatar="ed" style="background-color: #6b7280;">E</div>
-          <div class="avatar-pill" data-avatar="harriet" style="background-color: #a78bfa;">H</div>
-          <div class="avatar-pill" data-avatar="marissa" style="background-color: #ec4899;">M</div>
-          <div class="avatar-pill" data-avatar="matlock" style="background-color: #10b981;">M</div>
-          <div class="avatar-pill" data-avatar="phineas" style="background-color: #f59e0b;">P</div>
-          <div class="avatar-pill" data-avatar="spencer" style="background-color: #6366f1;">S</div>
+
+        <div class="trophy-section">
+          <div class="trophy-section-label">
+            <span>👤</span> Humans
+          </div>
+          <div class="avatar-grid">
+            <div class="avatar-pill" data-avatar="gary">
+              <div class="avatar-pill-init" style="background:#6366f1;">G</div>
+              <span class="avatar-pill-name">Gary</span>
+            </div>
+            <div class="avatar-pill" data-avatar="nardellly">
+              <div class="avatar-pill-init" style="background:#8b5cf6;">N</div>
+              <span class="avatar-pill-name">Nardellly</span>
+            </div>
+            <div class="avatar-pill" data-avatar="alan">
+              <div class="avatar-pill-init" style="background:#10b981;">A</div>
+              <span class="avatar-pill-name">Alan</span>
+            </div>
+            <div class="avatar-pill" data-avatar="milo">
+              <div class="avatar-pill-init" style="background:#f59e0b;">M</div>
+              <span class="avatar-pill-name">Milo</span>
+            </div>
+          </div>
         </div>
-        <div style="color: #9ca3af; font-size: 12px; margin-top: 16px;">🏆 Each helper earns a unique trophy — no two are alike!</div>
-        <div class="modal-buttons">
-          <button class="btn-cancel" style="background-color: #6b7280;">Back</button>
-          <button id="award-btn" class="btn-complete">Award Trophies & Complete</button>
+
+        <div class="trophy-section">
+          <div class="trophy-section-label">
+            <span>🖥️</span> Agents
+          </div>
+          <div class="avatar-grid">
+            <div class="avatar-pill" data-avatar="harriet">
+              <img src="avatars/harriet.png" class="avatar-pill-img" title="Harriet">
+              <span class="avatar-pill-name">Harriet</span>
+            </div>
+            <div class="avatar-pill" data-avatar="andy">
+              <img src="avatars/andy.png" class="avatar-pill-img" title="Andy">
+              <span class="avatar-pill-name">Andy</span>
+            </div>
+            <div class="avatar-pill" data-avatar="banksy">
+              <img src="avatars/banksy.png" class="avatar-pill-img" title="Banksy">
+              <span class="avatar-pill-name">Banksy</span>
+            </div>
+            <div class="avatar-pill" data-avatar="clu">
+              <img src="avatars/clu.png" class="avatar-pill-img" title="Clu">
+              <span class="avatar-pill-name">Clu</span>
+            </div>
+            <div class="avatar-pill" data-avatar="marissa">
+              <img src="avatars/marissa.png" class="avatar-pill-img" title="Marissa">
+              <span class="avatar-pill-name">Marissa</span>
+            </div>
+            <div class="avatar-pill" data-avatar="matlock">
+              <img src="avatars/matlock.png" class="avatar-pill-img" title="Matlock">
+              <span class="avatar-pill-name">Matlock</span>
+            </div>
+            <div class="avatar-pill" data-avatar="oz">
+              <img src="avatars/oz.png" class="avatar-pill-img" title="Oz">
+              <span class="avatar-pill-name">Oz</span>
+            </div>
+            <div class="avatar-pill" data-avatar="spencer">
+              <img src="avatars/spencer.png" class="avatar-pill-img" title="Spencer">
+              <span class="avatar-pill-name">Spencer</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="trophy-note">🏆 Earn a unique trophy — no two are alike!</div>
+
+        <div class="modal-buttons" style="display:flex;gap:12px;justify-content:flex-end;">
+          <button class="btn-cancel" style="background:#1a1a2e;border:1px solid #3f3f5c;color:#9ca3af;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;">← Back</button>
+          <button id="award-btn" class="btn-complete" style="background:#22c55e;color:#0d0d11;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;">Award Trophies & Complete ✅</button>
         </div>
       `;
       document.querySelectorAll('.avatar-pill').forEach(pill => {
-        pill.addEventListener('click', function() {
-          this.classList.toggle('selected');
-        });
+        pill.addEventListener('click', function() { this.classList.toggle('selected'); });
       });
       document.querySelector('.btn-cancel').onclick = showInitialModal;
       document.getElementById('award-btn').onclick = awardTrophies;
